@@ -1,0 +1,18 @@
+government = native
+add_government_reform = native_chiefdom_reform
+government_rank = 1
+primary_culture = guamares
+religion = animism
+technology_group = mesoamerican
+capital = 2615
+
+
+1444.11.11 = {
+	monarch = {
+		name = "Chimalpili"
+		dynasty = "Guamares"
+		adm = 3
+		dip = 1
+		mil = 2
+	}
+}

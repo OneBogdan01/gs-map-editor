@@ -1,0 +1,14 @@
+[remap]
+
+importer="glsl"
+type="RDShaderFile"
+uid="uid://cy74kv3fayr6h"
+path="res://.godot/imported/political_map.glsl-8e42a1dd1eae73f4f90012d65034bd0a.res"
+
+[deps]
+
+source_file="res://shaders/political_map.glsl"
+dest_files=["res://.godot/imported/political_map.glsl-8e42a1dd1eae73f4f90012d65034bd0a.res"]
+
+[params]
+

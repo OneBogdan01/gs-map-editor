@@ -1,0 +1,30 @@
+#63 - Erfurt
+
+owner = THU
+controller = THU
+culture = saxon
+religion = catholic
+capital = "Erfurt"
+trade_goods = dyes #Woad, also a center for glassmaking
+hre = yes
+base_tax = 5
+base_production = 4
+base_manpower = 3
+is_city = yes
+add_core = THU
+add_core = MAI
+discovered_by = eastern
+discovered_by = western
+discovered_by = muslim
+discovered_by = ottoman
+fort_15th = yes
+center_of_trade = 1
+
+1531.1.1 = { religion = protestant }
+1665.1.1 = {
+	fort_15th = no
+	fort_17th = yes
+}
+1790.8.1 = { unrest = 5 } # Peasant revolt
+1791.1.1 = { unrest = 0 }
+1806.7.12 = { hre = no } # The Holy Roman Empire is dissolved

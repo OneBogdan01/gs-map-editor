@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="DataFrame" load_steps=2 format=3 uid="uid://l1577m0nskvi"]
+
+[ext_resource type="Script" path="res://addons/scripts/data_frame.gd" id="1_gbvb4"]
+
+[resource]
+script = ExtResource("1_gbvb4")
+data = [[1, "Breda", "Brabant"], [2, "Zeeland", "Holland"]]
+columns = PackedStringArray("ID", "Province Name", "Owner")

@@ -1,0 +1,40 @@
+#988 - Huron
+
+owner = ATT
+controller = ATT
+culture = huron
+religion = totemism
+capital = "Attignawantan"
+trade_goods = fur
+hre = no
+base_tax = 2
+base_production = 2
+base_manpower = 4
+is_city = yes
+add_core = ATT
+native_size = 10
+native_ferocity = 5
+native_hostileness = 2
+
+
+
+discovered_by = north_american
+
+1609.1.1 = { discovered_by = FRA } # Samuel de Champlain
+1611.1.1 = { discovered_by = ENG } # Henry Hudson claimed the area
+
+1649.1.1 = {
+	owner = IRO
+	controller = IRO
+	add_core = IRO
+	culture = iroquois
+} #Taken by Iroquois in Beaver Wars.
+1650.1.1 = { 
+	owner = ---
+	controller = ---
+	is_city = no
+	remove_core = ARN
+	culture = anishinabe
+	tribal_owner = MSG
+} #Anishinabe expands post-beaver wars in deserted huron lands. n
+1707.5.12 = { discovered_by = GBR }

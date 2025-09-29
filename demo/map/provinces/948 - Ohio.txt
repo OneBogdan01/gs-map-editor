@@ -1,0 +1,41 @@
+#948 - Ohio
+
+culture = shawnee
+religion = totemism
+capital = "Ohio"
+trade_goods = unknown
+hre = no
+base_tax = 1
+base_production = 1
+base_manpower = 1
+native_size = 10
+native_ferocity = 5
+native_hostileness = 2
+tribal_owner = CLG
+
+discovered_by = north_american
+
+
+
+1671.1.1 = { discovered_by = ENG } # Abraham Wood
+1679.1.1 = { discovered_by = FRA } # René-Robert Cavelier
+1707.5.12 = { discovered_by = GBR }
+1750.1.1 = {
+	owner = LEN
+	controller = LEN
+	add_core = LEN
+	culture = delaware
+	is_city = yes
+	trade_goods = fur
+}
+1795.8.3 = {
+	owner = USA
+	controller = USA
+	add_core = USA
+	culture = american
+	religion = protestant
+} # Treaty of Greenville, much of Ohio ceded by Natives.
+1803.3.1 = { capital = "Chillicothe" }
+1810.1.1 = { capital = "Zanesville" }
+1812.1.1 = { capital = "Chillicothe" }
+1816.1.1 = { capital = "Columbus" }

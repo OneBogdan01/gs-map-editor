@@ -1,0 +1,30 @@
+# - Regensburg
+
+owner = REG
+controller = REG
+add_core = REG
+culture = bavarian
+religion = catholic
+base_tax = 5
+base_production = 5
+trade_goods = cloth #Fustians
+base_manpower = 3
+capital	= "Regensburg" 
+is_city = yes
+hre = yes
+discovered_by = eastern
+discovered_by = western
+discovered_by = muslim
+discovered_by = ottoman
+extra_cost = 16
+center_of_trade = 2
+
+1542.10.15 = {
+	religion = protestant
+}
+1806.7.12 = { hre = no } # The Holy Roman Empire is dissolved
+1810.1.6 = {
+	owner = BAV
+	controller = BAV
+	add_core = BAV
+} # Treaty of Paris (1810)

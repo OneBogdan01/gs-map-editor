@@ -1,0 +1,15 @@
+#Nkoma
+
+owner = BUU
+controller = BUU
+add_core = BUU
+culture = rwandan
+religion = shamanism #Fetishism
+capital = "Nkoma"
+trade_goods = iron
+hre = no
+base_tax = 3
+base_production = 3
+base_manpower = 3
+is_city = yes
+discovered_by = central_african

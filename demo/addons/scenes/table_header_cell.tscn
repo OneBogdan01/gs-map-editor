@@ -1,0 +1,16 @@
+[gd_scene load_steps=2 format=3 uid="uid://chjtv5swisiva"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wdseq"]
+bg_color = Color(0.6, 0.6, 0.6, 0.25098)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+
+[node name="TableHeaderCell" type="Button"]
+offset_right = 8.0
+offset_bottom = 8.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_styles/normal = SubResource("StyleBoxFlat_wdseq")
+text = "header"

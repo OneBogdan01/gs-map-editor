@@ -1,0 +1,17 @@
+# No previous file for Natahende
+
+culture = mescalero
+religion = totemism
+capital = "Natahéndé" 
+trade_goods = unknown 
+hre = no 
+base_tax = 1
+base_production = 1 
+base_manpower = 1 
+native_size = 10 
+native_ferocity = 2 
+native_hostileness = 6 
+tribal_owner = MSC
+
+
+discovered_by = north_american

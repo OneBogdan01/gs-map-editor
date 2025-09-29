@@ -1,0 +1,12 @@
+{
+
+   
+    "files.exclude": {
+        "**/*.obj": true
+    },
+
+    "editor.formatOnSave": true,
+    "editor.formatOnSaveMode": "file",
+    "godotTools.editorPath.godot4": "d:\\godot\\godot-4.4.1-stable\\godot-4.4.1-stable\\bin\\godot.windows.editor.dev.x86_64.exe"
+
+}

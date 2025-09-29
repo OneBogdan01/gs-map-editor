@@ -1,0 +1,46 @@
+# No previous file for Tionontate
+
+owner = TIO
+controller = TIO
+add_core = TIO
+is_city = yes
+culture = tionontate
+religion = totemism
+capital = "Tionontate"
+trade_goods = tobacco #were called the Tobacco indians
+hre = no
+base_tax = 2 
+base_production = 2
+base_manpower = 1
+native_size = 5
+native_ferocity = 1
+native_hostileness = 2
+
+
+
+discovered_by = north_american
+
+1609.1.1 = { discovered_by = FRA } # Samuel de Champlain
+
+1649.1.1 = {
+	owner = IRO
+	controller = IRO
+	add_core = IRO
+	culture = iroquois
+} #Taken by Iroquois in Beaver Wars.
+1650.1.1 = { 
+	owner = ---
+	controller = ---
+	is_city = no
+	remove_core = ARN
+	culture = anishinabe
+	tribal_owner = MSG
+} #Anishinabe expands post-beaver wars in deserted huron lands. 
+
+
+
+1664.1.1 = { discovered_by = ENG }
+1707.5.12 = { discovered_by = GBR } 
+
+1726.1.1 = { add_core = FRA }
+1763.2.10 = { remove_core = FRA }

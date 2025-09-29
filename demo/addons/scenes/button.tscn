@@ -1,0 +1,11 @@
+[gd_scene format=3 uid="uid://p1dcyrvlw3m3"]
+
+[node name="BoxContainer" type="BoxContainer"]
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="CountryProrperties" type="Panel" parent="."]
+layout_mode = 2
+
+[node name="ProvinceOwner" type="Panel" parent="."]
+layout_mode = 2

@@ -1,0 +1,20 @@
+government = tribal
+add_government_reform = tribal_despotism
+primary_culture = tunjur
+religion = sunni
+technology_group = sub_saharan
+unlock_cult = yemoja_cult
+unlock_cult = roog_cult
+unlock_cult = nyame_cult
+capital = 2932	# Waddai
+religious_school = maliki_school
+
+1443.1.1 = {
+	monarch = {
+		name = "Yame"
+		dynasty = "ibn Abbas"
+		adm = 2
+		dip = 2
+		mil = 2
+	}
+}

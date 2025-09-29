@@ -1,0 +1,26 @@
+government = monarchy
+add_government_reform = plutocratic_reform
+government_rank = 1
+primary_culture = sulawesi
+religion = animism
+technology_group = chinese
+capital = 4795
+
+1444.1.1 = {
+	monarch = {
+		name = "Tumassalangga"
+		dynasty = "Bone"
+		adm = 4
+		dip = 2
+		mil = 4
+	}
+}
+
+1480.1.1 = {
+	monarch = {
+		adm = 3
+		dip = 3
+		mil = 3
+		regent = yes
+	}
+}

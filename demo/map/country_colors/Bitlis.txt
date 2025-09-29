@@ -1,0 +1,45 @@
+graphical_culture = muslimgfx
+
+color = { 178 34 34 }
+
+historical_idea_groups = {
+	defensive_ideas
+	religious_ideas
+	administrative_ideas
+	humanist_ideas
+	diplomatic_ideas
+	trade_ideas
+	offensive_ideas
+	economic_ideas
+}
+
+historical_units = {
+	anatolian_infantry
+	muslim_cavalry
+}
+
+monarch_names = {
+	"Sharaf #0" = 15
+	"Idris #0" = 10
+	"Mahmud #0" = 10
+	"Ahmad #0" = 10
+	"Ali #0" = 10
+	"Muhammad #0" = 10
+	"Omar #0" = 10
+	"Hassan #0" = 10
+}
+
+leader_names = {
+	"Sharaf Bey"
+	"Idris Bey"
+	"Mahmud Pasha"
+	"Ahmad Bey"
+	"Ali Pasha"
+	"Muhammad Bey"
+	"Omar Bey"
+	"Hassan Pasha"
+}
+
+ship_names = {
+	"Bitlis" "Ahlat" "Tatvan" "Hizan" "Mutki"
+}

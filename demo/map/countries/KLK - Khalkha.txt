@@ -1,0 +1,18 @@
+government = tribal
+add_government_reform = steppe_horde
+technology_group = nomad_group
+religion = tengri_pagan_reformed
+primary_culture = khalkha
+capital = 4218
+
+
+1634.1.1 = {
+	monarch = {
+		name = "Tushiyetu"
+		dynasty = "Chakhundorji"
+		adm = 2
+		dip = 2
+		mil = 4
+	}
+}
+

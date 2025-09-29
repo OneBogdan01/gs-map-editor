@@ -1,0 +1,44 @@
+graphical_culture = mesoamericangfx
+
+color = { 34 139 34 }
+
+historical_idea_groups = {
+	religious_ideas
+	defensive_ideas
+	expansion_ideas
+	administrative_ideas
+	humanist_ideas
+	trade_ideas
+	offensive_ideas
+	diplomatic_ideas
+}
+
+historical_units = {
+	mesoamerican_infantry
+}
+
+monarch_names = {
+	"Tecun #0" = 15
+	"Kicab #0" = 10
+	"Quikab #0" = 10
+	"Oxlahun #0" = 10
+	"Sequechul #0" = 10
+	"Tepepul #0" = 10
+	"Istayul #0" = 10
+	"Ahmak #0" = 10
+}
+
+leader_names = {
+	"Tecun Uman"
+	"Kicab Tanub"
+	"Quikab"
+	"Oxlahun Ok"
+	"Sequechul"
+	"Tepepul"
+	"Istayul"
+	"Ahmak"
+}
+
+ship_names = {
+	"Quetzal" "Jaguar" "Puma" "Colibrí" "Serpiente"
+}

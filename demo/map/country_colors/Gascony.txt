@@ -1,0 +1,124 @@
+#Country Name: Please see filename.
+
+graphical_culture = westerngfx
+
+color = { 32 144 204 }
+
+revolutionary_colors = { 5 8 13 }
+
+historical_idea_groups = {
+	defensive_ideas
+	trade_ideas
+	religious_ideas
+	diplomatic_ideas
+	economic_ideas
+	innovativeness_ideas
+	offensive_ideas
+	spy_ideas
+}
+
+historical_units = {
+	western_medieval_infantry
+	western_medieval_knights
+	western_men_at_arms
+	swiss_landsknechten
+	dutch_maurician
+	french_caracolle
+	anglofrench_line
+	french_dragoon
+	french_bluecoat
+	french_cuirassier
+	french_impulse
+	mixed_order_infantry
+	open_order_cavalry
+	napoleonic_square
+	napoleonic_lancers
+}
+
+monarch_names = {
+	"Henri #2" = 60
+	"Edouard #4" = 10
+	"Guillaume #10" = 5
+	"Richard #2" = 5
+	"Jean #1" = 5
+	"Edmond #0" = 5
+	"Humphrey #0" = 5
+	"Armand #0" = 0
+	"Arnaud #0" = 0
+	"Aymeric #0" = 0
+	"Bartomiu #0" = 0
+	"Benedit #0" = 0
+	"Bernat #0" = 0
+	"Bertran #0" = 0
+	"Brun #0" = 0
+	"Carles #0" = 0	
+	"Eneco #0" = 0
+	"Enric #0" = 0
+	"Est�ve #0" = 0
+	"Folquet #0" = 0
+	"Frances #0" = 0
+	"Fr�dol #0" = 0
+	"MONARCH_NAME_GASTO" = 0
+	"Gaufr� #0" = 0
+	"Guilhem #0" = 0
+	"Hug #0" = 0
+	"Jacme #0" = 0
+	"Jordan #0" = 0
+	"Loys #0" = 0
+	"Matheu #0" = 0
+	"Miqueu #0" = 0
+	"Nicolau #0" = 0
+	"Per #0" = 0
+	"Pol #0" = 0
+	"Pons #0" = 0
+	"Thomas #0" = 10
+	"Vicentz #0" = 0
+	"Vivian #0" = 0
+	"Xavier #0" = 0
+	
+	"Olivie #0" = -1
+	"Ninette #0" = -1
+	"Rosalie #0" = -1
+}
+
+leader_names = {
+	Aller
+	Detmold
+	Hamelm Hildesheim
+	Kapp
+	Minden
+	Oldenburg
+	Salzgitter
+	Werden Wernigerode
+}
+
+ship_names = {
+	Adour Africain Aigle "Aigle d'Or" "Aimable Nanon"
+	"Aimable Marthe" "Aimable Rose" Alexandre "Ste Anne de Bordeaux" Amiti�
+	Ang�lique Am�ricain Amphitrite "Arc en Ciel" Bayonnaise 
+	"Belle Poule" Bienfaisant Biscayenne Bizarre "Bonnes Amies" 
+	Bordelais Brillant Caroline Castor Catiche
+	Charente "Charmante Manon" "Charmante Nancy" "Charmante Rachel" "Ch�teau de Bayonne"
+	Ch�zine "Commerce de Bordeaux" "Comte de Toulouse" Content D�bonnaire
+	D�daigneuse "Deux Fr�res" Diamant Diligente "Duc d'Aquitaine"
+	Elisabeth Entreprenante Esp�rance Extravagante Favori
+	Fendant Flamand Gaillard Galant Godichon
+	"Grand Coureur" "Grand Sirius" "Gros Ventre" Hercule Hermine 
+	Imp�rieuse Indien Intr�pide Jolie Joseph
+	Labourt Laurence L�g�re Licorne Lion
+	Machault Marchand Mars Mascarin Maure
+	M�g�re M�lampe Mignon Neptune "Nouvelle Victoire"
+	Oiseau Opale P�lican Ph�nix Pollux
+	"Quatre Fr�res" Rameau "Reine Marie" Renomm�e Rostan
+	"Royal Daim" "Saint Jacques" "Saint Pierre" Sir�ne "Soleil Royal"
+	Swinton Tamponne "Toison d'Or" Tourterelle Trinit�
+	Triton Utile Valeur V�nus "Ville de Bayonne"
+}
+
+army_names = {
+	"Arm�e d'Aquitaine" "Arm�e du Bordelais" "Arm�e du Blayais"
+	"Arm�e du Pays de Buch" "Arm�e du Bazadais" "Arm�e du Queyran"
+	"Arm�e du Fronsadais" "Arm�e du Libournais" "Arm�e de Castillon" 
+	"Arm�e d'Albret" "Arm�e de la Garonne" "Arm�e de l'Agenais"
+	"Arm�e de $PROVINCE$" 
+}

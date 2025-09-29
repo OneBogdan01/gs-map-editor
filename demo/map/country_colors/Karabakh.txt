@@ -1,0 +1,45 @@
+graphical_culture = easterngfx
+
+color = { 128 0 128 }
+
+historical_idea_groups = {
+	defensive_ideas
+	religious_ideas
+	administrative_ideas
+	trade_ideas
+	diplomatic_ideas
+	humanist_ideas
+	offensive_ideas
+	economic_ideas
+}
+
+historical_units = {
+	eastern_infantry
+	eastern_cavalry
+}
+
+monarch_names = {
+	"Ashot #0" = 10
+	"Gagik #0" = 10
+	"David #0" = 10
+	"Smbat #0" = 10
+	"Levon #0" = 10
+	"Haik #0" = 10
+	"Aram #0" = 10
+	"Tigran #0" = 10
+}
+
+leader_names = {
+	"Ashot"
+	"Gagik"
+	"David Bek"
+	"Smbat"
+	"Levon"
+	"Haik"
+	"Aram"
+	"Tigran"
+}
+
+ship_names = {
+	"Artsakh" "Gandzasar" "Tigranakert" "Shushi" "Stepanakert"
+}

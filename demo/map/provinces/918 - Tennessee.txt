@@ -1,0 +1,34 @@
+#918 - Tennessee
+
+culture = chickasaw
+religion = totemism
+capital = "Tennessee"
+trade_goods = unknown
+hre = no
+base_tax = 2
+base_production = 2
+base_manpower = 1
+native_size = 15
+native_ferocity = 7
+native_hostileness = 2
+
+
+
+discovered_by = north_american
+
+1444.1.1 = { tribal_owner = CHI }
+1540.1.1 = { discovered_by = SPA } # Hernando de Soto
+1600.1.1 = {
+	owner = CHI
+	controller = CHI
+	add_core = CHI
+	is_city = yes
+	trade_goods = grain
+} #Growth of Chickasaw power
+1682.1.1 = { unrest = 3 } # Frictions between the French & the indians
+1786.1.10= { owner = USA
+	controller = USA
+	add_core = USA
+	culture = american
+	religion = protestant 
+} #Treaty of Hopewell (with the Chickasaw), come under US authority
