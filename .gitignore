@@ -28,9 +28,9 @@ evidence/GemFile.lock
 *.exp
 /code/.cache
 *.pdb
-code/compile_commands.json
 *.ilk
 *.obj
 *.TMP
-code/compile_commands.json
+
 /.cache
+compile_commands.json
