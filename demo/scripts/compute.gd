@@ -12,15 +12,28 @@ extends Node3D
 
 const COLOR_MAP_WIDTH = 256
 const COLOR_MAP_HEIGHT = 256
+# Simple profiling utility - add to your script
+var profiler_enabled := true
 
+# Simple timing function
+func time_function(name: String, callable: Callable):
+	if not profiler_enabled:
+		return callable.call()
+	
+	var start = Time.get_ticks_usec()
+	var result = callable.call()
+	var time_ms = (Time.get_ticks_usec() - start) / 1000.0
+	print("[%s] %.2f ms" % [name, time_ms])
+	return result
 func _reload_political_texture():
-	sprite_3d.texture = ImageTexture.create_from_image(Image.load_from_file("res://assets/political_map.png"))
+	sprite_3d.texture = ImageTexture.create_from_image(political_map)
 	
 	
 func _generate_map():
-	create_color_map_texture()
-	create_political_map_texture()
-	_reload_political_texture()
+	time_function("Color Map", create_color_map_texture)
+	time_function("Political Map", create_political_map_texture) 
+	time_function("Reload Texture", _reload_political_texture)
+
 	
 func _ready():
 	# TODO This should be way faster than it is now
@@ -133,42 +146,34 @@ func create_political_map_texture():
 	rd.sync()
 	# Get the result back
 	var byte_data: PackedByteArray = rd.texture_get_data(political_image, 0)
-	print("Retrieved byte data size: ", byte_data.size())
+
 
 	
 	# Create new image from the result
 	var result_image = Image.create_from_data(TEXTURE_SIZE.x, TEXTURE_SIZE.y, false, Image.FORMAT_RGBA8, byte_data)
-	result_image.save_png("res://assets/political_map.png")
-	political_image = result_image
+	#result_image.save_png("res://assets/political_map.png")
+	political_map = result_image
 
 func create_color_map_texture():
 	var rd = RenderingServer.create_local_rendering_device()
 	# TODO get the data already sorted and without useless data
-	var colors:PackedColorArray
-	var ids:PackedInt32Array
-	
-	var province_data = country_data.get_province_data()
-	province_data.sort_custom(sort)
-	for dict:Dictionary in province_data:
-		var id = dict["Id"]
-		ids.append(id)
-		colors.append(country_data.get_country_color_from_province_id(id))
+	var start = Time.get_ticks_usec()
 
-	var color_bytes := colors.to_byte_array()
-	var id_bytes := ids.to_byte_array()
+	
+	# calls cpp code
+	var buffer:PackedInt32Array = country_data.populate_color_map_buffers()
+		
+	var data_prep_time = (Time.get_ticks_usec() - start) / 1000.0
+	print("[Data Preparation] %.2f ms" % data_prep_time)
+	var buffer_bytes := buffer.to_byte_array()
 	
 	
-	var buffer_color := rd.storage_buffer_create(color_bytes.size(), color_bytes)
-	var uniform_color := RDUniform.new()
-	uniform_color.uniform_type = RenderingDevice.UNIFORM_TYPE_STORAGE_BUFFER
-	uniform_color.binding = 1 # this needs to match the "binding" in our shader file
-	uniform_color.add_id(buffer_color)
+	var buffer_storage := rd.storage_buffer_create(buffer_bytes.size(), buffer_bytes)
+	var uniform_buffer := RDUniform.new()
+	uniform_buffer.uniform_type = RenderingDevice.UNIFORM_TYPE_STORAGE_BUFFER
+	uniform_buffer.binding = 1 # this needs to match the "binding" in our shader file
+	uniform_buffer.add_id(buffer_storage)
 	
-	var buffer_id := rd.storage_buffer_create(id_bytes.size(), id_bytes)
-	var uniform_id := RDUniform.new()
-	uniform_id.uniform_type = RenderingDevice.UNIFORM_TYPE_STORAGE_BUFFER
-	uniform_id.binding = 2 # this needs to match the "binding" in our shader file
-	uniform_id.add_id(buffer_id)
 	
 	# Create output texture format 
 	const TEXTURE_SIZE = Vector2i(256, 256)
@@ -193,7 +198,7 @@ func create_color_map_texture():
 	var shader_spirv: RDShaderSPIRV = shader_file.get_spirv()
 	var shader = rd.shader_create_from_spirv(shader_spirv)
    
-	var uniform_set = rd.uniform_set_create([output_uniform, uniform_color,uniform_id], shader, 0)
+	var uniform_set = rd.uniform_set_create([output_uniform, uniform_buffer], shader, 0)
 
  
 	# Dispatch compute shader
@@ -214,14 +219,14 @@ func create_color_map_texture():
 	rd.sync()
 	# Get the result back
 	var byte_data: PackedByteArray = rd.texture_get_data(output_image, 0)
-	print("Retrieved byte data size: ", byte_data.size())
+
 
 	
 	# Create new image from the result
 	var result_image = Image.create_from_data(TEXTURE_SIZE.x, TEXTURE_SIZE.y, false, Image.FORMAT_RGBA8, byte_data)
 	color_map = result_image
 	# for debugging
-	result_image.save_png("res://assets/color_map.png")
+	#result_image.save_png("res://assets/color_map.png")
 	return result_image
 	
 func create_lookup_texture():
@@ -364,7 +369,7 @@ func create_lookup_texture():
 	rd.sync()
 	# Get the result back
 	var byte_data: PackedByteArray = rd.texture_get_data(output_image, 0)
-	print("Retrieved byte data size: ", byte_data.size())
+
 
 	if byte_data.size() == 0:
 		print("ERROR: No data retrieved from GPU texture!")
@@ -375,10 +380,8 @@ func create_lookup_texture():
 	var result_image = Image.create_from_data(texture_size.x, texture_size.y, false, Image.FORMAT_RG8, byte_data)
 	color_lookup = result_image
 	# for debugging
-	result_image.save_png("res://assets/color_lookup.png")  # In project directory
-	# Force filesystem refresh (if running in editor)
-	if Engine.is_editor_hint():
-		EditorInterface.get_resource_filesystem().scan()
+	#result_image.save_png("res://assets/color_lookup.png")  # In project directory
+
 	
 	print("Texture processing completed successfully!")
 

@@ -6,8 +6,8 @@
 #include "godot_cpp/core/print_string.hpp"
 #include "godot_cpp/variant/array.hpp"
 #include "godot_cpp/variant/color.hpp"
-#include "godot_cpp/variant/color_names.inc.hpp"
 #include "godot_cpp/variant/dictionary.hpp"
+#include "godot_cpp/variant/packed_int32_array.hpp"
 #include "godot_cpp/variant/packed_string_array.hpp"
 #include "godot_cpp/variant/string.hpp"
 #include "godot_cpp/variant/utility_functions.hpp"
@@ -83,6 +83,67 @@ PackedStringArray CountryData::get_txt_files_in_folder(const String &folder_path
 	dir->list_dir_end();
 	return txt_files;
 }
+//call at the beginning
+void CountryData::build_look_up_tables()
+{
+	country_id_to_country_name.clear();
+	country_name_to_color.clear();
+
+	for (const Dictionary &dict : country_data)
+	{
+		country_id_to_country_name[dict["Id"]] = dict["Name"];
+	}
+
+	for (const Dictionary &dict : country_color_data)
+	{
+		country_name_to_color[dict["Name"]] = dict["Color"];
+	}
+}
+Color CountryData::get_country_color_lookup(const String &country_id)
+{
+	String country_name = country_id_to_country_name[country_id];
+
+	return Color(country_name_to_color[country_name]);
+}
+PackedInt32Array CountryData::populate_color_map_buffers()
+{
+	// Array province_color;
+
+	// for (const Dictionary &province : province_data)
+	// {
+	// 	Color color = Color(0, 0, 0, 1); // Default black color
+	// 	//get its owner it should be as an identifier country like AAC (for Aachen)
+	// 	String country_id = province["Owner"];
+	// 	for (const Dictionary &entry_country : country_data)
+	// 	{
+	// 		//find the country with the identifier
+	// 		if (String(entry_country["Id"]) == country_id)
+	// 		{
+	// 			//using the country name get the color
+	// 			color = get_country_color(entry_country["Name"]);
+	// 			break;
+	// 		}
+	// 	}
+	// 	province_color.push_back(color);
+	// }
+
+	PackedInt32Array data;
+
+	int i = 0;
+	for (const Dictionary &dict : province_data)
+	{
+		int id = dict["Id"];
+		String country_id = dict["Owner"];
+		Color color = get_country_color_lookup(country_id);
+
+		data.append_array({ color.get_r8(), color.get_g8(), color.get_b8(), id });
+	}
+	return data;
+}
+bool CountryData::sort_by_id(const Dictionary &a, const Dictionary &b)
+{
+	return (int)a["Id"] < (int)b["Id"];
+}
 void CountryData::parse_all_files()
 {
 	UtilityFunctions::print("Parsing countries ...");
@@ -145,6 +206,10 @@ void CountryData::parse_all_files()
 		province_codes["Owner"] = parse_province_owner(full_path);
 		province_data.push_back(province_codes);
 	}
+	// sort them by id
+	province_data.sort_custom(callable_mp(this, &CountryData::sort_by_id));
+	// create lookup tables
+	build_look_up_tables();
 	UtilityFunctions::print("Parsed Provinces:", province_data.size());
 	UtilityFunctions::print("Parsed Country Colors:", country_color_data.size());
 	UtilityFunctions::print("Parsed Countries:", country_data.size());
@@ -234,13 +299,17 @@ Color CountryData::get_country_color_from_province_id(uint32_t province_id)
 	for (int i = 0; i < province_data.size(); i++)
 	{
 		const Dictionary &entry = province_data[i];
+		//find province id
 		if (uint32_t(entry["Id"]) == province_id)
 		{
+			//get its owner it should be as an identifier country like AAC (for Aachen)
 			String country_id = entry["Owner"];
 			for (const Dictionary &entry_country : country_data)
 			{
+				//find the country with the identifier
 				if (String(entry_country["Id"]) == country_id)
 				{
+					//using the country name get the color
 					color = get_country_color(entry_country["Name"]);
 					break;
 				}
@@ -465,6 +534,8 @@ void CountryData::_bind_methods()
 	ClassDB::bind_method(D_METHOD("get_country_color", "name"), &CountryData::get_country_color);
 	ClassDB::bind_method(D_METHOD("change_province_owner"), &CountryData::change_province_owner);
 	ClassDB::bind_method(D_METHOD("get_country_color_from_province_id", "name"), &CountryData::get_country_color_from_province_id);
+	ClassDB::bind_method(D_METHOD("populate_color_map_buffers"), &CountryData::populate_color_map_buffers);
+
 	ClassDB::bind_method(D_METHOD("set_country_color_by_name", "name", "color"), &CountryData::set_country_color_by_name);
 
 	ADD_PROPERTY(PropertyInfo(Variant::STRING, "provinces_folder", PROPERTY_HINT_DIR), "set_provinces_folder", "get_provinces_folder");

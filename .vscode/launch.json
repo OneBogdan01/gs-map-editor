@@ -5,26 +5,6 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "(Windows) Launch",
-            "type": "cppvsdbg",
-            "request": "launch",
-            "program": "D:/godot/godot-4.4.1-stable/godot-4.4.1-stable/bin/godot.windows.editor.dev.x86_64.exe",
-
-            "args": [
-            "--editor",
-            "--path",
-            "D:/Buas/Github/2526-Y3A-PR-230005/code/demo",
-            "--verbose",
-            "--debug",
-            "--stdout"
-        ],
-            "stopAtEntry": false,
-            "cwd": "${workspaceFolder}",
-            "environment": [],
-            "console": "integratedTerminal",
-            "preLaunchTask": "build"
-        },
-            {
         "name": "Run Demo [FROM EDITOR] - [DEBUG MODE]",
         "type": "cppvsdbg",
         "request": "launch",
@@ -32,7 +12,7 @@
         "args": [
             "--editor",
             "--path",
-            "D:/Buas/Github/2526-Y3A-PR-230005/code/demo",
+            "D:/Buas/Github/2526-Y3A-PR-230005/gs-map-editor/demo",
             "--verbose",
             "--debug",
             "--stdout"
@@ -50,7 +30,7 @@
 			"program": "D:/godot/godot-4.4.1-stable/godot-4.4.1-stable/bin/godot.windows.editor.dev.x86_64.exe",
 			"args": [
 				"--path",
-				"D:/Buas/Github/2526-Y3A-PR-230005/code/demo",
+				"D:/Buas/Github/2526-Y3A-PR-230005/gs-map-editor/demo",
 				"--verbose",
 				"--debug",
 				"--stdout"
@@ -69,7 +49,7 @@
 			"args": [
 				"--editor",
 				"--path",
-				"D:/Buas/Github/2526-Y3A-PR-230005/code/demo",
+				"D:/Buas/Github/2526-Y3A-PR-230005/gs-map-editor/demo",
 			],
 			"stopAtEntry": false,
 			"cwd": "${workspaceFolder}",
@@ -84,7 +64,7 @@
 			"program": "D:/godot/godot-4.4.1-stable/godot-4.4.1-stable/bin/godot.windows.editor.dev.x86_64.exe",
 			"args": [
 				"--path",
-				"D:/Buas/Github/2526-Y3A-PR-230005/code/demo",
+				"D:/Buas/Github/2526-Y3A-PR-230005/gs-map-editor/demo",
 			],
 			"stopAtEntry": false,
 			"cwd": "${workspaceFolder}",

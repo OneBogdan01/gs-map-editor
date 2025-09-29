@@ -1,6 +1,9 @@
 #pragma once
 #include "godot_cpp/classes/node.hpp"
+#include "godot_cpp/variant/color.hpp"
 #include "godot_cpp/variant/dictionary.hpp"
+#include "godot_cpp/variant/packed_color_array.hpp"
+#include "godot_cpp/variant/packed_int32_array.hpp"
 #include "godot_cpp/variant/packed_string_array.hpp"
 #include "godot_cpp/variant/variant.hpp"
 #include <cstdint>
@@ -13,6 +16,7 @@ class CountryData : public Node
 public:
 	CountryData();
 	~CountryData();
+	bool sort_by_id(const Dictionary &a, const Dictionary &b);
 	void set_countries_folder(const String &p_path);
 	String get_countries_folder() const;
 	void set_countries_color_folder(const String &p_path);
@@ -36,6 +40,9 @@ public:
 	void parse_all_files();
 	void export_color_data(int64_t color_index);
 	int64_t get_country_id_from_name(String name);
+	PackedInt32Array populate_color_map_buffers();
+	void build_look_up_tables();
+	Color get_country_color_lookup(const String &country_id);
 
 private:
 	PackedStringArray get_txt_files_in_folder(const String &folder_path);
@@ -47,5 +54,8 @@ private:
 	String countries_folder_path;
 	String country_colors_folder_path;
 	String provinces_folder_path;
+	// these cannot change at runtime
+	Dictionary country_id_to_country_name;
+	Dictionary country_name_to_color;
 };
 } //namespace godot
