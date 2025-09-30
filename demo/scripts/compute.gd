@@ -1,18 +1,19 @@
 
 extends Node3D
-@onready var sprite_3d: Sprite3D = $"."
+
+@onready var base_map_material = load("res://shaders/simple_borders/color_output_material.tres")
+
 @onready var map_data: MapData = $"../ProvinceSelector/MapData"
 @onready var country_data: CountryData = $"../ProvinceSelector/CountryData"
-@export var color_lookup: Image
-@export var color_map: Image
-@export var political_map: Image
 @onready var province_selector: ProvinceSelector = $"../ProvinceSelector"
-
 @onready var province_map: Sprite3D = $ProvinceMap
 
-const COLOR_MAP_WIDTH = 256
-const COLOR_MAP_HEIGHT = 256
-# Simple profiling utility - add to your script
+var color_lookup: Image
+var color_map: Image
+var political_map: Image
+var edge_map: Image
+
+
 var profiler_enabled := true
 
 # Simple timing function
@@ -25,14 +26,16 @@ func time_function(name: String, callable: Callable):
 	var time_ms = (Time.get_ticks_usec() - start) / 1000.0
 	print("[%s] %.2f ms" % [name, time_ms])
 	return result
-func _reload_political_texture():
-	sprite_3d.texture = ImageTexture.create_from_image(political_map)
-	
+func _update_shader_parameters(name, parameterVariant):
+		base_map_material.set_shader_parameter(name, parameterVariant)
+
+
 	
 func _generate_map():
 	time_function("Color Map", create_color_map_texture)
-	time_function("Political Map", create_political_map_texture) 
-	time_function("Reload Texture", _reload_political_texture)
+	#time_function("Distance Field",create_edge_map_texture)
+	#time_function("Political Map", create_political_map_texture) 
+	#time_function("Reload Texture", _reload_political_texture)
 
 	
 func _ready():
@@ -53,15 +56,6 @@ func _physics_process(delta: float) -> void:
 	elif  Input.is_action_just_pressed("select"):
 		province_selector.select_province()
 
-func _process(delta: float) -> void:
-	# debugging
-	if Input.is_action_just_pressed("change_map"):
-		if is_political:
-			_reload_political_texture()
-			is_political = false
-		else:
-			sprite_3d.texture = preload("res://assets/provinces.bmp")
-			is_political = true
 
 static func sort(a, b):
 	if a["Id"] < b["Id"]:
@@ -153,7 +147,117 @@ func create_political_map_texture():
 	var result_image = Image.create_from_data(TEXTURE_SIZE.x, TEXTURE_SIZE.y, false, Image.FORMAT_RGBA8, byte_data)
 	#result_image.save_png("res://assets/political_map.png")
 	political_map = result_image
+	#_update_shader_parameters("country_map", ImageTexture.create_from_image(political_map))
 
+
+
+func create_edge_map_texture():
+	var rd = RenderingServer.create_local_rendering_device()
+	# Create output texture format 
+	const TEXTURE_SIZE = Vector2i(5632, 2048)/4
+	var lookup_format = RDTextureFormat.new()
+	lookup_format.width = TEXTURE_SIZE.x
+	lookup_format.height = TEXTURE_SIZE.y
+	lookup_format.format = RenderingDevice.DATA_FORMAT_R8G8_UNORM
+	lookup_format.usage_bits =  RenderingDevice.TEXTURE_USAGE_STORAGE_BIT | RenderingDevice.TEXTURE_USAGE_CAN_COPY_FROM_BIT
+
+	var color_format = RDTextureFormat.new()
+	color_format.width = color_map.get_width()
+	color_format.height = color_map.get_height()
+	color_format.format = RenderingDevice.DATA_FORMAT_R8G8B8A8_UNORM
+	color_format.usage_bits = RenderingDevice.TEXTURE_USAGE_SAMPLING_BIT | RenderingDevice.TEXTURE_USAGE_STORAGE_BIT
+
+	# Create empty output texture
+	var edge_format = RDTextureFormat.new()
+	edge_format.width = TEXTURE_SIZE.x
+	edge_format.height = TEXTURE_SIZE.y
+	edge_format.format = RenderingDevice.DATA_FORMAT_R8_UNORM
+	edge_format.usage_bits = RenderingDevice.TEXTURE_USAGE_STORAGE_BIT | RenderingDevice.TEXTURE_USAGE_CAN_COPY_FROM_BIT
+	
+		# Create empty output texture
+	var temp_format = RDTextureFormat.new()
+	temp_format.width = TEXTURE_SIZE.x
+	temp_format.height = TEXTURE_SIZE.y
+	temp_format.format = RenderingDevice.DATA_FORMAT_R8G8_UNORM
+	temp_format.usage_bits = RenderingDevice.TEXTURE_USAGE_SAMPLING_BIT | RenderingDevice.TEXTURE_USAGE_CAN_COPY_FROM_BIT | RenderingDevice.TEXTURE_USAGE_STORAGE_BIT
+	
+
+
+	# Create GPU input texture with image data
+	var downsampled_lookup = color_lookup
+	downsampled_lookup.resize(TEXTURE_SIZE.x,TEXTURE_SIZE.y,Image.INTERPOLATE_BILINEAR)
+	var lookup_image = rd.texture_create(lookup_format, RDTextureView.new(), [color_lookup.get_data()])
+	var color_image = rd.texture_create(color_format, RDTextureView.new(), [color_map.get_data()])
+	
+	var edge_image = rd.texture_create(edge_format, RDTextureView.new(), [])
+	var buffer_a_image = rd.texture_create(temp_format, RDTextureView.new(), [])
+	
+	var buffer_b_image = rd.texture_create(temp_format, RDTextureView.new(), [])
+	
+	
+
+	
+	var lookup_uniform = RDUniform.new()
+	lookup_uniform.uniform_type = RenderingDevice.UNIFORM_TYPE_IMAGE
+	lookup_uniform.binding = 0
+	lookup_uniform.add_id(lookup_image)
+
+	var color_uniform = RDUniform.new()
+	color_uniform.uniform_type = RenderingDevice.UNIFORM_TYPE_IMAGE
+	color_uniform.binding = 1
+	color_uniform.add_id(color_image)
+	
+	var buffer_a_uniform := RDUniform.new()
+	buffer_a_uniform.uniform_type = RenderingDevice.UNIFORM_TYPE_IMAGE
+	buffer_a_uniform.binding = 2
+	buffer_a_uniform.add_id(buffer_a_image)
+	
+	var buffer_b_uniform := RDUniform.new()
+	buffer_b_uniform.uniform_type = RenderingDevice.UNIFORM_TYPE_IMAGE
+	buffer_b_uniform.binding = 3
+	buffer_b_uniform.add_id(buffer_b_image)
+	
+	var distance_uniform := RDUniform.new()
+	distance_uniform.uniform_type = RenderingDevice.UNIFORM_TYPE_IMAGE
+	distance_uniform.binding =2
+	distance_uniform.add_id(edge_image)
+	
+	
+
+	var shader_file = load("res://shaders/generate_borders.glsl")
+	
+	var shader_spirv: RDShaderSPIRV = shader_file.get_spirv()
+	var shader = rd.shader_create_from_spirv(shader_spirv)
+   
+
+	var uniform_set = rd.uniform_set_create([lookup_uniform, color_uniform, distance_uniform], shader, 0)
+
+ 
+	# Dispatch compute shader
+	var pipeline := rd.compute_pipeline_create(shader)
+	var compute_list = rd.compute_list_begin()
+	rd.compute_list_bind_compute_pipeline(compute_list, pipeline)
+	rd.compute_list_bind_uniform_set(compute_list, uniform_set, 0)
+   
+	# Calculate dispatch groups (8x8 work group size)
+	var group_size_x = (TEXTURE_SIZE.x + 7) / 8
+	var group_size_y = (TEXTURE_SIZE.y + 7) / 8
+   
+	rd.compute_list_dispatch(compute_list, group_size_x, group_size_y, 1)
+	rd.compute_list_end()
+   
+	# Submit and wait
+	rd.submit()
+	rd.sync()
+	# Get the result back
+	var byte_data: PackedByteArray = rd.texture_get_data(edge_image, 0)
+
+
+	
+	# Create new image from the result
+	var result_image = Image.create_from_data(TEXTURE_SIZE.x, TEXTURE_SIZE.y, false, Image.FORMAT_R8, byte_data)
+	result_image.save_png("res://assets/edge_map.png")
+	edge_map = result_image
 func create_color_map_texture():
 	var rd = RenderingServer.create_local_rendering_device()
 	# TODO get the data already sorted and without useless data
@@ -227,6 +331,9 @@ func create_color_map_texture():
 	color_map = result_image
 	# for debugging
 	#result_image.save_png("res://assets/color_map.png")
+	_update_shader_parameters("color_map",ImageTexture.create_from_image(color_map))
+	
+	
 	return result_image
 	
 func create_lookup_texture():
@@ -380,8 +487,8 @@ func create_lookup_texture():
 	var result_image = Image.create_from_data(texture_size.x, texture_size.y, false, Image.FORMAT_RG8, byte_data)
 	color_lookup = result_image
 	# for debugging
-	#result_image.save_png("res://assets/color_lookup.png")  # In project directory
-
+	result_image.save_png("res://assets/color_lookup.png")  # In project directory
+	_update_shader_parameters("lookup_map",ImageTexture.create_from_image(color_lookup))
 	
 	print("Texture processing completed successfully!")
 
