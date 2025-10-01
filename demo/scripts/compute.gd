@@ -1,6 +1,8 @@
 
 extends Node3D
-@onready var sprite_3d: Sprite3D = $"."
+
+@onready var base_map_material = load("res://shaders/simple_borders/color_output_material.tres")
+
 @onready var map_data: MapData = $"../ProvinceSelector/MapData"
 @onready var country_data: CountryData = $"../ProvinceSelector/CountryData"
 @onready var province_selector: ProvinceSelector = $"../ProvinceSelector"
@@ -25,16 +27,14 @@ func time_function(name: String, callable: Callable):
 	print("[%s] %.2f ms" % [name, time_ms])
 	return result
 func _update_shader_parameters(name, parameterVariant):
-		sprite_3d.material_override.set_shader_parameter(name, parameterVariant)
+		base_map_material.set_shader_parameter(name, parameterVariant)
 
-func _reload_political_texture():
-	sprite_3d.material_override.set_shader_parameter("political_map", ImageTexture.create_from_image(political_map))
-	
+
 	
 func _generate_map():
 	time_function("Color Map", create_color_map_texture)
 	#time_function("Distance Field",create_edge_map_texture)
-	time_function("Political Map", create_political_map_texture) 
+	#time_function("Political Map", create_political_map_texture) 
 	#time_function("Reload Texture", _reload_political_texture)
 
 	
@@ -56,15 +56,6 @@ func _physics_process(delta: float) -> void:
 	elif  Input.is_action_just_pressed("select"):
 		province_selector.select_province()
 
-func _process(delta: float) -> void:
-	# debugging
-	if Input.is_action_just_pressed("change_map"):
-		if is_political:
-			_reload_political_texture()
-			is_political = false
-		else:
-			sprite_3d.texture = preload("res://assets/provinces.bmp")
-			is_political = true
 
 static func sort(a, b):
 	if a["Id"] < b["Id"]:
@@ -156,7 +147,7 @@ func create_political_map_texture():
 	var result_image = Image.create_from_data(TEXTURE_SIZE.x, TEXTURE_SIZE.y, false, Image.FORMAT_RGBA8, byte_data)
 	#result_image.save_png("res://assets/political_map.png")
 	political_map = result_image
-	_update_shader_parameters("country_map", ImageTexture.create_from_image(political_map))
+	#_update_shader_parameters("country_map", ImageTexture.create_from_image(political_map))
 
 
 

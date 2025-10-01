@@ -1,0 +1,10 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://dhootisvgfdv0"]
+
+[ext_resource type="Shader" uid="uid://cdfeyj6fl3i4f" path="res://shaders/simple_borders/political_map.gdshader" id="1_uolq4"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_uolq4")
+shader_parameter/threshold = 0.1
+shader_parameter/aa_scale = 17.6
+shader_parameter/base_line_thickness = 0.38197

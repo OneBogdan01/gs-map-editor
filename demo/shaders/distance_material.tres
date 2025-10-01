@@ -1,0 +1,6 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://bpq3q8tsst5kl"]
+
+[ext_resource type="Shader" uid="uid://bx6iknau86hxt" path="res://shaders/distance_material.gdshader" id="1_7c0bp"]
+
+[resource]
+shader = ExtResource("1_7c0bp")
