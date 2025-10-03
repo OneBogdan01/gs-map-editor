@@ -1,13 +1,12 @@
-[gd_scene load_steps=10 format=3 uid="uid://cgoxd520waiho"]
+[gd_scene load_steps=8 format=3 uid="uid://cgoxd520waiho"]
 
 [ext_resource type="Texture2D" uid="uid://c7x6n8v5pq0qm" path="res://assets/provinces.bmp" id="1_o5qli"]
 [ext_resource type="Shader" uid="uid://cgwh38nj6ojyu" path="res://shaders/simple_borders/output.gdshader" id="1_tbgi4"]
 [ext_resource type="Script" uid="uid://cguys746q2lng" path="res://scripts/compute.gd" id="2_0wfyh"]
-[ext_resource type="Shader" uid="uid://cdfeyj6fl3i4f" path="res://shaders/simple_borders/political_map.gdshader" id="4_tbgi4"]
 [ext_resource type="Material" uid="uid://c8jde24pw1w18" path="res://shaders/simple_borders/color_output_material.tres" id="5_tbgi4"]
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_tbgi4"]
-viewport_path = NodePath("Map/HQX")
+viewport_path = NodePath("Map/ColorOutput")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_tbgi4"]
 resource_local_to_scene = true
@@ -17,13 +16,6 @@ shader_parameter/subview_image = SubResource("ViewportTexture_tbgi4")
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_o5qli"]
 size = Vector3(56.32, 20.48, 0)
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_o6xl0"]
-resource_local_to_scene = true
-shader = ExtResource("4_tbgi4")
-shader_parameter/border_color = Color(1, 1, 1, 1)
-shader_parameter/border_width = 2.0
-shader_parameter/border_softness = 1.0
 
 [node name="Node" type="Node"]
 
@@ -58,19 +50,6 @@ transparent = false
 double_sided = false
 texture_filter = 0
 texture = ExtResource("1_o5qli")
-
-[node name="HQX" type="SubViewport" parent="Map"]
-handle_input_locally = false
-size = Vector2i(5632, 2048)
-render_target_update_mode = 4
-
-[node name="Output" type="ColorRect" parent="Map/HQX"]
-material = SubResource("ShaderMaterial_o6xl0")
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
 
 [node name="ColorOutput" type="SubViewport" parent="Map"]
 size = Vector2i(5632, 2048)
