@@ -34,7 +34,7 @@ func _update_shader_parameters(name, parameterVariant):
 func _generate_map():
 	time_function("Color Map", create_color_map_texture)
 	#time_function("Distance Field",create_edge_map_texture)
-	#time_function("Political Map", create_political_map_texture) 
+	time_function("Political Map", create_political_map_texture) 
 	#time_function("Reload Texture", _reload_political_texture)
 
 	
@@ -145,7 +145,7 @@ func create_political_map_texture():
 	
 	# Create new image from the result
 	var result_image = Image.create_from_data(TEXTURE_SIZE.x, TEXTURE_SIZE.y, false, Image.FORMAT_RGBA8, byte_data)
-	#result_image.save_png("res://assets/political_map.png")
+	result_image.save_png("res://assets/political_map.png")
 	political_map = result_image
 	#_update_shader_parameters("country_map", ImageTexture.create_from_image(political_map))
 
@@ -330,7 +330,7 @@ func create_color_map_texture():
 	var result_image = Image.create_from_data(TEXTURE_SIZE.x, TEXTURE_SIZE.y, false, Image.FORMAT_RGBA8, byte_data)
 	color_map = result_image
 	# for debugging
-	#result_image.save_png("res://assets/color_map.png")
+	result_image.save_png("res://assets/color_map.png")
 	_update_shader_parameters("color_map",ImageTexture.create_from_image(color_map))
 	
 	
