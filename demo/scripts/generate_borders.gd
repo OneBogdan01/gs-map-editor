@@ -40,6 +40,7 @@ func _render_result(step_size, input_texture):
 	df.convert(Image.FORMAT_R8)
 	distance_material.set_shader_parameter("input_texture",ImageTexture.create_from_image(df))
 	distance.set_update_mode(SubViewport.UPDATE_ONCE)
+	await RenderingServer.frame_post_draw
 	
 func _increment_jfa():
 		# wait until the mask has rendered
@@ -61,9 +62,9 @@ func _increment_jfa():
 		
 func _init_jfa():
 		var tex = MASK_MATERIAL.get_shader_parameter("mask_texture")
-		full_texture_size = tex.get_image().get_size() /downsample
-		mask.size = full_texture_size
-		jfa.size =full_texture_size
+		full_texture_size = tex.get_image().get_size()
+		mask.size = full_texture_size 
+		jfa.size = full_texture_size 
 		distance.size = full_texture_size
 	
 		step_sizes = get_jfa_step_sizes(max(full_texture_size.x,full_texture_size.y))
@@ -85,17 +86,18 @@ func _input(event: InputEvent) -> void:
 		if index_step < step_sizes.size():
 			_increment_jfa()	
 		else :
-			distance.get_texture().get_image().save_png("res://assets/distance_field.png")
+			var tex = distance.get_texture().get_image()
+			tex.convert(Image.FORMAT_R8)
+			tex.save_png("res://assets/distance_field.png")
 
 	
 
 	
 
 func get_jfa_step_sizes(max_dimension: int) -> Array[float]:
-	var steps: Array[float] = []
-	var num_passes = ceil(log(max_dimension) / log(2))
-
-	for i in range(1, int(num_passes)+1, 1):
-		steps.append(1.0 / pow(2.0, float(i+6)))
+	var steps: Array[float] = [16,8,4,2,1]
+	#var num_passes = ceil(log(max_dimension) / log(2))
+	#for i in range(1, int(num_passes)+1, 1):
+		#steps.append()
 	
 	return steps

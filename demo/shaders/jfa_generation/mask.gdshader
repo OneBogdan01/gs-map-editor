@@ -1,5 +1,7 @@
 shader_type canvas_item;
-uniform sampler2D mask_texture : source_color, filter_nearest;
+render_mode unshaded;
+
+uniform sampler2D mask_texture :  filter_nearest;
 uniform float threshold : hint_range(0.001, 1.0, 0.001) = 0.2;
 
 void fragment() {
