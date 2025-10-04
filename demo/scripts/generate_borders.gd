@@ -61,7 +61,10 @@ func _increment_jfa():
 		index_step += 1
 		
 func _init_jfa():
+		pass
 		var tex = MASK_MATERIAL.get_shader_parameter("mask_texture")
+		if tex == null:
+			return
 		full_texture_size = tex.get_image().get_size()
 		mask.size = full_texture_size 
 		jfa.size = full_texture_size 

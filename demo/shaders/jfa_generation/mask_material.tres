@@ -1,10 +1,8 @@
-[gd_resource type="ShaderMaterial" load_steps=3 format=3 uid="uid://dr35gm5plrji5"]
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://dr35gm5plrji5"]
 
 [ext_resource type="Shader" uid="uid://58jh24y7caxu" path="res://shaders/jfa_generation/mask.gdshader" id="1_752an"]
-[ext_resource type="Texture2D" uid="uid://bmk5fr67658ye" path="res://assets/political_map.png" id="2_pv5yi"]
 
 [resource]
 resource_local_to_scene = true
 shader = ExtResource("1_752an")
-shader_parameter/mask_texture = ExtResource("2_pv5yi")
-shader_parameter/threshold = 0.001
+shader_parameter/max_distance = 10.0
