@@ -50,6 +50,7 @@ offset_right = 5632.0
 offset_bottom = 2048.0
 grow_horizontal = 2
 grow_vertical = 2
+scale = Vector2(0.045, 0.045)
 
 [node name="Mask" type="SubViewport" parent="Mask"]
 disable_3d = true
@@ -69,10 +70,12 @@ grow_vertical = 2
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_top = 444.0
 offset_right = 5632.0
-offset_bottom = 2048.0
+offset_bottom = 2492.0
 grow_horizontal = 2
 grow_vertical = 2
+scale = Vector2(0.1, 0.1)
 
 [node name="JFA" type="SubViewport" parent="JFA"]
 disable_3d = true
@@ -90,9 +93,11 @@ grow_vertical = 2
 
 [node name="Distance" type="SubViewportContainer" parent="."]
 texture_filter = 4
-offset_top = 2860.0
-offset_right = 5632.0
-offset_bottom = 4908.0
+offset_left = 484.0
+offset_top = 184.0
+offset_right = 6116.0
+offset_bottom = 2232.0
+scale = Vector2(0.12, 0.12)
 
 [node name="Distance" type="SubViewport" parent="Distance"]
 disable_3d = true
@@ -109,9 +114,11 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="Outline" type="SubViewportContainer" parent="."]
-offset_top = 5045.0
-offset_right = 5632.0
-offset_bottom = 7093.0
+offset_left = 563.0
+offset_top = 444.0
+offset_right = 6195.0
+offset_bottom = 2492.0
+scale = Vector2(0.1, 0.1)
 
 [node name="Outline" type="SubViewport" parent="Outline"]
 handle_input_locally = false
