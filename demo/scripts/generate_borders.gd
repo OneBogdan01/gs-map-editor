@@ -61,7 +61,7 @@ func _increment_jfa():
 		
 func _init_jfa():
 		var tex = MASK_MATERIAL.get_shader_parameter("mask_texture")
-		full_texture_size = tex.get_image().get_size() 
+		full_texture_size = tex.get_image().get_size() /downsample
 		mask.size = full_texture_size
 		jfa.size =full_texture_size
 		distance.size = full_texture_size
@@ -93,9 +93,9 @@ func _input(event: InputEvent) -> void:
 
 func get_jfa_step_sizes(max_dimension: int) -> Array[float]:
 	var steps: Array[float] = []
-	#var num_passes = ceil(log(max_dimension) / log(2))
-	var num_passes = 8
+	var num_passes = ceil(log(max_dimension) / log(2))
+
 	for i in range(1, int(num_passes)+1, 1):
-		steps.append(1.0 / pow(2.0, float(i+downsample)))
+		steps.append(1.0 / pow(2.0, float(i+6)))
 	
 	return steps

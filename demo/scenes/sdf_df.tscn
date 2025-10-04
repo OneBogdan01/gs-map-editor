@@ -42,9 +42,9 @@ shader_parameter/outer_glow_color = Color(0, 0, 0, 0.6)
 
 [node name="Borders" type="Node2D"]
 script = ExtResource("1_mpvg1")
-downsample = 3.0
 
 [node name="Mask" type="SubViewportContainer" parent="."]
+visible = false
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -57,7 +57,7 @@ grow_vertical = 2
 disable_3d = true
 handle_input_locally = false
 size = Vector2i(5632, 2048)
-render_target_update_mode = 4
+render_target_update_mode = 0
 
 [node name="ColorRect" type="ColorRect" parent="Mask/Mask"]
 material = ExtResource("2_d46lq")
@@ -94,9 +94,10 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="Distance" type="SubViewportContainer" parent="."]
-offset_top = 512.0
-offset_right = 5632.0
-offset_bottom = 2560.0
+offset_left = -2048.0
+offset_top = 223.0
+offset_right = 3584.0
+offset_bottom = 2271.0
 
 [node name="Distance" type="SubViewport" parent="Distance"]
 handle_input_locally = false

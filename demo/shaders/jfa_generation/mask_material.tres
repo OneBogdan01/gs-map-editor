@@ -7,4 +7,4 @@
 resource_local_to_scene = true
 shader = ExtResource("1_752an")
 shader_parameter/mask_texture = ExtResource("2_pv5yi")
-shader_parameter/threshold = 0.0001
+shader_parameter/threshold = 0.001
