@@ -19,7 +19,7 @@ void fragment() {
     vec2 uv = UV;
     vec3 center_color = get_province_color(uv).rgb;
     vec2 pixel_size = 1.0 / vec2(textureSize(lookup_map, 0));
-    
+    vec2 tex_size = vec2(textureSize(lookup_map, 0));
     bool found_edge = false;
 
 	float min_distance_x = 1.0;
@@ -27,19 +27,24 @@ void fragment() {
 	
     for (int x = -radius; x <= radius; x++) {
         for (int y = -radius; y <= radius; y++) {
-                vec2 offset = vec2(float(x), float(y))* pixel_size;
-                vec2 sample_uv = uv + offset;
+                vec2 offset = vec2(float(x), float(y)) ;
+                vec2 sample_uv = uv + offset * pixel_size;
                 vec3 sample_color = get_province_color(sample_uv).rgb;
                 
                 if (is_same_color(sample_color, center_color) == false) {
-                    min_distance_x = min(min_distance_x, offset.x);
-                    min_distance_y = min(min_distance_y, offset.y);
+                    min_distance_x = min(min_distance_x, abs(offset.x));
+                    min_distance_y = min(min_distance_y, abs(offset.y));
                     found_edge = true;
                 }
             }
         }
        
     
-
-    COLOR = vec4(min_distance_x / pixel_size.x , min_distance_y / pixel_size.y, 0.0, 1.0);
+ 	if (found_edge) {
+        COLOR = vec4((min_distance_x + 0.5)/ tex_size.x, (min_distance_y+0.5) / tex_size.y, 0.0, 1.0);
+    } else {
+        // Non-edge pixels get marker value
+        COLOR = vec4(1.0, 1.0, 0.0, 1.0);
+    }
+    COLOR = vec4(min_distance_x, min_distance_y, 0.0, 1.0);
 }

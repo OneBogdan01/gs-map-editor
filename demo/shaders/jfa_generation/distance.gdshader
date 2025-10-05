@@ -5,6 +5,6 @@ uniform float max_dist;
 void fragment() {
 	vec2 color = texture(jfa_output, UV).rg;
 	
-	float dist = length(color);
-	COLOR = vec4(dist,0.0 , 0.0, 1.0);
+	float dist = distance(UV, color);
+	COLOR = vec4(dist*max_dist,0.0 , 0.0, 1.0);
 }
