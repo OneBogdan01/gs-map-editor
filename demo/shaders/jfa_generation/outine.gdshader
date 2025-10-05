@@ -33,6 +33,9 @@ void fragment() {
     vec3 final_color = mix(border_color.rgb, province_color.rgb, gradient_factor);
     
     final_color = mix(province_color.rgb, final_color, gradient_strength);
-    
+    if (df <0.1){
+		final_color = border_color.rgb;
+		
+	}
     COLOR = vec4(final_color, province_color.a);
 }

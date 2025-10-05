@@ -5,7 +5,7 @@ uniform sampler2D subview_image: source_color, filter_linear_mipmap, repeat_enab
 
 
 // Parameters
-uniform float threshold = 0.1;
+uniform float threshold = 0.00001;
 uniform float aa_scale = 17.6;
 uniform float base_line_thickness = 0.38197;
 const int ML = 0;
