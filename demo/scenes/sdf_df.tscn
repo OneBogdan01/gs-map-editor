@@ -1,7 +1,7 @@
 [gd_scene load_steps=19 format=3 uid="uid://ceute7vwrcxn5"]
 
 [ext_resource type="Script" uid="uid://b1kq8ntee2kh6" path="res://scripts/generate_borders.gd" id="1_mpvg1"]
-[ext_resource type="Shader" uid="uid://58jh24y7caxu" path="res://shaders/jfa_generation/mask.gdshader" id="2_p5se2"]
+[ext_resource type="Shader" uid="uid://cxe0yysroa1l1" path="res://shaders/jfa_generation/prepare_jfa.gdshader" id="2_km2q1"]
 [ext_resource type="Shader" uid="uid://uw4ncslfcbvl" path="res://shaders/jfa_generation/jfa_pass.gdshader" id="3_h3ic4"]
 [ext_resource type="Shader" uid="uid://cflts8u5fubwp" path="res://shaders/jfa_generation/distance.gdshader" id="4_d46lq"]
 [ext_resource type="Shader" uid="uid://sswv8rlsaoha" path="res://shaders/jfa_generation/outine.gdshader" id="5_h3ic4"]
@@ -11,10 +11,10 @@
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_f4lwf"]
 resource_local_to_scene = true
-shader = ExtResource("2_p5se2")
+shader = ExtResource("2_km2q1")
 shader_parameter/lookup_map = ExtResource("7_km2q1")
 shader_parameter/color_map = ExtResource("6_mg84p")
-shader_parameter/max_distance = 10.0
+shader_parameter/radius = 2
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_rnjyy"]
 viewport_path = NodePath("Mask/Mask")
@@ -26,15 +26,16 @@ shader_parameter/input_texture = SubResource("ViewportTexture_rnjyy")
 shader_parameter/step_size = 0.0
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_d46lq"]
-viewport_path = NodePath("Mask/Mask")
+viewport_path = NodePath("JFA/JFA")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_h3ic4"]
 resource_local_to_scene = true
 shader = ExtResource("4_d46lq")
 shader_parameter/jfa_output = SubResource("ViewportTexture_d46lq")
+shader_parameter/max_dist = 0.0
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_km2q1"]
-viewport_path = NodePath("Mask/Mask")
+viewport_path = NodePath("Distance/Distance")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_7tuex"]
 resource_local_to_scene = true
@@ -69,10 +70,8 @@ script = ExtResource("1_mpvg1")
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -704.0
-offset_top = -256.0
-offset_right = 2112.0
-offset_bottom = 768.0
+offset_right = 5632.0
+offset_bottom = 2048.0
 grow_horizontal = 2
 grow_vertical = 2
 scale = Vector2(0.045, 0.045)
@@ -80,7 +79,8 @@ scale = Vector2(0.045, 0.045)
 [node name="Mask" type="SubViewport" parent="Mask"]
 disable_3d = true
 handle_input_locally = false
-size = Vector2i(5632, 2048)
+size = Vector2i(1408, 512)
+render_target_update_mode = 4
 
 [node name="ColorRect" type="ColorRect" parent="Mask/Mask"]
 material = SubResource("ShaderMaterial_f4lwf")
@@ -94,17 +94,17 @@ grow_vertical = 2
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = 444.0
-offset_right = 5632.0
-offset_bottom = 2492.0
+offset_top = 23.0
+offset_right = 1408.0
+offset_bottom = 535.0
 grow_horizontal = 2
 grow_vertical = 2
-scale = Vector2(0.1, 0.1)
+scale = Vector2(0.5, 0.5)
 
 [node name="JFA" type="SubViewport" parent="JFA"]
 disable_3d = true
 handle_input_locally = false
-size = Vector2i(5632, 2048)
+size = Vector2i(1408, 512)
 render_target_update_mode = 4
 
 [node name="ColorRect" type="ColorRect" parent="JFA/JFA"]
@@ -116,21 +116,18 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="Distance" type="SubViewportContainer" parent="."]
-texture_filter = 4
-offset_left = 484.0
-offset_top = 184.0
-offset_right = 6116.0
-offset_bottom = 2232.0
-scale = Vector2(0.12, 0.12)
+offset_left = 3.05176e-05
+offset_top = 279.0
+offset_right = 1408.0
+offset_bottom = 791.0
+scale = Vector2(0.5, 0.5)
 
 [node name="Distance" type="SubViewport" parent="Distance"]
 disable_3d = true
 handle_input_locally = false
-size = Vector2i(5632, 2048)
-render_target_update_mode = 4
+size = Vector2i(1408, 512)
 
 [node name="DistanceTex" type="ColorRect" parent="Distance/Distance"]
-texture_filter = 4
 material = SubResource("ShaderMaterial_h3ic4")
 anchors_preset = 15
 anchor_right = 1.0
@@ -139,27 +136,27 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="Outline" type="SubViewportContainer" parent="."]
-offset_left = 563.0
-offset_top = 444.0
-offset_right = 6195.0
-offset_bottom = 2492.0
+offset_left = 6.10352e-05
+offset_top = 359.0
+offset_right = 5632.0
+offset_bottom = 2407.0
 scale = Vector2(0.1, 0.1)
 
 [node name="Outline" type="SubViewport" parent="Outline"]
 disable_3d = true
 handle_input_locally = false
 size = Vector2i(5632, 2048)
+render_target_update_mode = 4
 
 [node name="OutlineTex" type="ColorRect" parent="Outline/Outline"]
 material = SubResource("ShaderMaterial_7tuex")
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 30.0
-offset_right = 30.0
 grow_horizontal = 2
 grow_vertical = 2
 
 [node name="Sprite3D" type="Sprite3D" parent="."]
+visible = false
 material_override = SubResource("ShaderMaterial_yq5no")
 texture = SubResource("ViewportTexture_cjwr4")
