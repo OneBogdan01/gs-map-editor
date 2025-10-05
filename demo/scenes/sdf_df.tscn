@@ -1,0 +1,165 @@
+[gd_scene load_steps=19 format=3 uid="uid://ceute7vwrcxn5"]
+
+[ext_resource type="Script" uid="uid://b1kq8ntee2kh6" path="res://scripts/generate_borders.gd" id="1_mpvg1"]
+[ext_resource type="Shader" uid="uid://58jh24y7caxu" path="res://shaders/jfa_generation/mask.gdshader" id="2_p5se2"]
+[ext_resource type="Shader" uid="uid://uw4ncslfcbvl" path="res://shaders/jfa_generation/jfa_pass.gdshader" id="3_h3ic4"]
+[ext_resource type="Shader" uid="uid://cflts8u5fubwp" path="res://shaders/jfa_generation/distance.gdshader" id="4_d46lq"]
+[ext_resource type="Shader" uid="uid://sswv8rlsaoha" path="res://shaders/jfa_generation/outine.gdshader" id="5_h3ic4"]
+[ext_resource type="Texture2D" uid="uid://bro5urv8mkvw0" path="res://assets/color_map.png" id="6_mg84p"]
+[ext_resource type="Texture2D" uid="uid://b73404h0hkhdt" path="res://assets/color_lookup.png" id="7_km2q1"]
+[ext_resource type="Shader" uid="uid://de8ekpkafjhuh" path="res://shaders/jfa_generation/hqx_borders.gdshader" id="9_f4lwf"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_f4lwf"]
+resource_local_to_scene = true
+shader = ExtResource("2_p5se2")
+shader_parameter/lookup_map = ExtResource("7_km2q1")
+shader_parameter/color_map = ExtResource("6_mg84p")
+shader_parameter/max_distance = 10.0
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_rnjyy"]
+viewport_path = NodePath("Mask/Mask")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_4vge2"]
+resource_local_to_scene = true
+shader = ExtResource("3_h3ic4")
+shader_parameter/input_texture = SubResource("ViewportTexture_rnjyy")
+shader_parameter/step_size = 0.0
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_d46lq"]
+viewport_path = NodePath("Mask/Mask")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_h3ic4"]
+resource_local_to_scene = true
+shader = ExtResource("4_d46lq")
+shader_parameter/jfa_output = SubResource("ViewportTexture_d46lq")
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_km2q1"]
+viewport_path = NodePath("Mask/Mask")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_7tuex"]
+resource_local_to_scene = true
+shader = ExtResource("5_h3ic4")
+shader_parameter/input_texture = SubResource("ViewportTexture_km2q1")
+shader_parameter/lookup_map = ExtResource("7_km2q1")
+shader_parameter/color_map = ExtResource("6_mg84p")
+shader_parameter/edge_smoothness = 0.0
+shader_parameter/edge_threshold = 0.32
+shader_parameter/border_color = Color(0, 0, 0, 1)
+shader_parameter/gradient_strength = 0.34
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_p5se2"]
+viewport_path = NodePath("Outline/Outline")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_yq5no"]
+resource_local_to_scene = true
+render_priority = 0
+shader = ExtResource("9_f4lwf")
+shader_parameter/subview_image = SubResource("ViewportTexture_p5se2")
+shader_parameter/threshold = 0.001
+shader_parameter/aa_scale = 17.6
+shader_parameter/base_line_thickness = 0.38197
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_cjwr4"]
+viewport_path = NodePath("Outline/Outline")
+
+[node name="Borders" type="Node2D"]
+script = ExtResource("1_mpvg1")
+
+[node name="Mask" type="SubViewportContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -704.0
+offset_top = -256.0
+offset_right = 2112.0
+offset_bottom = 768.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.045, 0.045)
+
+[node name="Mask" type="SubViewport" parent="Mask"]
+disable_3d = true
+handle_input_locally = false
+size = Vector2i(5632, 2048)
+
+[node name="ColorRect" type="ColorRect" parent="Mask/Mask"]
+material = SubResource("ShaderMaterial_f4lwf")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="JFA" type="SubViewportContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 444.0
+offset_right = 5632.0
+offset_bottom = 2492.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.1, 0.1)
+
+[node name="JFA" type="SubViewport" parent="JFA"]
+disable_3d = true
+handle_input_locally = false
+size = Vector2i(5632, 2048)
+render_target_update_mode = 4
+
+[node name="ColorRect" type="ColorRect" parent="JFA/JFA"]
+material = SubResource("ShaderMaterial_4vge2")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Distance" type="SubViewportContainer" parent="."]
+texture_filter = 4
+offset_left = 484.0
+offset_top = 184.0
+offset_right = 6116.0
+offset_bottom = 2232.0
+scale = Vector2(0.12, 0.12)
+
+[node name="Distance" type="SubViewport" parent="Distance"]
+disable_3d = true
+handle_input_locally = false
+size = Vector2i(5632, 2048)
+render_target_update_mode = 4
+
+[node name="DistanceTex" type="ColorRect" parent="Distance/Distance"]
+texture_filter = 4
+material = SubResource("ShaderMaterial_h3ic4")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Outline" type="SubViewportContainer" parent="."]
+offset_left = 563.0
+offset_top = 444.0
+offset_right = 6195.0
+offset_bottom = 2492.0
+scale = Vector2(0.1, 0.1)
+
+[node name="Outline" type="SubViewport" parent="Outline"]
+disable_3d = true
+handle_input_locally = false
+size = Vector2i(5632, 2048)
+
+[node name="OutlineTex" type="ColorRect" parent="Outline/Outline"]
+material = SubResource("ShaderMaterial_7tuex")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 30.0
+offset_right = 30.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Sprite3D" type="Sprite3D" parent="."]
+material_override = SubResource("ShaderMaterial_yq5no")
+texture = SubResource("ViewportTexture_cjwr4")

@@ -17,10 +17,10 @@ void main() {
     ivec2 coords = ivec2(gl_GlobalInvocationID.xy);
     int index = coords.x + coords.y * 256;
     
-    vec4 output_color = vec4(0.0, 0.0, 0.0, 1.0); // Default to black
+    vec4 output_color = vec4(0.0, 0.0, 0.0, 0.0); // Default to black
     
     output_color.rgb = vec3(color_id_buffer.color_id[index].rgb) / 255.0;
-    
+    output_color.a = clamp(output_color.r + output_color.g + output_color.b, 0.0, 1.0);
     uint id = color_id_buffer.color_id[index].a;
     ivec2 coords_tex = ivec2(id%256u, id/256u);
     imageStore(color_map, coords_tex, output_color);
