@@ -1,21 +1,48 @@
-[gd_scene load_steps=8 format=3 uid="uid://cgoxd520waiho"]
+[gd_scene load_steps=14 format=3 uid="uid://cgoxd520waiho"]
 
 [ext_resource type="Texture2D" uid="uid://c7x6n8v5pq0qm" path="res://assets/provinces.bmp" id="1_o5qli"]
-[ext_resource type="Shader" uid="uid://cgwh38nj6ojyu" path="res://shaders/simple_borders/output.gdshader" id="1_tbgi4"]
+[ext_resource type="Shader" uid="uid://de8ekpkafjhuh" path="res://shaders/jfa_generation/hqx_borders.gdshader" id="1_o6xl0"]
 [ext_resource type="Script" uid="uid://cguys746q2lng" path="res://scripts/compute.gd" id="2_0wfyh"]
-[ext_resource type="Material" uid="uid://c8jde24pw1w18" path="res://shaders/simple_borders/color_output_material.tres" id="5_tbgi4"]
+[ext_resource type="Shader" uid="uid://sswv8rlsaoha" path="res://shaders/jfa_generation/outine.gdshader" id="4_o6xl0"]
+[ext_resource type="Shader" uid="uid://58jh24y7caxu" path="res://shaders/jfa_generation/mask.gdshader" id="5_tefeu"]
+[ext_resource type="Texture2D" uid="uid://bro5urv8mkvw0" path="res://assets/color_map.png" id="5_tipki"]
+[ext_resource type="Texture2D" uid="uid://b73404h0hkhdt" path="res://assets/color_lookup.png" id="6_85g3d"]
 
-[sub_resource type="ViewportTexture" id="ViewportTexture_tbgi4"]
+[sub_resource type="ViewportTexture" id="ViewportTexture_tipki"]
 viewport_path = NodePath("Map/ColorOutput")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_tbgi4"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_85g3d"]
 resource_local_to_scene = true
 render_priority = 0
-shader = ExtResource("1_tbgi4")
-shader_parameter/subview_image = SubResource("ViewportTexture_tbgi4")
+shader = ExtResource("1_o6xl0")
+shader_parameter/subview_image = SubResource("ViewportTexture_tipki")
+shader_parameter/threshold = 0.001
+shader_parameter/aa_scale = 17.6
+shader_parameter/base_line_thickness = 0.38197
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_o5qli"]
 size = Vector3(56.32, 20.48, 0)
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_choun"]
+viewport_path = NodePath("Map/DistanceField")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ya4ey"]
+resource_local_to_scene = true
+shader = ExtResource("4_o6xl0")
+shader_parameter/input_texture = SubResource("ViewportTexture_choun")
+shader_parameter/lookup_map = ExtResource("6_85g3d")
+shader_parameter/color_map = ExtResource("5_tipki")
+shader_parameter/edge_smoothness = 0.0
+shader_parameter/edge_threshold = 0.32
+shader_parameter/border_color = Color(0, 0, 0, 1)
+shader_parameter/gradient_strength = 0.34
+shader_parameter/edge_size = 0.1
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_o6xl0"]
+shader = ExtResource("5_tefeu")
+shader_parameter/lookup_map = ExtResource("6_85g3d")
+shader_parameter/color_map = ExtResource("5_tipki")
+shader_parameter/max_distance = 10.0
 
 [node name="Node" type="Node"]
 
@@ -28,7 +55,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.143974, -0.380161, 0.10186
 
 [node name="Map" type="Sprite3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
-material_override = SubResource("ShaderMaterial_tbgi4")
+material_override = SubResource("ShaderMaterial_85g3d")
 transparent = false
 double_sided = false
 texture_filter = 0
@@ -52,11 +79,23 @@ texture_filter = 0
 texture = ExtResource("1_o5qli")
 
 [node name="ColorOutput" type="SubViewport" parent="Map"]
+disable_3d = true
 size = Vector2i(5632, 2048)
-render_target_update_mode = 4
 
 [node name="Output" type="ColorRect" parent="Map/ColorOutput"]
-material = ExtResource("5_tbgi4")
+material = SubResource("ShaderMaterial_ya4ey")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="DistanceField" type="SubViewport" parent="Map"]
+disable_3d = true
+size = Vector2i(5632, 2048)
+
+[node name="ColorRect" type="ColorRect" parent="Map/DistanceField"]
+material = SubResource("ShaderMaterial_o6xl0")
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0

@@ -2,6 +2,9 @@
 extends Node3D
 
 @onready var base_map_material = load("res://shaders/simple_borders/color_output_material.tres")
+@onready var output: ColorRect = $ColorOutput/Output
+@onready var distance: ColorRect = $DistanceField/ColorRect
+@onready var distance_field: SubViewport = $DistanceField
 
 @onready var map_data: MapData = $"../ProvinceSelector/MapData"
 @onready var country_data: CountryData = $"../ProvinceSelector/CountryData"
@@ -12,6 +15,9 @@ var color_lookup: Image
 var color_map: Image
 var political_map: Image
 var edge_map: Image
+
+var output_material: ShaderMaterial
+var distance_material: ShaderMaterial
 
 
 var profiler_enabled := true
@@ -27,19 +33,24 @@ func time_function(name: String, callable: Callable):
 	print("[%s] %.2f ms" % [name, time_ms])
 	return result
 func _update_shader_parameters(name, parameterVariant):
-		base_map_material.set_shader_parameter(name, parameterVariant)
-
+		output_material.set_shader_parameter(name, parameterVariant)
+		distance_material.set_shader_parameter(name, parameterVariant)
+		distance_field.render_target_update_mode = SubViewport.UPDATE_ONCE
 
 	
 func _generate_map():
 	time_function("Color Map", create_color_map_texture)
 	#time_function("Distance Field",create_edge_map_texture)
-	time_function("Political Map", create_political_map_texture) 
+	#time_function("Political Map", create_political_map_texture) 
 	#time_function("Reload Texture", _reload_political_texture)
 
 	
 func _ready():
 	# TODO This should be way faster than it is now
+	output_material = output.material
+	distance_material = distance.material
+	
+	
 	country_data.parse_all_files()
 	map_data.load_csv_data()
 	create_lookup_texture()
@@ -499,7 +510,7 @@ func create_lookup_texture():
 func _on_province_selector_province_selected(province_id: int) -> void:
 	if is_getting_country == false and selected_country.is_empty() == false:
 		country_data.change_province_owner(province_id,selected_country)
-		_generate_map()
+		time_function("Generate Map", _generate_map)
 
 
 func _on_province_selector_country_selected(country: String) -> void:

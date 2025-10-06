@@ -1,10 +1,15 @@
 [gd_resource type="ShaderMaterial" load_steps=4 format=3 uid="uid://c8jde24pw1w18"]
 
-[ext_resource type="Shader" uid="uid://b7xhn24jxcixb" path="res://shaders/simple_borders/color_output.gdshader" id="1_i041x"]
+[ext_resource type="Shader" uid="uid://sswv8rlsaoha" path="res://shaders/jfa_generation/outine.gdshader" id="1_dqgna"]
 [ext_resource type="Texture2D" uid="uid://bro5urv8mkvw0" path="res://assets/color_map.png" id="2_dqgna"]
 [ext_resource type="Texture2D" uid="uid://b73404h0hkhdt" path="res://assets/color_lookup.png" id="3_psbgn"]
 
 [resource]
-shader = ExtResource("1_i041x")
+resource_local_to_scene = true
+shader = ExtResource("1_dqgna")
 shader_parameter/lookup_map = ExtResource("3_psbgn")
 shader_parameter/color_map = ExtResource("2_dqgna")
+shader_parameter/edge_smoothness = 0.01
+shader_parameter/edge_threshold = 0.5
+shader_parameter/border_color = Color(0, 0, 0, 1)
+shader_parameter/gradient_strength = 1.0

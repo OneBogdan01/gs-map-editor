@@ -20,12 +20,10 @@ void fragment() {
     float min_distance = max_distance;
     bool found_edge = false;
     
-    // Search in expanding square pattern
     int max_radius = int(max_distance);
     for (int radius = 1; radius <= max_radius; radius++) {
         for (int x = -radius; x <= radius; x++) {
             for (int y = -radius; y <= radius; y++) {
-                // Only check the outer ring of the square
                 if (abs(x) == radius || abs(y) == radius) {
                     vec2 offset = vec2(float(x), float(y));
                     vec2 sample_uv = uv + offset * pixel_size;
@@ -40,7 +38,6 @@ void fragment() {
             }
         }
         
-        // Early exit if we found an edge
         if (found_edge && float(radius) > min_distance) {
             break;
         }
