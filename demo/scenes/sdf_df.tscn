@@ -47,6 +47,8 @@ shader_parameter/edge_threshold = 0.32
 shader_parameter/border_color = Color(0, 0, 0, 1)
 shader_parameter/gradient_strength = 0.34
 shader_parameter/edge_size = 0.1
+shader_parameter/province_size_size = 0.1
+shader_parameter/province_border_color = Color(0, 0, 0, 0.8)
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_p5se2"]
 viewport_path = NodePath("Outline/Outline")
