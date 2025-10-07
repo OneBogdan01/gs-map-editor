@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://cgoxd520waiho"]
+[gd_scene load_steps=17 format=3 uid="uid://cgoxd520waiho"]
 
 [ext_resource type="Texture2D" uid="uid://c7x6n8v5pq0qm" path="res://assets/provinces.bmp" id="1_o5qli"]
 [ext_resource type="Shader" uid="uid://de8ekpkafjhuh" path="res://shaders/jfa_generation/hqx_borders.gdshader" id="1_o6xl0"]
@@ -7,6 +7,7 @@
 [ext_resource type="Shader" uid="uid://58jh24y7caxu" path="res://shaders/jfa_generation/mask.gdshader" id="5_tefeu"]
 [ext_resource type="Texture2D" uid="uid://bro5urv8mkvw0" path="res://assets/color_map.png" id="5_tipki"]
 [ext_resource type="Texture2D" uid="uid://b73404h0hkhdt" path="res://assets/color_lookup.png" id="6_85g3d"]
+[ext_resource type="Shader" uid="uid://3nhhwbba4syw" path="res://shaders/jfa_generation/outline_province.gdshader" id="7_tipki"]
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_tipki"]
 viewport_path = NodePath("Map/ColorOutput")
@@ -16,7 +17,7 @@ resource_local_to_scene = true
 render_priority = 0
 shader = ExtResource("1_o6xl0")
 shader_parameter/subview_image = SubResource("ViewportTexture_tipki")
-shader_parameter/threshold = 0.001
+shader_parameter/threshold = 1e-05
 shader_parameter/aa_scale = 17.6
 shader_parameter/base_line_thickness = 0.38197
 
@@ -26,17 +27,29 @@ size = Vector3(56.32, 20.48, 0)
 [sub_resource type="ViewportTexture" id="ViewportTexture_choun"]
 viewport_path = NodePath("Map/DistanceField")
 
+[sub_resource type="ViewportTexture" id="ViewportTexture_85g3d"]
+viewport_path = NodePath("Map/ProvinceBorders")
+
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ya4ey"]
 resource_local_to_scene = true
 shader = ExtResource("4_o6xl0")
 shader_parameter/input_texture = SubResource("ViewportTexture_choun")
+shader_parameter/province_distance_field = SubResource("ViewportTexture_85g3d")
 shader_parameter/lookup_map = ExtResource("6_85g3d")
 shader_parameter/color_map = ExtResource("5_tipki")
 shader_parameter/edge_smoothness = 0.0
-shader_parameter/edge_threshold = 0.32
+shader_parameter/edge_threshold = 0.25
 shader_parameter/border_color = Color(0, 0, 0, 1)
 shader_parameter/gradient_strength = 0.34
 shader_parameter/edge_size = 0.1
+shader_parameter/province_size_size = 0.10993
+shader_parameter/province_border_color = Color(0, 0, 0, 0.231373)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_tipki"]
+resource_local_to_scene = true
+shader = ExtResource("7_tipki")
+shader_parameter/lookup_map = ExtResource("6_85g3d")
+shader_parameter/max_distance = 10.0
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_o6xl0"]
 shader = ExtResource("5_tefeu")
@@ -90,9 +103,23 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
+[node name="ProvinceBorders" type="SubViewport" parent="Map"]
+disable_3d = true
+size = Vector2i(5632, 2048)
+render_target_update_mode = 1
+
+[node name="ProvinceBordersOut" type="ColorRect" parent="Map/ProvinceBorders"]
+material = SubResource("ShaderMaterial_tipki")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
 [node name="DistanceField" type="SubViewport" parent="Map"]
 disable_3d = true
 size = Vector2i(5632, 2048)
+render_target_update_mode = 1
 
 [node name="ColorRect" type="ColorRect" parent="Map/DistanceField"]
 material = SubResource("ShaderMaterial_o6xl0")
