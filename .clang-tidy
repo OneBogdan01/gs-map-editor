@@ -1,0 +1,16 @@
+# Enable all the relevant checks and then disable all the ones I don't care about or that don't work well with godot.
+# Run with: run-clang-tidy -use-color -config-file ./.clang-tidy -source-filter '.*/gsg/src/.*\.cpp' -p ../godot -extra-arg=-std=c++23
+# Add "-fix" to apply fixes automatically.
+Checks: '
+-*,
+clang-analyzer-*,-clang-analyzer-osx*,bugprone-*,concurrency-*,cppcoreguidelines-*,misc-*,modernize-*,performance-*,portability-*,readability-*,
+-modernize-use-trailing-return-type,-modernize-use-nodiscard,-modernize-use-auto,-modernize-macro-to-enum,-modernize-avoid-c-arrays,
+-misc-include-cleaner,-misc-unused-parameters,
+-misc-non-private-member-variables-in-classes,-cppcoreguidelines-non-private-member-variables-in-classes,
+-readability-braces-around-statements,-readability-else-after-return,-readability-magic-numbers,-readability-simplify-boolean-expr,
+-bugprone-macro-parentheses,-bugprone-narrowing-conversions,-bugprone-easily-swappable-parameters,-bugprone-switch-missing-default-case,-bugprone-unhandled-self-assignment,
+-cppcoreguidelines-pro-type-union-access,-cppcoreguidelines-avoid-magic-numbers,-cppcoreguidelines-macro-usage,-cppcoreguidelines-special-member-functions,
+-cppcoreguidelines-pro-type-reinterpret-cast,-cppcoreguidelines-pro-type-const-cast,-cppcoreguidelines-narrowing-conversions,-cppcoreguidelines-owning-memory,
+-cppcoreguidelines-macro-to-enum,-cppcoreguidelines-avoid-c-arrays,-cppcoreguidelines-pro-bounds-constant-array-index, -readability-function-cognitive-complexity, -cppcoreguidelines-no-malloc, -cppcoreguidelines-pro-bounds-pointer-arithmetic, -cppcoreguidelines-avoid-do-while, -readability-identifier-length, -cppcoreguidelines-avoid-non-const-global-variables, -cppcoreguidelines-avoid-goto
+'
+FormatStyle: file
