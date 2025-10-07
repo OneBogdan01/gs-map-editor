@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="CameraController" inherits="Node3D" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
+	<brief_description>
+	</brief_description>
+	<description>
+	</description>
+	<tutorials>
+	</tutorials>
+	<members>
+		<member name="acceleration" type="float" setter="set_acceleration" getter="get_acceleration" default="1.0">
+		</member>
+		<member name="deceleration" type="float" setter="set_deceleration" getter="get_deceleration" default="0.4">
+		</member>
+	</members>
+</class>

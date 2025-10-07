@@ -476,9 +476,9 @@ void CountryData::export_color_data(int64_t color_index)
 	{
 		if (lines[i].contains(owner_token))
 		{
-			int32_t r = (int32_t)country_color.get_r8();
-			int32_t g = (int32_t)country_color.get_g8();
-			int32_t b = (int32_t)country_color.get_b8();
+			int32_t r = country_color.get_r8();
+			int32_t g = country_color.get_g8();
+			int32_t b = country_color.get_b8();
 			String new_color_value = String("{ ") + String::num_int64(r) + " " + String::num_int64(g) + " " + String::num_int64(b) + " }";
 			lines[i] = owner_token + new_color_value;
 			found = true;

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="ProvinceSelector" inherits="Node3D" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
+	<brief_description>
+	Node that selects a province at runtime.
+	</brief_description>
+	<description>
+	</description>
+	<tutorials>
+	</tutorials>
+	<methods>
+		<method name="select_province">
+			<return type="void" />
+			<description>
+			</description>
+		</method>
+	</methods>
+	<members>
+		<member name="ProvinceMap" type="Sprite3D" setter="set_province_map" getter="get_province_map">
+		</member>
+		<member name="country_data" type="CountryData" setter="set_country_data" getter="get_country_data">
+		</member>
+		<member name="province_parser" type="MapData" setter="set_province_parser" getter="get_province_parser">
+		</member>
+	</members>
+	<signals>
+		<signal name="country_selected">
+			<param index="0" name="country" type="String" />
+			<description>
+			</description>
+		</signal>
+		<signal name="province_selected">
+			<param index="0" name="province_id" type="int" />
+			<description>
+			</description>
+		</signal>
+	</signals>
+</class>

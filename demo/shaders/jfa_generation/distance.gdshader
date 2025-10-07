@@ -6,4 +6,3 @@ void fragment() {
 	float dist = distance(UV, color);
 	COLOR = vec4(dist,0 , 0, 1.0);
 }
-

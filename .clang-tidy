@@ -1,6 +1,7 @@
 # Enable all the relevant checks and then disable all the ones I don't care about or that don't work well with godot.
 # Run with: run-clang-tidy -use-color -config-file ./.clang-tidy -source-filter '.*/gsg/src/.*\.cpp' -p ../godot -extra-arg=-std=c++23
 # Add "-fix" to apply fixes automatically.
+# https://github.com/dementive/gsg/blob/main/.clangd
 Checks: '
 -*,
 clang-analyzer-*,-clang-analyzer-osx*,bugprone-*,concurrency-*,cppcoreguidelines-*,misc-*,modernize-*,performance-*,portability-*,readability-*,

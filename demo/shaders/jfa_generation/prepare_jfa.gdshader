@@ -24,13 +24,13 @@ void fragment() {
 
 	float min_distance_x = 1.0;
 	float min_distance_y = 1.0;
-	
+
     for (int x = -radius; x <= radius; x++) {
         for (int y = -radius; y <= radius; y++) {
                 vec2 offset = vec2(float(x), float(y)) ;
                 vec2 sample_uv = uv + offset * pixel_size;
                 vec3 sample_color = get_province_color(sample_uv).rgb;
-                
+
                 if (is_same_color(sample_color, center_color) == false) {
                     min_distance_x = min(min_distance_x, abs(offset.x));
                     min_distance_y = min(min_distance_y, abs(offset.y));
@@ -38,8 +38,8 @@ void fragment() {
                 }
             }
         }
-       
-    
+
+
  	if (found_edge) {
         COLOR = vec4((min_distance_x + 0.5)/ tex_size.x, (min_distance_y+0.5) / tex_size.y, 0.0, 1.0);
     } else {

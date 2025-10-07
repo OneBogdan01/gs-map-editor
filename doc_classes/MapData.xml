@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="MapData" inherits="Node" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
+	<brief_description>
+	</brief_description>
+	<description>
+	</description>
+	<tutorials>
+	</tutorials>
+	<methods>
+		<method name="load_csv_data">
+			<return type="void" />
+			<description>
+			</description>
+		</method>
+	</methods>
+	<members>
+		<member name="csv_file_path" type="String" setter="set_csv_path" getter="get_csv_path" default="&quot;res://assets/definition.csv&quot;">
+		</member>
+		<member name="province_data" type="Array" setter="set_province_data" getter="get_province_data" default="[]">
+		</member>
+	</members>
+</class>
