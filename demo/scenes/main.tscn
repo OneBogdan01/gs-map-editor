@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://cgoxd520waiho"]
+[gd_scene load_steps=18 format=3 uid="uid://cgoxd520waiho"]
 
 [ext_resource type="Texture2D" uid="uid://c7x6n8v5pq0qm" path="res://assets/provinces.bmp" id="1_o5qli"]
 [ext_resource type="Shader" uid="uid://de8ekpkafjhuh" path="res://shaders/jfa_generation/hqx_borders.gdshader" id="1_o6xl0"]
@@ -8,6 +8,7 @@
 [ext_resource type="Texture2D" uid="uid://bro5urv8mkvw0" path="res://assets/color_map.png" id="5_tipki"]
 [ext_resource type="Texture2D" uid="uid://b73404h0hkhdt" path="res://assets/color_lookup.png" id="6_85g3d"]
 [ext_resource type="Shader" uid="uid://3nhhwbba4syw" path="res://shaders/jfa_generation/outline_province.gdshader" id="7_tipki"]
+[ext_resource type="Texture2D" uid="uid://bmk5fr67658ye" path="res://assets/political_map.png" id="8_85g3d"]
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_tipki"]
 viewport_path = NodePath("Map/ColorOutput")
@@ -49,6 +50,7 @@ shader_parameter/province_border_color = Color(0, 0, 0, 0.231373)
 resource_local_to_scene = true
 shader = ExtResource("7_tipki")
 shader_parameter/lookup_map = ExtResource("6_85g3d")
+shader_parameter/mask_map = ExtResource("8_85g3d")
 shader_parameter/max_distance = 10.0
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_o6xl0"]

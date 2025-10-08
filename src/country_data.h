@@ -57,5 +57,6 @@ private:
 	// these cannot change at runtime
 	Dictionary country_id_to_country_name;
 	Dictionary country_name_to_color;
+	Dictionary terrain_tokens;
 };
 } //namespace godot
