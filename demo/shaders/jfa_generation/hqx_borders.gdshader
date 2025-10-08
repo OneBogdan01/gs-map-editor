@@ -1,7 +1,8 @@
 shader_type spatial;
 render_mode unshaded;
-
-uniform sampler2D subview_image : source_color, filter_linear_mipmap, repeat_enable;
+#define PRECISION 0.000001
+uniform sampler2D subview_image : source_color, filter_linear;
+uniform sampler2D water_color : source_color, filter_linear_mipmap;
 
 // Parameters
 uniform float threshold = 0.00001;
@@ -28,9 +29,7 @@ bool diag(inout vec4 sum, vec2 ip, vec2 p1, vec2 p2, float thickness)
 
 void fragment()
 {
-	// Textures
 
-	vec3 subview_texture = texture(subview_image, UV).rgb;
 
 	// Apply smoothing
 	vec2 tex_size = vec2(textureSize(subview_image, 0));
@@ -56,7 +55,10 @@ void fragment()
 		diag(s, ip, vec2(0, -1), vec2(-1, 1), 0.25);
 		diag(s, ip, vec2(1, -1), vec2(-1, 0), 0.25);
 	}
-
+	
+	float val = s.r + s.g + s.b;
+	float alpha =  step(-PRECISION, val) * (1.0 - step(PRECISION, val));
+	vec3 final_color = mix(s.rgb, texture(water_color, UV).rgb,  alpha);
 	ALBEDO = s.rgb; //mix(s.rgb, terrain_texture, 0.4);
 }
 

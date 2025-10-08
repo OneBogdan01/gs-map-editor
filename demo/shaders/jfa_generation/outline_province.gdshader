@@ -1,6 +1,8 @@
 shader_type canvas_item;
 
 uniform sampler2D lookup_map : filter_nearest;
+uniform sampler2D mask_map : filter_nearest;
+
 uniform float max_distance : hint_range(1.0, 50.0, 1.0) = 10.0;
 
 vec4 get_province_color(vec2 uv)
@@ -12,7 +14,13 @@ vec4 get_province_color(vec2 uv)
 void fragment()
 {
 	vec2 uv = UV;
+	float alpha = texture(mask_map, uv).a;
+	if(alpha < 0.1){
+		COLOR = vec4(1.0);
+	}
+	else{
 	vec4 center_color = get_province_color(uv);
+	
 	vec2 pixel_size = 1.0 / vec2(textureSize(lookup_map, 0));
 
 	float min_distance = max_distance;
@@ -49,4 +57,5 @@ void fragment()
 
 	float normalized_distance = min_distance / max_distance;
 	COLOR = vec4(vec3(normalized_distance), 1.0);
+	}
 }

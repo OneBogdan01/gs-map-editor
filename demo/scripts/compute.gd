@@ -271,7 +271,6 @@ func create_edge_map_texture():
 	edge_map = result_image
 func create_color_map_texture():
 	var rd = RenderingServer.create_local_rendering_device()
-	# TODO get the data already sorted and without useless data
 	var start = Time.get_ticks_usec()
 
 	
