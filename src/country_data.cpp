@@ -593,7 +593,7 @@ static String get_terrain_owner(const String &filename)
 	}
 
 	// Arctic/Greenland
-	if (lower_name.contains("greendland tip"))
+	if (lower_name.contains("greenland tip"))
 	{
 		return "Ocean";
 	}
@@ -1408,7 +1408,7 @@ String CountryData::parse_province_owner(const String &file_path)
 
 	String owner_token = "owner =";
 	int owner_pos = content.find(owner_token);
-	if (owner_pos == -1)
+	if (owner_pos == -1 || content.find("tribal_owner") != -1)
 	{
 		// handle the mountain case
 		String filename = file_path.get_file();

@@ -41,8 +41,8 @@ shader_parameter/color_map = ExtResource("5_tipki")
 shader_parameter/edge_smoothness = 0.0
 shader_parameter/edge_threshold = 0.25
 shader_parameter/border_color = Color(0, 0, 0, 1)
-shader_parameter/gradient_strength = 0.34
-shader_parameter/edge_size = 0.1
+shader_parameter/gradient_strength = 0.32
+shader_parameter/edge_size = 0.133
 shader_parameter/province_size_size = 0.10993
 shader_parameter/province_border_color = Color(0, 0, 0, 0.231373)
 
