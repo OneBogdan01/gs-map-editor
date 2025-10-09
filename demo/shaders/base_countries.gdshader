@@ -35,11 +35,6 @@ void fragment()
 			}
 		}
 	}
-	if (found_edge)
-	{
-		break;
-	}
-}
 
 if (found_edge)
 {
