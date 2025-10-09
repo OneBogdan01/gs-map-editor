@@ -17,7 +17,7 @@
 
 using namespace godot;
 
-ProvinceSelector::ProvinceSelector() {}
+ProvinceSelector::ProvinceSelector() = default;
 ProvinceSelector::~ProvinceSelector() {}
 
 MapData *ProvinceSelector::get_province_parser() const

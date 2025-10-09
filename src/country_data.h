@@ -5,10 +5,10 @@
 #include "godot_cpp/variant/packed_color_array.hpp"
 #include "godot_cpp/variant/packed_int32_array.hpp"
 #include "godot_cpp/variant/packed_string_array.hpp"
-#include "godot_cpp/variant/variant.hpp"
 #include <cstdint>
 namespace godot
 {
+//parses data to create gameplay entities, provinces, states countries
 class CountryData : public Node
 {
 	GDCLASS(CountryData, Node);
@@ -48,15 +48,20 @@ private:
 	PackedStringArray get_txt_files_in_folder(const String &folder_path);
 
 	static void _bind_methods();
+	//dictionaries for each of the folders below
 	Array province_data;
 	Array country_data;
 	Array country_color_data;
+	//folders
 	String countries_folder_path;
 	String country_colors_folder_path;
 	String provinces_folder_path;
-	// these cannot change at runtime
+	//these are for fast lookups, need to be build at the start
 	Dictionary country_id_to_country_name;
 	Dictionary country_name_to_color;
 	Dictionary terrain_tokens;
+	//used to path provinces that have no owner, think of oceans,
+	//lakes and so on, this plugin only handles the case where each province is assigned to something.
+	bool should_patch_terrain{ true };
 };
 } //namespace godot

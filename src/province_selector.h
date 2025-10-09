@@ -1,6 +1,4 @@
-
-
-#include "country_data.h"
+#pragma once
 #include "godot_cpp/classes/camera3d.hpp"
 #include "godot_cpp/classes/node.hpp"
 #include "godot_cpp/classes/ref.hpp"
@@ -15,6 +13,8 @@
 namespace godot
 {
 class MapData;
+class CountryData;
+
 class ProvinceSelector : public Node3D
 {
 	GDCLASS(ProvinceSelector, Node3D);

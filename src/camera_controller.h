@@ -5,6 +5,7 @@
 namespace godot
 {
 
+//very basic camera used for the demo of this plugin, can be safely ignored
 class CameraController : public Node3D
 {
 	GDCLASS(CameraController, Node3D);
