@@ -13,8 +13,21 @@
 
 using namespace godot;
 
+namespace
+{
+// godot provided color comparison is too strict
+bool colors_equal(const Color &a, const Color &b, float tolerance = 0.001f)
+{
+	return (abs(a.r - b.r) < tolerance &&
+			abs(a.g - b.g) < tolerance &&
+			abs(a.b - b.b) < tolerance &&
+			abs(a.a - b.a) < tolerance);
+}
+} //namespace
+
 void MapData::_bind_methods()
 {
+	//csv
 	ClassDB::bind_method(D_METHOD("get_csv_path"), &MapData::get_csv_path);
 	ClassDB::bind_method(D_METHOD("set_csv_path", "p_path"), &MapData::set_csv_path);
 	ClassDB::bind_method(D_METHOD("load_csv_data"), &MapData::load_csv_data);
@@ -23,21 +36,19 @@ void MapData::_bind_methods()
 						 PROPERTY_HINT_FILE, "*.csv"),
 			"set_csv_path", "get_csv_path");
 
+	ClassDB::bind_method(D_METHOD("get_should_skip_first_row"), &MapData::get_should_skip_first_row);
+	ClassDB::bind_method(D_METHOD("set_should_skip_first_row", "data"), &MapData::set_should_skip_first_row);
+	ADD_PROPERTY(PropertyInfo(Variant::BOOL, "should_skip_first_row"),
+			"set_should_skip_first_row", "get_should_skip_first_row");
+
+	//province data
 	ClassDB::bind_method(D_METHOD("get_province_data"), &MapData::get_province_data);
-	ClassDB::bind_method(D_METHOD("set_province_data", "p_data"), &MapData::set_province_data);
+	ClassDB::bind_method(D_METHOD("set_province_data", "data"), &MapData::set_province_data);
 	ADD_PROPERTY(PropertyInfo(Variant::ARRAY, "province_data"),
 			"set_province_data", "get_province_data");
-	// 	ClassDB::bind_method(D_METHOD("get_speed"), &MapData::get_speed);
-	// 	ClassDB::bind_method(D_METHOD("set_speed", "p_speed"), &MapData::set_speed);
-
-	// ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "speed", PROPERTY_HINT_RANGE, "0,20,0.01"), "set_speed", "get_speed");
-
-	// 	ADD_SIGNAL(MethodInfo("position_changed", PropertyInfo(Variant::OBJECT, "node"), PropertyInfo(Variant::VECTOR2, "new_pos")));
 }
 
-MapData::MapData()
-{
-}
+MapData::MapData() = default;
 MapData::~MapData()
 {
 }
@@ -46,18 +57,12 @@ void MapData::set_csv_path(const String &p_path)
 {
 	csv_file_path = p_path;
 }
-bool colors_equal(const Color &a, const Color &b, float tolerance = 0.001f)
-{
-	return (abs(a.r - b.r) < tolerance &&
-			abs(a.g - b.g) < tolerance &&
-			abs(a.b - b.b) < tolerance &&
-			abs(a.a - b.a) < tolerance);
-}
+
 String MapData::get_province_from_color(Color color)
 {
 	for (int i = 0; i < province_data.size(); i++)
 	{
-		Dictionary dict = province_data[i];
+		const Dictionary &dict = province_data[i];
 		Color province_color = dict["Color"];
 
 		// default epsilon value is too big
@@ -88,17 +93,31 @@ String MapData::get_csv_path() const
 {
 	return csv_file_path;
 }
-void MapData::set_province_data(const Array &p_data)
+void MapData::set_province_data(const Array &data)
 {
-	province_data = p_data;
+	province_data = data;
 }
 Array MapData::get_province_data() const
 {
 	return province_data;
 }
 
+bool MapData::get_should_skip_first_row() const
+{
+	return should_skip_first_row;
+}
+void MapData::set_should_skip_first_row(bool value)
+{
+	should_skip_first_row = value;
+}
+
 void MapData::load_csv_data()
 {
+	if (csv_file_path.is_empty())
+	{
+		print_error("CSV file path is empty", csv_file_path);
+		return;
+	}
 	Ref<FileAccess> file = FileAccess::open(csv_file_path, FileAccess::READ);
 
 	if (file.is_null())
@@ -109,15 +128,14 @@ void MapData::load_csv_data()
 
 	//Decodes correctly rather than failing for UTF8
 	String buffer = file->get_buffer(file->get_length()).get_string_from_ascii();
-	// UtilityFunctions::print(province_data);
 
 	//Parse data
 	PackedStringArray rows = buffer.split("\n");
 
 	for (const String &row : rows)
 	{
-		// Skip the first line
-		if (row == rows[0])
+		// The first line in my data needs to be skipped
+		if (should_skip_first_row && row == rows[0])
 		{
 			continue;
 		}

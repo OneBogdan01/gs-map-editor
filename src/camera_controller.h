@@ -2,9 +2,11 @@
 
 #include "godot_cpp/classes/node3d.hpp"
 #include "godot_cpp/variant/vector3.hpp"
-namespace godot {
+namespace godot
+{
 
-class CameraController : public Node3D {
+class CameraController : public Node3D
+{
 	GDCLASS(CameraController, Node3D);
 
 public:
@@ -16,7 +18,7 @@ public:
 	float get_deceleration();
 	void set_deceleration(float value);
 	Vector3 get_max_speed();
-	 void set_max_speed(Vector3 value);
+	void set_max_speed(Vector3 value);
 
 protected:
 	static void _bind_methods();

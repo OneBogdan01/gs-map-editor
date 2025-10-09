@@ -13,33 +13,41 @@
 
 using namespace godot;
 
-void initialize_example_module(ModuleInitializationLevel p_level) {
-	if (p_level != MODULE_INITIALIZATION_LEVEL_SCENE) {
+void initialize_example_module(ModuleInitializationLevel p_level)
+{
+	if (p_level != MODULE_INITIALIZATION_LEVEL_SCENE)
+	{
 		return;
 	}
 
+	// used for province selecting
 	GDREGISTER_CLASS(MapData);
 	GDREGISTER_CLASS(CountryData);
 
+	// can be done in gd
 	GDREGISTER_RUNTIME_CLASS(CameraController);
 	GDREGISTER_CLASS(ProvinceSelector);
 }
 
-void uninitialize_example_module(ModuleInitializationLevel p_level) {
-	if (p_level != MODULE_INITIALIZATION_LEVEL_SCENE) {
+void uninitialize_example_module(ModuleInitializationLevel p_level)
+{
+	if (p_level != MODULE_INITIALIZATION_LEVEL_SCENE)
+	{
 		return;
 	}
 }
 
-extern "C" {
-// Initialization.
-GDExtensionBool GDE_EXPORT map_editor_init(GDExtensionInterfaceGetProcAddress p_get_proc_address, const GDExtensionClassLibraryPtr p_library, GDExtensionInitialization *r_initialization) {
-	godot::GDExtensionBinding::InitObject init_obj(p_get_proc_address, p_library, r_initialization);
+extern "C"
+{
+	// Initialization.
+	GDExtensionBool GDE_EXPORT map_editor_init(GDExtensionInterfaceGetProcAddress p_get_proc_address, const GDExtensionClassLibraryPtr p_library, GDExtensionInitialization *r_initialization)
+	{
+		godot::GDExtensionBinding::InitObject init_obj(p_get_proc_address, p_library, r_initialization);
 
-	init_obj.register_initializer(initialize_example_module);
-	init_obj.register_terminator(uninitialize_example_module);
-	init_obj.set_minimum_library_initialization_level(MODULE_INITIALIZATION_LEVEL_SCENE);
+		init_obj.register_initializer(initialize_example_module);
+		init_obj.register_terminator(uninitialize_example_module);
+		init_obj.set_minimum_library_initialization_level(MODULE_INITIALIZATION_LEVEL_SCENE);
 
-	return init_obj.init();
-}
+		return init_obj.init();
+	}
 }
