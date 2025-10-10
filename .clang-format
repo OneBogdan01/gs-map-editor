@@ -37,7 +37,7 @@ AlignAfterOpenBracket: DontAlign
 # AlignEscapedNewlines: Right
 AlignOperands: DontAlign
 AlignTrailingComments:
-  Kind: Never
+  Kind: Always
   OverEmptyLines: 0
 # AllowAllArgumentsOnNextLine: true
 AllowAllParametersOfDeclarationOnNextLine: false
@@ -210,11 +210,11 @@ RemoveSemicolon: true
 # SpaceBeforeRangeBasedForLoopColon: true
 # SpaceBeforeSquareBrackets: false
 # SpaceInEmptyBlock: false
-# SpacesBeforeTrailingComments: 1
+SpacesBeforeTrailingComments: 1
 # SpacesInAngles: Never
 # SpacesInContainerLiterals: true
 SpacesInLineCommentPrefix:
-  Minimum: 0 # We want a minimum of 1 for comments, but allow 0 for disabled code.
+  Minimum: 1 # We want a minimum of 1 for comments, but allow 0 for disabled code.
   Maximum: -1
 # SpacesInParens: Never
 # SpacesInParensOptions:
