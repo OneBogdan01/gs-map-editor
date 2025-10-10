@@ -143,7 +143,10 @@ transform = Transform3D(1, 0, 0, 0, 0.258819, 0.965926, 0, -0.965926, 0.258819, 
 provinces_folder = "res://map/provinces"
 countries_folder = "res://map/countries"
 countries_color_folder = "res://map/country_colors"
-map_data = "res://map/countries"
+terrain_colors = Dictionary[String, Color]({
+"No Owner": Color(0.7, 0.5, 0.1, 1),
+"Ocean": Color(0.1, 0.4, 0.7, 1)
+})
 
 [connection signal="country_selected" from="ProvinceSelector" to="Map" method="_on_province_selector_country_selected"]
 [connection signal="province_selected" from="ProvinceSelector" to="Map" method="_on_province_selector_province_selected"]

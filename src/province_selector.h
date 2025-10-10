@@ -1,6 +1,4 @@
-
-
-#include "country_data.h"
+#pragma once
 #include "godot_cpp/classes/camera3d.hpp"
 #include "godot_cpp/classes/node.hpp"
 #include "godot_cpp/classes/ref.hpp"
@@ -15,6 +13,8 @@
 namespace godot
 {
 class MapData;
+class CountryData;
+
 class ProvinceSelector : public Node3D
 {
 	GDCLASS(ProvinceSelector, Node3D);
@@ -22,7 +22,7 @@ class ProvinceSelector : public Node3D
 public:
 	ProvinceSelector();
 	~ProvinceSelector();
-	//setters getters
+	// setters getters
 	MapData *get_province_parser() const;
 	void set_province_parser(MapData *value);
 	CountryData *get_country_data() const;
@@ -47,4 +47,4 @@ private:
 	bool clicked{ false };
 	const float RAY_LENGTH{ 1000.0f };
 };
-} //namespace godot
+} // namespace godot

@@ -16,8 +16,8 @@ func _parse_begin(object: Object) -> void:
 		var parse_button = Button.new()
 		parse_button.text = "Parse All Files"
 		parse_button.pressed.connect(_on_parse_button_pressed.bind(country_data))
-		if country_data.get_province_data().is_empty():
-			_on_parse_button_pressed(country_data)
+		#if country_data.get_province_data().is_empty():
+			#_on_parse_button_pressed(country_data)
 		add_custom_control(parse_button)
 		
 		# Search container
