@@ -1,7 +1,34 @@
-#include "terrain_patch.h"
+#include "utility.h"
+#include "godot_cpp/classes/dir_access.hpp"
 #include "godot_cpp/variant/color.hpp"
 #include "godot_cpp/variant/packed_string_array.hpp"
 using namespace godot;
+PackedStringArray gsg::get_txt_files_in_folder(const String &folder_path)
+{
+	PackedStringArray txt_files;
+
+	Ref<DirAccess> dir = DirAccess::open(folder_path);
+	if (dir.is_null())
+	{
+		UtilityFunctions::print("Failed to open directory: ", folder_path);
+		return txt_files;
+	}
+
+	dir->list_dir_begin();
+	String file_name = dir->get_next();
+
+	while (file_name.is_empty() == false)
+	{
+		if (dir->current_is_dir() == false && file_name.get_extension().to_lower() == "txt")
+		{
+			txt_files.push_back(file_name);
+		}
+		file_name = dir->get_next();
+	}
+
+	dir->list_dir_end();
+	return txt_files;
+}
 String gsg::get_terrain_owner(const String &filename)
 {
 	String lower_name = filename.to_lower();
@@ -188,10 +215,10 @@ String gsg::get_terrain_owner(const String &filename)
 				lower_name.contains("sound") || lower_name.contains("archipelago") ||
 				lower_name.contains("shelf") || lower_name.contains("trench")) &&
 			!lower_name.contains("sea of galilee") && // Inland lake
-			!lower_name.contains("dead sea") && // Inland lake
-			!lower_name.contains("caspian") && // Inland lake
-			!lower_name.contains("aral") && // Inland lake
-			!lower_name.contains("great basin")) // Land desert
+			!lower_name.contains("dead sea") &&		  // Inland lake
+			!lower_name.contains("caspian") &&		  // Inland lake
+			!lower_name.contains("aral") &&			  // Inland lake
+			!lower_name.contains("great basin"))	  // Land desert
 	{
 		// Additional safety check - these are definitely land provinces
 		if (!lower_name.contains("bayezid") && !lower_name.contains("bayburt") &&
