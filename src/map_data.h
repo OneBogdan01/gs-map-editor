@@ -21,7 +21,7 @@ public:
 	int32_t get_province_id_from_color(Color color);
 
 	void load_csv_data();
-	//setter and getters
+	// setter and getters
 	Array get_province_data() const;
 	void set_province_data(const Array &p_data);
 	void set_csv_path(const String &p_path);
@@ -37,4 +37,4 @@ private:
 	Array province_data;
 	bool should_skip_first_row{ true };
 };
-} //namespace godot
+} // namespace godot

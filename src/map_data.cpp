@@ -23,11 +23,11 @@ bool colors_equal(const Color &a, const Color &b, float tolerance = 0.001f)
 			abs(a.b - b.b) < tolerance &&
 			abs(a.a - b.a) < tolerance);
 }
-} //namespace
+} // namespace
 
 void MapData::_bind_methods()
 {
-	//csv
+	// csv
 	ClassDB::bind_method(D_METHOD("get_csv_path"), &MapData::get_csv_path);
 	ClassDB::bind_method(D_METHOD("set_csv_path", "p_path"), &MapData::set_csv_path);
 	ClassDB::bind_method(D_METHOD("load_csv_data"), &MapData::load_csv_data);
@@ -41,7 +41,7 @@ void MapData::_bind_methods()
 	ADD_PROPERTY(PropertyInfo(Variant::BOOL, "should_skip_first_row"),
 			"set_should_skip_first_row", "get_should_skip_first_row");
 
-	//province data
+	// province data
 	ClassDB::bind_method(D_METHOD("get_province_data"), &MapData::get_province_data);
 	ClassDB::bind_method(D_METHOD("set_province_data", "data"), &MapData::set_province_data);
 	ADD_PROPERTY(PropertyInfo(Variant::ARRAY, "province_data"),
@@ -126,10 +126,10 @@ void MapData::load_csv_data()
 		return;
 	}
 
-	//Decodes correctly rather than failing for UTF8
+	// Decodes correctly rather than failing for UTF8
 	String buffer = file->get_buffer(file->get_length()).get_string_from_ascii();
 
-	//Parse data
+	// Parse data
 	PackedStringArray rows = buffer.split("\n");
 
 	for (const String &row : rows)

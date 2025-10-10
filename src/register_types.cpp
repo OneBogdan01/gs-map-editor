@@ -25,6 +25,7 @@ void initialize_example_module(ModuleInitializationLevel p_level)
 	GDREGISTER_CLASS(CountryData);
 	// can be done in gd
 	GDREGISTER_RUNTIME_CLASS(CameraController);
+
 	GDREGISTER_CLASS(ProvinceSelector);
 }
 

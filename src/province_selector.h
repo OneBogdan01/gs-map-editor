@@ -22,7 +22,7 @@ class ProvinceSelector : public Node3D
 public:
 	ProvinceSelector();
 	~ProvinceSelector();
-	//setters getters
+	// setters getters
 	MapData *get_province_parser() const;
 	void set_province_parser(MapData *value);
 	CountryData *get_country_data() const;
@@ -47,4 +47,4 @@ private:
 	bool clicked{ false };
 	const float RAY_LENGTH{ 1000.0f };
 };
-} //namespace godot
+} // namespace godot

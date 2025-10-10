@@ -72,7 +72,7 @@ Camera3D *ProvinceSelector::get_current_camera() const
 {
 	return get_viewport()->get_camera_3d();
 }
-//TODO make faster
+// TODO make faster
 void ProvinceSelector::select_province()
 {
 	PhysicsDirectSpaceState3D *space = get_world_3d()->get_direct_space_state();

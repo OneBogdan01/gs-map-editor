@@ -5,7 +5,7 @@
 namespace godot
 {
 
-//very basic camera used for the demo of this plugin, can be safely ignored
+// very basic camera used for the demo of this plugin, can be safely ignored
 class CameraController : public Node3D
 {
 	GDCLASS(CameraController, Node3D);
@@ -33,4 +33,4 @@ private:
 	float deceleration{ 0.4f };
 	Vector3 max_speed{ 1.0, 1.0, 1.0 };
 };
-} //namespace godot
+} // namespace godot
