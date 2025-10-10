@@ -1,8 +1,7 @@
 #include "country_data.h"
 
-#include "terrain_patch.h"
+#include "utility.h"
 
-#include "godot_cpp/classes/dir_access.hpp"
 #include "godot_cpp/classes/file_access.hpp"
 
 #include "godot_cpp/core/error_macros.hpp"
@@ -15,44 +14,19 @@
 #include "godot_cpp/variant/string.hpp"
 #include "godot_cpp/variant/utility_functions.hpp"
 #include "godot_cpp/variant/variant.hpp"
+#include <cstdint>
 
 using namespace godot;
+using namespace godot::gsg;
 
 CountryData::CountryData() = default;
-CountryData::~CountryData() {}
+CountryData::~CountryData() = default;
 
-PackedStringArray CountryData::get_txt_files_in_folder(const String &folder_path)
-{
-	PackedStringArray txt_files;
-
-	Ref<DirAccess> dir = DirAccess::open(folder_path);
-	if (dir.is_null())
-	{
-		UtilityFunctions::print("Failed to open directory: ", folder_path);
-		return txt_files;
-	}
-
-	dir->list_dir_begin();
-	String file_name = dir->get_next();
-
-	while (file_name.is_empty() == false)
-	{
-		if (dir->current_is_dir() == false && file_name.get_extension().to_lower() == "txt")
-		{
-			txt_files.push_back(file_name);
-		}
-		file_name = dir->get_next();
-	}
-
-	dir->list_dir_end();
-	return txt_files;
-}
-//call at the beginning
 void CountryData::build_look_up_tables()
 {
 	country_id_to_country_name.clear();
 	country_name_to_color.clear();
-
+	province_id_to_owner.clear();
 	for (const Dictionary &dict : country_data)
 	{
 		country_id_to_country_name[dict["Id"]] = dict["Name"];
@@ -62,7 +36,12 @@ void CountryData::build_look_up_tables()
 	{
 		country_name_to_color[dict["Name"]] = dict["Color"];
 	}
+	for (const Dictionary &dict : province_data)
+	{
+		province_id_to_owner[dict["Id"]] = dict["Owner"];
+	}
 }
+
 Color CountryData::get_country_color_lookup(const String &country_id)
 {
 	String country_name = country_id_to_country_name[country_id];
@@ -73,10 +52,9 @@ PackedInt32Array CountryData::populate_color_map_buffers()
 {
 	PackedInt32Array data;
 
-	int i = 0;
 	for (const Dictionary &dict : province_data)
 	{
-		int id = dict["Id"];
+		int32_t id = dict["Id"];
 		String country_id = dict["Owner"];
 		Color color = get_country_color_lookup(country_id);
 
@@ -88,21 +66,16 @@ bool CountryData::sort_by_id(const Dictionary &a, const Dictionary &b)
 {
 	return (int)a["Id"] < (int)b["Id"];
 }
-void CountryData::parse_all_files()
-{
-	UtilityFunctions::print("Parsing countries ...");
 
-	if (countries_folder_path.is_empty())
-	{
-		UtilityFunctions::print("Countries folder path is not set!");
-		return;
-	}
+void CountryData::store_filename_data()
+{
 	province_data.clear();
 	country_color_data.clear();
 	country_data.clear();
 	PackedStringArray country_filenames = get_txt_files_in_folder(countries_folder_path);
 	PackedStringArray country_color_filenames = get_txt_files_in_folder(country_colors_folder_path);
 	PackedStringArray province_filenames = get_txt_files_in_folder(provinces_folder_path);
+
 	for (const auto &country_color_filename : country_color_filenames)
 	{
 		// filenames are like this: Aachen.txt
@@ -119,33 +92,36 @@ void CountryData::parse_all_files()
 	{
 		Dictionary country_codes;
 		// this is how the file names are AAC - Aachen.txt
-		country_codes["Id"] = country_filename.substr(0, 3); // gets AAC identifier
+		country_codes["Id"] = country_filename.substr(0, 3);			  // gets AAC identifier
 		country_codes["Name"] = country_filename.substr(6).split(".")[0]; // get country name Aachen
 
 		country_data.push_back(country_codes);
 	}
-	// Add terrain colors here:
 
-	terrain_tokens["Ocean"] = Color(0.1, 0.4, 0.7);
-
-	terrain_tokens["No Owner"] = Color(0.7, 0.5, 0.1);
-
-	Array terrain_keys = terrain_tokens.keys();
-	for (const auto &terrain_key : terrain_keys)
+	if (should_assign_country_to_non_ownable == true)
 	{
-		Dictionary terrain_dict;
-		String terrain_name = terrain_key;
-		terrain_dict["Name"] = terrain_name;
-		terrain_dict["Color"] = terrain_tokens[terrain_name];
-		country_color_data.push_back(terrain_dict);
-		Dictionary terrain_data;
-		terrain_data["Id"] = terrain_name;
-		terrain_data["Name"] = terrain_name;
-		country_data.push_back(terrain_data);
+		UtilityFunctions::print("Assigning provinces with no owner...");
+		terrain_colors["Ocean"] = Color(0.1, 0.4, 0.7);
+
+		terrain_colors["No Owner"] = Color(0.7, 0.5, 0.1);
+
+		Array terrain_keys = terrain_colors.keys();
+		for (const auto &terrain_key : terrain_keys)
+		{
+			Dictionary terrain_dict;
+			String terrain_name = terrain_key;
+			terrain_dict["Name"] = terrain_name;
+			terrain_dict["Color"] = terrain_colors[terrain_name];
+			country_color_data.push_back(terrain_dict);
+			Dictionary terrain_data;
+			terrain_data["Id"] = terrain_name;
+			terrain_data["Name"] = terrain_name;
+			country_data.push_back(terrain_data);
+		}
 	}
 	for (const auto &province_filename : province_filenames)
 	{
-		//1-Uppland.txt
+		// 1-Uppland.txt
 		Dictionary province_codes;
 		String filename = province_filename.get_file();
 
@@ -171,6 +147,28 @@ void CountryData::parse_all_files()
 	}
 	// sort them by id
 	province_data.sort_custom(callable_mp(this, &CountryData::sort_by_id));
+}
+void CountryData::parse_all_files()
+{
+	UtilityFunctions::print("Parsing countries ...");
+
+	if (countries_folder_path.is_empty())
+	{
+		print_error("Countries folder path is not set!");
+		return;
+	}
+	if (country_colors_folder_path.is_empty())
+	{
+		print_error("Country colors folder path is not set!");
+		return;
+	}
+	if (provinces_folder_path.is_empty())
+	{
+		print_error("Province folder path is not set!");
+		return;
+	}
+	store_filename_data();
+
 	// create lookup tables
 	build_look_up_tables();
 	UtilityFunctions::print("Parsed Provinces:", province_data.size());
@@ -195,26 +193,23 @@ PackedStringArray CountryData::get_country_provinces(uint32_t country_index)
 	}
 	return provinces;
 }
-String CountryData::get_country_from_province(int32_t province_id)
+String CountryData::get_country_from_province(uint32_t province_id)
 {
-	String country_owner = "None";
-	for (const Dictionary &dict : province_data)
+	if (province_id_to_owner.has(province_id) == false)
 	{
-		if (int32_t(dict["Id"]) == province_id)
-		{
-			String country_id = String(dict["Owner"]);
-			for (const Dictionary &entry_country : country_data)
-			{
-				if (String(entry_country["Id"]) == country_id)
-				{
-					country_owner = (entry_country["Name"]);
-					return country_owner;
-				}
-			}
-		}
+		print_error("Province id not found: ", province_id);
+		return "None";
 	}
-	print_error("Province id not found:  ", province_id);
-	return country_owner;
+
+	String country_id = province_id_to_owner[province_id];
+
+	if (country_id_to_country_name.has(country_id) == false)
+	{
+		print_error("Country id not found: ", country_id);
+		return "None";
+	}
+
+	return country_id_to_country_name[country_id];
 }
 Dictionary CountryData::get_country_from_name(String name)
 {
@@ -230,12 +225,12 @@ Dictionary CountryData::get_country_from_name(String name)
 	print_error("Province name not found:  ", name);
 	return dic;
 }
-Dictionary CountryData::get_province_from_id(int32_t id)
+Dictionary CountryData::get_province_from_id(uint32_t id)
 {
 	Dictionary dic;
 	for (Dictionary entry : province_data)
 	{
-		if (int32_t(entry["Id"]) == id)
+		if (uint32_t(entry["Id"]) == id)
 		{
 			dic = entry;
 			return dic;
@@ -244,13 +239,21 @@ Dictionary CountryData::get_province_from_id(int32_t id)
 	print_error("Province id not found:  ", id);
 	return dic;
 }
-void CountryData::change_province_owner(int32_t province_id, const String &new_country_name)
+void CountryData::change_province_owner(uint32_t province_id, const String &new_country_name)
 {
+	// deprecated way of doing it with the array update
 	Dictionary country = get_country_from_name(new_country_name);
 
 	Dictionary province = get_province_from_id(province_id);
+	UtilityFunctions::print_verbose(new_country_name);
 	province["Owner"] = country["Id"];
+
 	province_data.set(province_data.find(province), province);
+	UtilityFunctions::print_verbose("Before owner:", province_id_to_owner[province_id]);
+
+	province_id_to_owner[province_id] = country["Id"];
+	UtilityFunctions::print_verbose("After owner:", province_id_to_owner[province_id]);
+
 	// UtilityFunctions::print(get_country_provinces(country_data.find(country)));
 }
 Color CountryData::get_country_color_from_province_id(uint32_t province_id)
@@ -260,17 +263,17 @@ Color CountryData::get_country_color_from_province_id(uint32_t province_id)
 
 	for (const Dictionary &entry : province_data)
 	{
-		//find province id
+		// find province id
 		if (uint32_t(entry["Id"]) == province_id)
 		{
-			//get its owner it should be as an identifier country like AAC (for Aachen)
+			// get its owner it should be as an identifier country like AAC (for Aachen)
 			String country_id = entry["Owner"];
 			for (const Dictionary &entry_country : country_data)
 			{
-				//find the country with the identifier
+				// find the country with the identifier
 				if (String(entry_country["Id"]) == country_id)
 				{
-					//using the country name get the color
+					// using the country name get the color
 					color = get_country_color(entry_country["Name"]);
 					break;
 				}
@@ -281,87 +284,6 @@ Color CountryData::get_country_color_from_province_id(uint32_t province_id)
 	return color;
 }
 
-String CountryData::parse_province_owner(const String &file_path)
-{
-	Ref<FileAccess> file = FileAccess::open(file_path, FileAccess::READ);
-	String content = file->get_buffer(file->get_length()).get_string_from_ascii();
-
-	String owner_token = "owner =";
-	int owner_pos = content.find(owner_token);
-	if (owner_pos == -1 || content.find("tribal_owner") != -1)
-	{
-		// handle the mountain case
-		String filename = file_path.get_file();
-		if (should_patch_terrain)
-		{
-			String assigned_owner = gsg::get_terrain_owner(filename);
-			if (assigned_owner.is_empty() == false)
-			{
-				return assigned_owner;
-			}
-
-			UtilityFunctions::print(filename + " is unassigned");
-			return "No Owner";
-		}
-	}
-	int value_start = owner_pos + owner_token.length();
-	int line_end = content.find("\n", value_start);
-	//get ID
-	String province_owner = content.substr(value_start, line_end - value_start).strip_edges();
-	//strip comments
-	int comment_pos = province_owner.find("#");
-	if (comment_pos == -1)
-	{
-		comment_pos = province_owner.find("//");
-	}
-	if (comment_pos != -1)
-	{
-		province_owner = province_owner.substr(0, comment_pos).strip_edges();
-	}
-	return province_owner;
-}
-Color CountryData::parse_country_color(const String &file_path)
-{
-	Color color;
-	Ref<FileAccess> file = FileAccess::open(file_path, FileAccess::READ);
-	String content = file->get_buffer(file->get_length()).get_string_from_ascii();
-
-	String owner_token = "color = ";
-	int owner_pos = content.find(owner_token);
-	int value_start = owner_pos + owner_token.length();
-	int line_end = content.find("\n", value_start);
-	//get ID
-	String province_owner = content.substr(value_start, line_end - value_start).strip_edges();
-	PackedStringArray fields = province_owner.split(" ");
-
-	// only add numbers
-	Array rgb;
-
-	for (auto field : fields)
-	{
-		//try to remove non numbers
-		field = field.replace("}", "");
-		field = field.replace("{", "");
-		if (field.is_valid_float())
-		{
-			rgb.push_back(field.to_int());
-		}
-	}
-	if (rgb.size() != 3)
-	{
-		UtilityFunctions::print("Could not parse", rgb);
-		UtilityFunctions::print("Found Strings", fields);
-		UtilityFunctions::print("Could not parse file:", file_path);
-		return color;
-	}
-	color = Color::from_rgba8(rgb[0], rgb[1], rgb[2]);
-
-	return color;
-}
-Array CountryData::get_country_data() const
-{
-	return country_data;
-}
 Color CountryData::get_country_color(const String &country_name)
 {
 	Color color = Color(1, 1, 1, 1);
@@ -381,20 +303,6 @@ Color CountryData::get_country_color(const String &country_name)
 	return color;
 }
 
-int64_t CountryData::get_country_id_from_name(String name)
-{
-	for (int64_t i = 0; i < country_color_data.size(); i++)
-	{
-		Dictionary dict = country_color_data[i];
-		if (dict["Name"] == name)
-		{
-			return i;
-		}
-	}
-
-	print_error("Did not find country color for: ", name);
-	return -1;
-}
 bool CountryData::set_country_color_by_name(const String &country_name, const Color &new_color)
 {
 	int64_t index = -1;
@@ -423,7 +331,7 @@ bool CountryData::set_country_color_by_name(const String &country_name, const Co
 
 void CountryData::export_color_data(int64_t color_index)
 {
-	//This rewrites the entire file to not corrupt it
+	// This rewrites the entire file to not corrupt it
 	Dictionary color_data = country_color_data.get(color_index);
 	String country_name = color_data["Name"];
 	Color country_color = color_data["Color"];
@@ -486,34 +394,4 @@ void CountryData::export_color_data(int64_t color_index)
 	file->store_string(new_content);
 
 	UtilityFunctions::print("Successfully updated color for: " + country_name);
-}
-
-void CountryData::_bind_methods()
-{
-	ClassDB::bind_method(D_METHOD("set_provinces_folder", "path"), &CountryData::set_provinces_folder);
-	ClassDB::bind_method(D_METHOD("get_provinces_folder"), &CountryData::get_provinces_folder);
-	ClassDB::bind_method(D_METHOD("set_countries_folder", "path"), &CountryData::set_countries_folder);
-	ClassDB::bind_method(D_METHOD("get_countries_folder"), &CountryData::get_countries_folder);
-	ClassDB::bind_method(D_METHOD("set_countries_color_folder", "path"), &CountryData::set_countries_color_folder);
-	ClassDB::bind_method(D_METHOD("get_countries_color_folder"), &CountryData::get_countries_color_folder);
-	ClassDB::bind_method(D_METHOD("export_color_data"), &CountryData::export_color_data);
-	ClassDB::bind_method(D_METHOD("get_country_id_from_name"), &CountryData::get_country_id_from_name);
-
-	ClassDB::bind_method(D_METHOD("get_province_data"), &CountryData::get_province_data);
-	ClassDB::bind_method(D_METHOD("set_province_data"), &CountryData::set_province_data);
-	ClassDB::bind_method(D_METHOD("parse_all_files"), &CountryData::parse_all_files);
-	ClassDB::bind_method(D_METHOD("get_country_provinces"), &CountryData::get_country_provinces);
-	ClassDB::bind_method(D_METHOD("get_country_data"), &CountryData::get_country_data);
-	ClassDB::bind_method(D_METHOD("get_country_color_data"), &CountryData::get_country_color_data);
-	ClassDB::bind_method(D_METHOD("get_country_color", "name"), &CountryData::get_country_color);
-	ClassDB::bind_method(D_METHOD("change_province_owner"), &CountryData::change_province_owner);
-	ClassDB::bind_method(D_METHOD("get_country_color_from_province_id", "name"), &CountryData::get_country_color_from_province_id);
-	ClassDB::bind_method(D_METHOD("populate_color_map_buffers"), &CountryData::populate_color_map_buffers);
-
-	ClassDB::bind_method(D_METHOD("set_country_color_by_name", "name", "color"), &CountryData::set_country_color_by_name);
-
-	ADD_PROPERTY(PropertyInfo(Variant::STRING, "provinces_folder", PROPERTY_HINT_DIR), "set_provinces_folder", "get_provinces_folder");
-	ADD_PROPERTY(PropertyInfo(Variant::STRING, "countries_folder", PROPERTY_HINT_DIR), "set_countries_folder", "get_countries_folder");
-	ADD_PROPERTY(PropertyInfo(Variant::STRING, "countries_color_folder", PROPERTY_HINT_DIR), "set_countries_color_folder", "get_countries_color_folder");
-	ADD_PROPERTY(PropertyInfo(Variant::ARRAY, "map_data"), "set_countries_folder", "get_countries_folder");
 }
