@@ -1,5 +1,7 @@
 extends EditorInspectorPlugin
 
+var country_inspector: CountryInspector
+
 var search_line_edit: LineEdit
 var current_country_data: CountryData
 var current_data_container: VBoxContainer
@@ -93,7 +95,6 @@ func _update_data_display(container: VBoxContainer, country_data: CountryData, s
 	for child in container.get_children():
 		child.queue_free()
 	
-	# Get the parsed data
 	var province_data = country_data.get_province_data()
 	var province_color_data = country_data.get_country_color_data()
 	
