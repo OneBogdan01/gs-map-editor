@@ -1,78 +1,63 @@
-extends EditorInspectorPlugin
-
-var country_inspector: CountryInspector
+extends CountryInspector
 
 var search_line_edit: LineEdit
-var current_country_data: CountryData
 var current_data_container: VBoxContainer
+
 
 func _can_handle(object):
 	return object is CountryData
 
 func _parse_begin(object: Object) -> void:
-	if object is CountryData:
-		var country_data = object as CountryData
-		current_country_data = country_data
-		
-		# Parse button
-		var parse_button = Button.new()
-		parse_button.text = "Parse All Files"
-		parse_button.pressed.connect(_on_parse_button_pressed.bind(country_data))
-		#if country_data.get_province_data().is_empty():
-			#_on_parse_button_pressed(country_data)
-		add_custom_control(parse_button)
-		
-		# Search container
-		var search_container = HBoxContainer.new()
-		
-		var search_label = Label.new()
-		search_label.text = "Search:"
-		search_label.custom_minimum_size.x = 50
-		search_container.add_child(search_label)
-		
-		search_line_edit = LineEdit.new()
-		search_line_edit.placeholder_text = "Search countries or provinces..."
-		search_line_edit.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		search_line_edit.text_changed.connect(_on_search_text_changed)
-		search_container.add_child(search_line_edit)
-		
-		var clear_button = Button.new()
-		clear_button.text = "Clear"
-		clear_button.pressed.connect(_on_clear_search)
-		search_container.add_child(clear_button)
-		
-		add_custom_control(search_container)
-		
-		# Data display container with size constraints
-		var scroll_container = ScrollContainer.new()
-		scroll_container.set_custom_minimum_size(Vector2i(200, 600))
-		scroll_container.size_flags_vertical = Control.SIZE_EXPAND_FILL
-		
-		var data_container = VBoxContainer.new()
-		data_container.name = "ParsedDataContainer"
-		data_container.custom_minimum_size = Vector2(400, 0)
-		data_container.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		current_data_container = data_container
-		
-		scroll_container.add_child(data_container)
-		_update_data_display(data_container, country_data)
-		add_custom_control(scroll_container)
-
-func _on_parse_button_pressed(country_data: CountryData):
-	country_data.parse_all_files()
+	var country_data = object as CountryData
 	current_country_data = country_data
 	
-	# Find and update the data display
-	var inspector = EditorInterface.get_inspector()
-	var containers = _find_containers_by_name(inspector, "ParsedDataContainer")
-	for container in containers:
-		current_data_container = container
-		_update_data_display(container, country_data)
+
+	var parse_button = Button.new()
+	parse_button.text = "Parse All Files"
+	parse_button.pressed.connect(_on_parse_button_pressed.bind(country_data))
+	add_custom_control(parse_button)
+	
+
+	var search_container = HBoxContainer.new()
+	
+	var search_label = Label.new()
+	search_label.text = "Filter:"
+	search_label.custom_minimum_size.x = 50
+	search_container.add_child(search_label)
+	
+	search_line_edit = LineEdit.new()
+	search_line_edit.placeholder_text = "Search entities or provinces..."
+	search_line_edit.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	search_line_edit.text_changed.connect(_on_search_text_changed)
+	search_container.add_child(search_line_edit)
+	
+	var clear_button = Button.new()
+	clear_button.text = "Clear"
+	clear_button.pressed.connect(_on_clear_search)
+	search_container.add_child(clear_button)
+	
+	add_custom_control(search_container)
+	
+	# Data display container with size constraints
+	var scroll_container = ScrollContainer.new()
+	scroll_container.set_custom_minimum_size(Vector2i(200, 600))
+	scroll_container.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	
+	var data_container = VBoxContainer.new()
+	data_container.name = "ParsedDataContainer"
+	data_container.custom_minimum_size = Vector2(400, 0)
+	data_container.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	current_data_container = data_container
+	
+	scroll_container.add_child(data_container)
+	_update_data_display(data_container)
+	add_custom_control(scroll_container)
+
 
 func _on_search_text_changed(new_text: String):
 	print("new line for ", new_text)
 	if current_country_data and current_data_container:
-		_update_data_display(current_data_container, current_country_data, new_text.strip_edges().to_lower())
+		_update_data_display(current_data_container, new_text.strip_edges().to_lower())
 
 func _on_clear_search():
 	if search_line_edit:
@@ -86,24 +71,23 @@ func _on_country_color_changed(new_color: Color, country_data: CountryData, coun
 	var success = country_data.set_country_color_by_name(country_name, new_color)
 	if success == false:
 		print("Failed to update ", country_name)
-	else :
-		var id :int= country_data.get_country_id_from_name(country_name)
+	else:
+		var id: int = country_data.get_country_id_from_name(country_name)
 		country_data.export_color_data(id)
 
-func _update_data_display(container: VBoxContainer, country_data: CountryData, search_term: String = ""):
-	# Clear existing children
+func _update_data_display(container: VBoxContainer, search_term: String = ""):
+	# delete all 
 	for child in container.get_children():
 		child.queue_free()
 	
-	var province_data = country_data.get_province_data()
-	var province_color_data = country_data.get_country_color_data()
-	
-	var country_data_array = country_data.get_country_data()
+	var province_data = current_country_data.get_province_data()
+	var country_data_array = current_country_data.get_country_data()
+	var color_data = current_country_data.get_country_color_data()
 	
 	if province_data.is_empty():
 		var no_data_label = Label.new()
 		no_data_label.text = "No data parsed, click 'Parse All Files' to load data."
-		no_data_label.add_theme_color_override("font_color", Color.GRAY)
+		no_data_label.add_theme_color_override("font_color", Color.RED)
 		container.add_child(no_data_label)
 		return
 	
@@ -115,7 +99,7 @@ func _update_data_display(container: VBoxContainer, country_data: CountryData, s
 		var country = country_data_array[i]
 		var country_name = country.get("Name", "Unknown").to_lower()
 		var country_id = country.get("Id", "").to_lower()
-		var provinces = country_data.get_country_provinces(i)
+		var provinces = current_country_data.get_country_provinces(i)
 		
 		var country_matches = false
 		var filtered_provinces = []
@@ -181,7 +165,7 @@ func _update_data_display(container: VBoxContainer, country_data: CountryData, s
 		var country_text = "%s (%s) Province Count:%d" % [country_name, country_id, provinces.size()]
 		
 		# Get country color 
-		var country_color = country_data.get_country_color(country_name)
+		var country_color = current_country_data.get_country_color(country_name)
 
 
 		# Highlight search term in country name if it matches
@@ -200,8 +184,8 @@ func _update_data_display(container: VBoxContainer, country_data: CountryData, s
 		country_button.toggle_mode = provinces.size() > 0
 		country_button.disabled = provinces.size() == 0
 		country_button.button_pressed = false
-		country_button.add_theme_font_size_override("font_size", 24)
-		country_button.anchor_right = 0.85  # Take up 85% of width
+		# country_button.add_theme_font_size_override("font_size", 16)
+		country_button.anchor_right = 0.85 # Take up 85% of width
 		country_button.anchor_bottom = 1.0
 		button_container.add_child(country_button)
 
@@ -209,13 +193,13 @@ func _update_data_display(container: VBoxContainer, country_data: CountryData, s
 		var color_picker = ColorPickerButton.new()
 		color_picker.color = country_color
 		color_picker.custom_minimum_size = Vector2(32, 32)
-		color_picker.anchor_left = 0.85  # Start where country button ends
-		color_picker.anchor_right = 1.0   # Take remaining space
+		color_picker.anchor_left = 0.85 # Start where country button ends
+		color_picker.anchor_right = 1.0 # Take remaining space
 		color_picker.anchor_bottom = 1.0
-		color_picker.edit_alpha = false   # Disable alpha editing if you don't need it
+		color_picker.edit_alpha = false # Disable alpha editing if you don't need it
 
 		# TODO
-		color_picker.color_changed.connect(_on_country_color_changed.bind(country_data, country_name))
+		color_picker.color_changed.connect(_on_country_color_changed.bind(current_country_data, country_name))
 
 		button_container.add_child(color_picker)
 		country_container.add_child(button_container)
@@ -253,7 +237,7 @@ func _update_data_display(container: VBoxContainer, country_data: CountryData, s
 			
 			province_label.text = display_text
 			province_label.add_theme_color_override("font_color", Color.LIGHT_GRAY)
-			province_label.add_theme_font_size_override("font_size", 20)
+			# province_label.add_theme_font_size_override("font_size", 20)
 			province_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 			province_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 			province_label.custom_minimum_size.y = 30

@@ -7,7 +7,6 @@
 #include "map_data.h"
 #include "province_selector.h"
 
-
 #include <gdextension_interface.h>
 #include <godot_cpp/core/defs.hpp>
 #include <godot_cpp/godot.hpp>
@@ -16,15 +15,18 @@ using namespace godot;
 
 void initialize_example_module(ModuleInitializationLevel p_level)
 {
-	if (p_level != MODULE_INITIALIZATION_LEVEL_SCENE)
+	if (p_level == MODULE_INITIALIZATION_LEVEL_EDITOR)
+	{
+		GDREGISTER_CLASS(CountryInspector);
+		return;
+	}
+	else if (p_level != MODULE_INITIALIZATION_LEVEL_SCENE)
 	{
 		return;
 	}
-
 	// used for province selecting
 	GDREGISTER_CLASS(MapData);
 	GDREGISTER_CLASS(CountryData);
-	GDREGISTER_CLASS(CountryInspector);
 
 	// can be done in gd
 	GDREGISTER_RUNTIME_CLASS(CameraController);

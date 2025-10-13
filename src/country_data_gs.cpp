@@ -4,7 +4,6 @@
 #include "godot_cpp/variant/color.hpp"
 #include "godot_cpp/variant/dictionary.hpp"
 #include "godot_cpp/variant/string.hpp"
-#include "godot_cpp/variant/typed_dictionary.hpp"
 
 using namespace godot;
 

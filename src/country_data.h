@@ -81,9 +81,9 @@ private:
 
 	static void _bind_methods();
 	// TODO can get rid of these and just use dictionaries for everything.
-	Array province_data;
-	Array country_data;
-	Array country_color_data;
+	Array province_data;	  // 3 AAC SWE
+	Array country_data;		  // // Name ID Sweden SWE // 2
+	Array country_color_data; // Name Color // 2
 	// folders
 	String countries_folder_path;
 	String country_colors_folder_path;

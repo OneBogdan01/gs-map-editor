@@ -1,6 +1,6 @@
 shader_type spatial;
 render_mode unshaded;
-#define PRECISION 0.000001
+#define PRECISION 0.0001
 uniform sampler2D subview_image : source_color, filter_linear;
 uniform sampler2D water_color : source_color, filter_linear_mipmap;
 
@@ -55,7 +55,7 @@ void fragment()
 		diag(s, ip, vec2(0, -1), vec2(-1, 1), 0.25);
 		diag(s, ip, vec2(1, -1), vec2(-1, 0), 0.25);
 	}
-	
+
 	float val = s.r + s.g + s.b;
 	float alpha =  step(-PRECISION, val) * (1.0 - step(PRECISION, val));
 	vec3 final_color = mix(s.rgb, texture(water_color, UV).rgb,  alpha);
