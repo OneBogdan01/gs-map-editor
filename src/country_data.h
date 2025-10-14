@@ -29,14 +29,16 @@ public:
 	String parse_province_owner(const String &file_path);
 	Color parse_country_color(const String &file_path);
 
-	// Query methods, these are deprecated and will be replaced with dictionaries instead of arrays
+	// Query methods,
+	Color get_country_color(const String &country_id);
 	String get_country_from_province(uint32_t province_id);
-	Color get_country_color(const String &country_name);
+	PackedStringArray get_country_provinces(const String &country_id);
+
+	//  these are deprecated and will be replaced with dictionaries instead of arrays
 	Color get_country_color_from_province_id(uint32_t province_id);
-	Color get_country_color_lookup(const String &country_id);
 	Dictionary get_country_from_name(String name);
 	Dictionary get_province_from_id(uint32_t id);
-	PackedStringArray get_country_provinces(uint32_t country_id);
+	PackedStringArray get_country_provinces_depre(uint32_t country_id);
 
 	// Modification methods
 	void change_province_owner(uint32_t province_id, const String &new_country_name);
@@ -74,6 +76,8 @@ public:
 	TypedDictionary<String, Color> get_country_id_to_color() const { return country_id_to_color; }
 	void set_province_id_to_owner(const TypedDictionary<int32_t, String> &data) { province_id_to_owner = data; }
 	TypedDictionary<int32_t, String> get_province_id_to_owner() const { return province_id_to_owner; }
+	void set_province_id_to_name(const TypedDictionary<int32_t, String> &data) { province_id_to_name = data; }
+	TypedDictionary<int32_t, String> get_province_id_to_name() const { return province_id_to_name; }
 
 private:
 	void store_filename_data();
@@ -93,6 +97,7 @@ private:
 	TypedDictionary<String, Color> country_name_to_color;
 	TypedDictionary<String, Color> country_id_to_color;
 	TypedDictionary<int32_t, String> province_id_to_owner;
+	TypedDictionary<int32_t, String> province_id_to_name;
 	TypedDictionary<String, Color> terrain_colors;
 	// This is used to fix provinces that have no owner, think of oceans,
 	// lakes and so on, otherwise code will only handle the case where each province is assigned to something.

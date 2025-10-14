@@ -95,6 +95,10 @@ void CountryData::_bind_methods()
 	ClassDB::bind_method(D_METHOD("set_province_id_to_owner", "data"), &CountryData::set_province_id_to_owner);
 	ADD_PROPERTY(PropertyInfo(Variant::DICTIONARY, "province_id_to_owner"), "set_province_id_to_owner", "get_province_id_to_owner");
 
+	ClassDB::bind_method(D_METHOD("get_province_id_to_name"), &CountryData::get_province_id_to_name);
+	ClassDB::bind_method(D_METHOD("set_province_id_to_name", "data"), &CountryData::set_province_id_to_name);
+	ADD_PROPERTY(PropertyInfo(Variant::DICTIONARY, "province_id_to_name"), "set_province_id_to_name", "get_province_id_to_name");
+
 	// others
 	ClassDB::bind_method(D_METHOD("get_terrain_colors"), &CountryData::get_terrain_colors);
 	ClassDB::bind_method(D_METHOD("set_terrain_colors", "data"), &CountryData::set_terrain_colors);
