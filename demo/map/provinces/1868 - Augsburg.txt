@@ -1,5 +1,5 @@
 # 1868 - Augsburg
-owner = GER
+owner = AUG
 controller = AUG
 add_core = AUG
 culture = swabian

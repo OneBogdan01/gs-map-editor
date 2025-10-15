@@ -4,7 +4,7 @@ latent_trade_goods = {
 	coal
 }
 
-owner = GER
+owner = AAC
 controller = AAC
 culture = hessian
 religion = catholic
