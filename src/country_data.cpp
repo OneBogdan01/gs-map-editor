@@ -236,13 +236,13 @@ Dictionary CountryData::get_country_from_name(String name)
 	Dictionary dic;
 	for (Dictionary entry_country : country_data)
 	{
-		if (String(entry_country["Name"]) == name)
+		if (String(entry_country["Id"]) == name)
 		{
 			dic = entry_country;
 			return dic;
 		}
 	}
-	print_error("Province name not found:  ", name);
+	print_error("Country name not found:  ", name);
 	return dic;
 }
 Dictionary CountryData::get_province_from_id(uint32_t id)
@@ -329,97 +329,4 @@ int32_t CountryData::set_country_color_by_name(const String &country_name, const
 	// only this part is relevant
 	country_name_to_color[country_name] = new_color;
 	return index;
-}
-
-void CountryData::export_color_data(int64_t color_index)
-{
-	Dictionary color_data = country_color_data.get(color_index);
-	String country_name = color_data["Name"];
-	Color country_color = color_data["Color"];
-	String file_path = country_colors_folder_path.path_join(country_name + ".txt");
-
-	Ref<FileAccess> file = FileAccess::open(file_path, FileAccess::READ);
-	if (!file.is_valid())
-	{
-		print_error("Could not open file for reading: " + file_path);
-		return;
-	}
-
-	PackedByteArray raw_bytes = file->get_buffer(file->get_length());
-	file->close();
-
-	// Search for "color = " as bytes
-	PackedByteArray search_pattern = String("color = ").to_ascii_buffer();
-	int color_pos = -1;
-
-	for (int i = 0; i <= raw_bytes.size() - search_pattern.size(); i++)
-	{
-		bool match = true;
-		for (int j = 0; j < search_pattern.size(); j++)
-		{
-			if (raw_bytes[i + j] != search_pattern[j])
-			{
-				match = false;
-				break;
-			}
-		}
-		if (match)
-		{
-			color_pos = i + search_pattern.size();
-			break;
-		}
-	}
-
-	if (color_pos == -1)
-	{
-		UtilityFunctions::print("Color line not found in: " + country_name);
-		return;
-	}
-
-	// Find the end of the color value (look for newline or closing brace + newline)
-	int value_end = color_pos;
-	while (value_end < raw_bytes.size() && raw_bytes[value_end] != '\n')
-	{
-		value_end++;
-	}
-
-	// Build new color value as bytes
-	int32_t r = country_color.get_r8();
-	int32_t g = country_color.get_g8();
-	int32_t b = country_color.get_b8();
-	String new_color_str = "{ " + String::num_int64(r) + " " + String::num_int64(g) + " " + String::num_int64(b) + " }";
-	PackedByteArray new_color_bytes = new_color_str.to_ascii_buffer();
-
-	// Build new file: before + new color + after
-	PackedByteArray new_file;
-
-	// Copy everything before the color value
-	for (int i = 0; i < color_pos; i++)
-	{
-		new_file.append(raw_bytes[i]);
-	}
-
-	// Add new color value
-	for (int i = 0; i < new_color_bytes.size(); i++)
-	{
-		new_file.append(new_color_bytes[i]);
-	}
-
-	// Copy everything after the old color value
-	for (int i = value_end; i < raw_bytes.size(); i++)
-	{
-		new_file.append(raw_bytes[i]);
-	}
-
-	// Write the new file
-	file = FileAccess::open(file_path, FileAccess::WRITE);
-	if (!file.is_valid())
-	{
-		UtilityFunctions::print("Could not open file for writing: " + file_path);
-		return;
-	}
-
-	file->store_buffer(new_file);
-
-	UtilityFunctions::print("Successfully updated color for: " + country_name);
 }

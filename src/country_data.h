@@ -46,6 +46,7 @@ public:
 
 	// Export generation
 	void export_color_data(int64_t color_index);
+	void export_owner_data(int64_t province_id);
 	PackedInt32Array populate_color_map_buffers();
 
 	// Getters and Setters

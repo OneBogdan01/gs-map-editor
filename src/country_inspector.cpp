@@ -126,8 +126,11 @@ void CountryInspector::update_display(const String &search_term)
 		tree_display->set_hide_root(true);
 		tree_display->set_h_size_flags(Control::SIZE_EXPAND_FILL);
 		tree_display->set_v_size_flags(Control::SIZE_EXPAND_FILL);
+
+		// signals
 		tree_display->connect("item_edited", callable_mp(this, &CountryInspector::_on_tree_item_edited));
 		tree_display->connect("item_activated", callable_mp(this, &CountryInspector::_on_tree_item_rmb_selected));
+
 		data_container->add_child(tree_display);
 	}
 	tree_display->clear();
@@ -213,7 +216,6 @@ void CountryInspector::update_display(const String &search_term)
 		{
 			TreeItem *province_item = tree_display->create_item(country_item);
 
-			// Add MATCH indicator if province matches search
 			String province_display_text = province;
 			if (has_search && !country_matches && province.to_lower().contains(search_lower))
 			{
@@ -221,12 +223,16 @@ void CountryInspector::update_display(const String &search_term)
 			}
 
 			province_item->set_text(0, province_display_text);
+			province_item->set_expand_right(0, true);
 			province_item->set_metadata(0, province);
+
 			province_item->set_metadata(1, country_id);
 			province_item->set_selectable(1, false);
+			province_item->set_editable(1, false);
+			province_item->set_text(1, "");
+			province_item->set_custom_bg_color(1, Color(0, 0, 0, 0));
 		}
 
-		// Auto-expand if searching
 		if (has_search)
 		{
 			country_item->set_collapsed(false);
@@ -432,7 +438,8 @@ void CountryInspector::_on_country_transfer_selected(int index, const String &pr
 		new_country_info["provinces"] = new_provinces;
 		display_data[new_country_id] = new_country_info;
 	}
-
+	// export data
+	country_data->export_owner_data(province_id.to_int());
 	// Update the tree display
 	update_display("");
 

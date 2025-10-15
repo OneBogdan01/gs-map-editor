@@ -1,7 +1,11 @@
 #include "utility.h"
 #include "godot_cpp/classes/dir_access.hpp"
+#include "godot_cpp/classes/file_access.hpp"
+#include "godot_cpp/core/print_string.hpp"
 #include "godot_cpp/variant/color.hpp"
+#include "godot_cpp/variant/packed_byte_array.hpp"
 #include "godot_cpp/variant/packed_string_array.hpp"
+#include "godot_cpp/variant/string.hpp"
 using namespace godot;
 PackedStringArray gsg::get_txt_files_in_folder(const String &folder_path)
 {
@@ -28,6 +32,97 @@ PackedStringArray gsg::get_txt_files_in_folder(const String &folder_path)
 
 	dir->list_dir_end();
 	return txt_files;
+}
+String gsg::color_to_string(Color color)
+{
+	// Build new color value as bytes
+	int32_t r = color.get_r8();
+	int32_t g = color.get_g8();
+	int32_t b = color.get_b8();
+	return "{ " + String::num_int64(r) + " " + String::num_int64(g) + " " + String::num_int64(b) + " }";
+}
+PackedByteArray gsg::read_file_bytes(const String &file_path)
+{
+	Ref<FileAccess> file = FileAccess::open(file_path, FileAccess::READ);
+	if (!file.is_valid())
+	{
+		print_error("Could not open file for reading: " + file_path);
+		return {};
+	}
+
+	PackedByteArray raw_bytes = file->get_buffer(file->get_length());
+	return raw_bytes;
+}
+bool gsg::write_file_bytes(const String &file_path, const PackedByteArray &data)
+{
+	Ref<FileAccess> file = FileAccess::open(file_path, FileAccess::WRITE);
+	if (!file.is_valid())
+	{
+		print_error("Could not open file for writing: " + file_path);
+		return false;
+	}
+
+	return file->store_buffer(data);
+}
+PackedByteArray gsg::find_replace_in_file(const PackedByteArray &file_in_bytes,
+		const String &search_key,
+		const String &new_value)
+{
+	PackedByteArray search_pattern = search_key.to_ascii_buffer();
+	int token_pos = -1;
+
+	// search for the key in bytes in order to maintain the file format
+	// this is a limitation of Godot since it does not support the format used by EU4
+	for (int i = 0; i <= file_in_bytes.size() - search_pattern.size(); i++)
+	{
+		bool match = true;
+		for (int j = 0; j < search_pattern.size(); j++)
+		{
+			if (file_in_bytes[i + j] != search_pattern[j])
+			{
+				match = false;
+				break;
+			}
+		}
+		if (match)
+		{
+			token_pos = i + search_pattern.size();
+			break;
+		}
+	}
+
+	if (token_pos == -1)
+	{
+		print_error("Token was not found line not found: ", search_key);
+		return {};
+	}
+
+	// get to the end of the line, or end of the file
+	int value_end = token_pos;
+	while (value_end < file_in_bytes.size() && file_in_bytes[value_end] != '\n')
+	{
+		value_end++;
+	}
+
+	PackedByteArray new_color_bytes = new_value.to_ascii_buffer();
+	PackedByteArray new_file;
+
+	// Copy before the token
+	for (int i = 0; i < token_pos; i++)
+	{
+		new_file.append(file_in_bytes[i]);
+	}
+	// Copy the new value
+	for (int i = 0; i < new_color_bytes.size(); i++)
+	{
+		new_file.append(new_color_bytes[i]);
+	}
+	// Copy after the token
+	for (int i = value_end; i < file_in_bytes.size(); i++)
+	{
+		new_file.append(file_in_bytes[i]);
+	}
+	return new_file;
 }
 String gsg::get_terrain_owner(const String &filename)
 {
@@ -203,6 +298,10 @@ String gsg::get_terrain_owner(const String &filename)
 
 	// Specific named sea zones that might not match patterns above
 	if (lower_name.contains("coast"))
+	{
+		return "Ocean";
+	}
+	if (lower_name.contains("greenland tip"))
 	{
 		return "Ocean";
 	}
