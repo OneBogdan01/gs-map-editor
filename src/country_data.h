@@ -42,7 +42,7 @@ public:
 
 	// Modification methods
 	void change_province_owner(uint32_t province_id, const String &new_country_name);
-	bool set_country_color_by_name(const String &country_name, const Color &new_color);
+	int32_t set_country_color_by_name(const String &country_name, const Color &new_color);
 
 	// Export generation
 	void export_color_data(int64_t color_index);
@@ -95,6 +95,7 @@ private:
 	// these are for fast lookups, need to be build at the start
 	TypedDictionary<String, String> country_id_to_country_name;
 	TypedDictionary<String, Color> country_name_to_color;
+	// TODO remove this one
 	TypedDictionary<String, Color> country_id_to_color;
 	TypedDictionary<int32_t, String> province_id_to_owner;
 	TypedDictionary<int32_t, String> province_id_to_name;

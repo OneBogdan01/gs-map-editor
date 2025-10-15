@@ -1,5 +1,6 @@
 #include "country_data.h"
 #include "godot_cpp/classes/file_access.hpp"
+#include "godot_cpp/variant/utility_functions.hpp"
 #include "utility.h"
 
 using namespace godot;
@@ -10,9 +11,12 @@ String CountryData::parse_province_owner(const String &file_path)
 
 	String owner_token = "owner =";
 	int owner_pos = content.find(owner_token);
-	if (owner_pos == -1 || content.find("tribal_owner") != -1)
+	bool on_start_of_the_line = content.substr(owner_pos - 1, 1).contains("\n");
+	// patch the EU4 data, the owner needs to be at the beginning of the line.
+
+	if (on_start_of_the_line == false || owner_pos == -1 || content.find("tribal_owner") != -1)
 	{
-		// handle the mountain case
+		// handle the terrain case
 		String filename = file_path.get_file();
 		if (should_patch_terrain)
 		{
@@ -21,11 +25,11 @@ String CountryData::parse_province_owner(const String &file_path)
 			{
 				return assigned_owner;
 			}
-
-			UtilityFunctions::print(filename + " is unassigned");
-			return "No Owner";
 		}
+		UtilityFunctions::print(filename + " is unassigned");
+		return "No Owner";
 	}
+
 	int value_start = owner_pos + owner_token.length();
 	int line_end = content.find("\n", value_start);
 	// get ID
