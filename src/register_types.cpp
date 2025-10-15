@@ -2,10 +2,10 @@
 
 #include "camera_controller.h"
 #include "country_data.h"
+#include "country_inspector.h"
+#include "godot_cpp/core/class_db.hpp"
 #include "map_data.h"
 #include "province_selector.h"
-
-#include "godot_cpp/core/class_db.hpp"
 
 #include <gdextension_interface.h>
 #include <godot_cpp/core/defs.hpp>
@@ -15,14 +15,19 @@ using namespace godot;
 
 void initialize_example_module(ModuleInitializationLevel p_level)
 {
-	if (p_level != MODULE_INITIALIZATION_LEVEL_SCENE)
+	if (p_level == MODULE_INITIALIZATION_LEVEL_EDITOR)
+	{
+		GDREGISTER_CLASS(CountryInspector);
+		return;
+	}
+	else if (p_level != MODULE_INITIALIZATION_LEVEL_SCENE)
 	{
 		return;
 	}
-
 	// used for province selecting
 	GDREGISTER_CLASS(MapData);
 	GDREGISTER_CLASS(CountryData);
+
 	// can be done in gd
 	GDREGISTER_RUNTIME_CLASS(CameraController);
 

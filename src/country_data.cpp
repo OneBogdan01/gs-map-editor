@@ -27,6 +27,7 @@ void CountryData::build_look_up_tables()
 	country_id_to_country_name.clear();
 	country_name_to_color.clear();
 	province_id_to_owner.clear();
+	province_id_to_name.clear();
 	for (const Dictionary &dict : country_data)
 	{
 		country_id_to_country_name[dict["Id"]] = dict["Name"];
@@ -39,10 +40,11 @@ void CountryData::build_look_up_tables()
 	for (const Dictionary &dict : province_data)
 	{
 		province_id_to_owner[dict["Id"]] = dict["Owner"];
+		province_id_to_name[dict["Id"]] = dict["Name"];
 	}
 }
 
-Color CountryData::get_country_color_lookup(const String &country_id)
+Color CountryData::get_country_color(const String &country_id)
 {
 	String country_name = country_id_to_country_name[country_id];
 
@@ -56,7 +58,7 @@ PackedInt32Array CountryData::populate_color_map_buffers()
 	{
 		int32_t id = dict["Id"];
 		String country_id = dict["Owner"];
-		Color color = get_country_color_lookup(country_id);
+		Color color = get_country_color(country_id);
 
 		data.append_array({ color.get_r8(), color.get_g8(), color.get_b8(), id });
 	}
@@ -175,7 +177,25 @@ void CountryData::parse_all_files()
 	UtilityFunctions::print("Parsed Country Colors:", country_color_data.size());
 	UtilityFunctions::print("Parsed Countries:", country_data.size());
 }
-PackedStringArray CountryData::get_country_provinces(uint32_t country_index)
+
+PackedStringArray CountryData::get_country_provinces(const String &country_id)
+{
+	PackedStringArray provinces_output;
+	Array province_ids = province_id_to_owner.keys();
+
+	for (const auto &i : province_ids)
+	{
+		int32_t province_id = i;
+
+		if (province_id_to_owner[province_id] == country_id)
+		{
+			provinces_output.push_back("  Province: " + String(province_id_to_name[province_id]) + " (ID: " + itos(province_id) + ")");
+		}
+	}
+
+	return provinces_output;
+}
+PackedStringArray CountryData::get_country_provinces_depre(uint32_t country_index)
 {
 	PackedStringArray provinces;
 	Dictionary country_dict = country_data[country_index];
@@ -216,13 +236,13 @@ Dictionary CountryData::get_country_from_name(String name)
 	Dictionary dic;
 	for (Dictionary entry_country : country_data)
 	{
-		if (String(entry_country["Name"]) == name)
+		if (String(entry_country["Id"]) == name)
 		{
 			dic = entry_country;
 			return dic;
 		}
 	}
-	print_error("Province name not found:  ", name);
+	print_error("Country name not found:  ", name);
 	return dic;
 }
 Dictionary CountryData::get_province_from_id(uint32_t id)
@@ -284,26 +304,7 @@ Color CountryData::get_country_color_from_province_id(uint32_t province_id)
 	return color;
 }
 
-Color CountryData::get_country_color(const String &country_name)
-{
-	Color color = Color(1, 1, 1, 1);
-	for (const auto &i : country_color_data)
-	{
-		Dictionary color_entry = i;
-
-		if (country_name == String(color_entry["Name"]))
-		{
-			// Cast the Variant to Color
-			return color = Color(color_entry["Color"]);
-		}
-	}
-
-	print_error("Country name not found: ", country_name);
-
-	return color;
-}
-
-bool CountryData::set_country_color_by_name(const String &country_name, const Color &new_color)
+int32_t CountryData::set_country_color_by_name(const String &country_name, const Color &new_color)
 {
 	int64_t index = -1;
 	for (int i = 0; i < country_color_data.size(); i++)
@@ -318,80 +319,14 @@ bool CountryData::set_country_color_by_name(const String &country_name, const Co
 
 	if (index == -1)
 	{
-		return false;
+		return index;
 	}
 	Dictionary entry = country_color_data.get(index);
 
 	entry["Color"] = new_color;
 
 	country_color_data.set(index, entry);
-
-	return true;
-}
-
-void CountryData::export_color_data(int64_t color_index)
-{
-	// This rewrites the entire file to not corrupt it
-	Dictionary color_data = country_color_data.get(color_index);
-	String country_name = color_data["Name"];
-	Color country_color = color_data["Color"];
-	String file_path = country_colors_folder_path.path_join(country_name + ".txt");
-
-	Ref<FileAccess> file = FileAccess::open(file_path, FileAccess::READ);
-	if (!file.is_valid())
-	{
-		print_error("Could not open file for reading: " + file_path);
-		return;
-	}
-
-	PackedByteArray raw_bytes = file->get_buffer(file->get_length());
-	file->close();
-
-	String content = raw_bytes.get_string_from_ascii();
-
-	PackedStringArray lines = content.split("\n");
-
-	String owner_token = "color = ";
-	bool found = false;
-
-	for (int i = 0; i < lines.size(); i++)
-	{
-		if (lines[i].contains(owner_token))
-		{
-			int32_t r = country_color.get_r8();
-			int32_t g = country_color.get_g8();
-			int32_t b = country_color.get_b8();
-			String new_color_value = String("{ ") + String::num_int64(r) + " " + String::num_int64(g) + " " + String::num_int64(b) + " }";
-			lines[i] = owner_token + new_color_value;
-			found = true;
-			break;
-		}
-	}
-
-	if (!found)
-	{
-		UtilityFunctions::print("Color line not found in: " + country_name);
-		return;
-	}
-
-	String new_content = "";
-	for (int i = 0; i < lines.size(); i++)
-	{
-		new_content += lines[i];
-		if (i < lines.size() - 1)
-		{
-			new_content += "\n";
-		}
-	}
-
-	file = FileAccess::open(file_path, FileAccess::WRITE);
-	if (!file.is_valid())
-	{
-		UtilityFunctions::print("Could not open file for writing: " + file_path);
-		return;
-	}
-
-	file->store_string(new_content);
-
-	UtilityFunctions::print("Successfully updated color for: " + country_name);
+	// only this part is relevant
+	country_name_to_color[country_name] = new_color;
+	return index;
 }

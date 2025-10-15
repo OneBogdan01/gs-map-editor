@@ -29,21 +29,24 @@ public:
 	String parse_province_owner(const String &file_path);
 	Color parse_country_color(const String &file_path);
 
-	// Query methods, these are deprecated and will be replaced with dictionaries instead of arrays
+	// Query methods,
+	Color get_country_color(const String &country_id);
 	String get_country_from_province(uint32_t province_id);
-	Color get_country_color(const String &country_name);
+	PackedStringArray get_country_provinces(const String &country_id);
+
+	//  these are deprecated and will be replaced with dictionaries instead of arrays
 	Color get_country_color_from_province_id(uint32_t province_id);
-	Color get_country_color_lookup(const String &country_id);
 	Dictionary get_country_from_name(String name);
 	Dictionary get_province_from_id(uint32_t id);
-	PackedStringArray get_country_provinces(uint32_t country_id);
+	PackedStringArray get_country_provinces_depre(uint32_t country_id);
 
 	// Modification methods
 	void change_province_owner(uint32_t province_id, const String &new_country_name);
-	bool set_country_color_by_name(const String &country_name, const Color &new_color);
+	int32_t set_country_color_by_name(const String &country_name, const Color &new_color);
 
 	// Export generation
 	void export_color_data(int64_t color_index);
+	void export_owner_data(int64_t province_id);
 	PackedInt32Array populate_color_map_buffers();
 
 	// Getters and Setters
@@ -74,6 +77,8 @@ public:
 	TypedDictionary<String, Color> get_country_id_to_color() const { return country_id_to_color; }
 	void set_province_id_to_owner(const TypedDictionary<int32_t, String> &data) { province_id_to_owner = data; }
 	TypedDictionary<int32_t, String> get_province_id_to_owner() const { return province_id_to_owner; }
+	void set_province_id_to_name(const TypedDictionary<int32_t, String> &data) { province_id_to_name = data; }
+	TypedDictionary<int32_t, String> get_province_id_to_name() const { return province_id_to_name; }
 
 private:
 	void store_filename_data();
@@ -81,9 +86,9 @@ private:
 
 	static void _bind_methods();
 	// TODO can get rid of these and just use dictionaries for everything.
-	Array province_data;
-	Array country_data;
-	Array country_color_data;
+	Array province_data;	  // 3 AAC SWE
+	Array country_data;		  // // Name ID Sweden SWE // 2
+	Array country_color_data; // Name Color // 2
 	// folders
 	String countries_folder_path;
 	String country_colors_folder_path;
@@ -91,8 +96,10 @@ private:
 	// these are for fast lookups, need to be build at the start
 	TypedDictionary<String, String> country_id_to_country_name;
 	TypedDictionary<String, Color> country_name_to_color;
+	// TODO remove this one
 	TypedDictionary<String, Color> country_id_to_color;
 	TypedDictionary<int32_t, String> province_id_to_owner;
+	TypedDictionary<int32_t, String> province_id_to_name;
 	TypedDictionary<String, Color> terrain_colors;
 	// This is used to fix provinces that have no owner, think of oceans,
 	// lakes and so on, otherwise code will only handle the case where each province is assigned to something.
