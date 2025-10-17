@@ -1,11 +1,11 @@
-#include "register_types.h"
+#include "register_types.hpp"
 
-#include "camera_controller.h"
-#include "country_data.h"
-#include "country_inspector.h"
+#include "camera_controller.hpp"
+#include "country_data.hpp"
+#include "country_inspector.hpp"
 #include "godot_cpp/core/class_db.hpp"
-#include "map_data.h"
-#include "province_selector.h"
+#include "map_data.hpp"
+#include "province_selector.hpp"
 
 #include <gdextension_interface.h>
 #include <godot_cpp/core/defs.hpp>
@@ -17,7 +17,7 @@ void initialize_example_module(ModuleInitializationLevel p_level)
 {
 	if (p_level == MODULE_INITIALIZATION_LEVEL_EDITOR)
 	{
-		GDREGISTER_CLASS(CountryInspector);
+		GDREGISTER_VIRTUAL_CLASS(CountryInspector);
 		return;
 	}
 	else if (p_level != MODULE_INITIALIZATION_LEVEL_SCENE)

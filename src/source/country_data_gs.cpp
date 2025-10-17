@@ -1,4 +1,4 @@
-#include "country_data.h"
+#include "country_data.hpp"
 #include "godot_cpp/classes/global_constants.hpp"
 #include "godot_cpp/variant/array.hpp"
 #include "godot_cpp/variant/color.hpp"

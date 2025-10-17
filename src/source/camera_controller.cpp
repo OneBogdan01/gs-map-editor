@@ -1,4 +1,4 @@
-#include "camera_controller.h"
+#include "camera_controller.hpp"
 #include "godot_cpp/classes/input.hpp"
 #include "godot_cpp/core/math.hpp"
 #include "godot_cpp/variant/vector3.hpp"

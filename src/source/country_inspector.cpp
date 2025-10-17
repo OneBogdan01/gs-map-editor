@@ -1,6 +1,5 @@
-#include "country_inspector.h"
-#include "country_data.h"
-#include "godot_cpp/classes/button.hpp"
+#include "country_inspector.hpp"
+#include "country_data.hpp"
 #include "godot_cpp/classes/color_picker.hpp"
 #include "godot_cpp/classes/item_list.hpp"
 #include "godot_cpp/classes/label.hpp"
@@ -13,7 +12,6 @@
 #include "godot_cpp/classes/v_box_container.hpp"
 #include "godot_cpp/core/memory.hpp"
 #include "godot_cpp/variant/color.hpp"
-#include "godot_cpp/variant/color_names.inc.hpp"
 #include "godot_cpp/variant/string.hpp"
 #include <cstdint>
 #include <godot_cpp/classes/editor_inspector_plugin.hpp>

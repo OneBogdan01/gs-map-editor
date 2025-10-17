@@ -1,4 +1,4 @@
-#include "utility.h"
+#include "utility.hpp"
 #include "godot_cpp/classes/dir_access.hpp"
 #include "godot_cpp/classes/file_access.hpp"
 #include "godot_cpp/core/print_string.hpp"

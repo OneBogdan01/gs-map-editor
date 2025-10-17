@@ -1,10 +1,10 @@
-#include "country_data.h"
+#include "country_data.hpp"
 #include "godot_cpp/classes/file_access.hpp"
 #include "godot_cpp/core/print_string.hpp"
 #include "godot_cpp/variant/packed_byte_array.hpp"
 #include "godot_cpp/variant/string.hpp"
 #include "godot_cpp/variant/utility_functions.hpp"
-#include "utility.h"
+#include "utility.hpp"
 #include <cstdint>
 
 using namespace godot;

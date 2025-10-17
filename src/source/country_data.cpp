@@ -1,6 +1,6 @@
-#include "country_data.h"
+#include "country_data.hpp"
 
-#include "utility.h"
+#include "utility.hpp"
 
 #include "godot_cpp/classes/file_access.hpp"
 
@@ -103,9 +103,9 @@ void CountryData::store_filename_data()
 	if (should_assign_country_to_non_ownable == true)
 	{
 		UtilityFunctions::print("Assigning provinces with no owner...");
-		terrain_colors["Ocean"] = Color(0.1, 0.4, 0.7);
+		terrain_colors["Ocean"] = Color(0.1, 0.4, 0.7, 0.0);
 
-		terrain_colors["No Owner"] = Color(0.7, 0.5, 0.1);
+		terrain_colors["No Owner"] = Color(0.7, 0.5, 0.1, 0.0);
 
 		Array terrain_keys = terrain_colors.keys();
 		for (const auto &terrain_key : terrain_keys)

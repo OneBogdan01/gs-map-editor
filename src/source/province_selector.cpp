@@ -1,5 +1,5 @@
-#include "province_selector.h"
-#include "country_data.h"
+#include "province_selector.hpp"
+#include "country_data.hpp"
 #include "godot_cpp/classes/camera3d.hpp"
 #include "godot_cpp/classes/engine.hpp"
 #include "godot_cpp/classes/global_constants.hpp"
@@ -12,7 +12,7 @@
 #include "godot_cpp/classes/world3d.hpp"
 #include "godot_cpp/core/property_info.hpp"
 #include "godot_cpp/variant/vector2i.hpp"
-#include "map_data.h"
+#include "map_data.hpp"
 #include <cstdint>
 
 using namespace godot;
