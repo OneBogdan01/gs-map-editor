@@ -31,7 +31,7 @@ String CountryData::parse_province_owner(const String &file_path)
 				return assigned_owner;
 			}
 		}
-		UtilityFunctions::print(filename + " is unassigned");
+		UtilityFunctions::print_verbose(filename + " is unassigned");
 		return "No Owner";
 	}
 
@@ -104,7 +104,7 @@ void CountryData::export_color_data(int64_t color_index)
 		print_error("Failed to read file for: " + country_name);
 		return;
 	}
-	PackedByteArray modified_file = gsg::find_replace_in_file(raw_bytes, "color =", gsg::color_to_string(country_color));
+	PackedByteArray modified_file = gsg::find_replace_in_file(raw_bytes, "color =", " " + gsg::color_to_string(country_color));
 	if (modified_file.size() == 0)
 	{
 		print_error("Failed to find 'color = ' in file for: " + country_name);

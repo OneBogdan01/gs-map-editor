@@ -1,11 +1,11 @@
 #include "register_types.hpp"
 
 #include "camera_controller.hpp"
+#include "compute_helper.hpp"
 #include "country_data.hpp"
 #include "country_inspector.hpp"
 #include "godot_cpp/core/class_db.hpp"
 #include "map_data.hpp"
-#include "province_selector.hpp"
 
 #include <gdextension_interface.h>
 #include <godot_cpp/core/defs.hpp>
@@ -28,10 +28,9 @@ void initialize_example_module(ModuleInitializationLevel p_level)
 	GDREGISTER_CLASS(MapData);
 	GDREGISTER_CLASS(CountryData);
 
+	GDREGISTER_CLASS(ComputeHelper);
 	// can be done in gd
 	GDREGISTER_RUNTIME_CLASS(CameraController);
-
-	GDREGISTER_CLASS(ProvinceSelector);
 }
 
 void uninitialize_example_module(ModuleInitializationLevel p_level)

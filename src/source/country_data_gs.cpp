@@ -107,7 +107,7 @@ void CountryData::_bind_methods()
 	ClassDB::bind_method(D_METHOD("get_country_provinces"), &CountryData::get_country_provinces);
 
 	ClassDB::bind_method(D_METHOD("get_country_color", "name"), &CountryData::get_country_color);
-	ClassDB::bind_method(D_METHOD("change_province_owner"), &CountryData::change_province_owner);
+	ClassDB::bind_method(D_METHOD("change_province_owner", "province_id", "new_country"), &CountryData::change_province_owner);
 	ClassDB::bind_method(D_METHOD("get_country_color_from_province_id", "name"), &CountryData::get_country_color_from_province_id);
 	ClassDB::bind_method(D_METHOD("populate_color_map_buffers"), &CountryData::populate_color_map_buffers);
 
