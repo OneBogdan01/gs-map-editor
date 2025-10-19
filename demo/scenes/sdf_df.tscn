@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://ceute7vwrcxn5"]
+[gd_scene load_steps=18 format=3 uid="uid://ceute7vwrcxn5"]
 
 [ext_resource type="Script" uid="uid://b1kq8ntee2kh6" path="res://scripts/generate_borders.gd" id="1_mpvg1"]
 [ext_resource type="Shader" uid="uid://58jh24y7caxu" path="res://shaders/jfa_generation/mask.gdshader" id="2_p5se2"]
@@ -33,13 +33,10 @@ resource_local_to_scene = true
 shader = ExtResource("4_d46lq")
 shader_parameter/jfa_output = SubResource("ViewportTexture_d46lq")
 
-[sub_resource type="ViewportTexture" id="ViewportTexture_km2q1"]
-viewport_path = NodePath("Mask/Mask")
-
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_7tuex"]
 resource_local_to_scene = true
 shader = ExtResource("5_h3ic4")
-shader_parameter/input_texture = SubResource("ViewportTexture_km2q1")
+shader_parameter/ocean_color = Color(0, 0, 0, 1)
 shader_parameter/lookup_map = ExtResource("7_km2q1")
 shader_parameter/color_map = ExtResource("6_mg84p")
 shader_parameter/edge_smoothness = 0.0
