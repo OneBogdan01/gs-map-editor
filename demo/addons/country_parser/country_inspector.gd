@@ -4,13 +4,10 @@ const INSPECTOR_THEME = preload("res://assets/inspector_theme.tres")
 func _can_handle(object):
 	return object is CountryData
 
-func _parse_begin(object: Object) -> void:
-	var country_data = object as CountryData
-	create_containers(country_data)
-
+func create_ui_containers() -> void:
 	var parse_button = Button.new()
 	parse_button.text = "Parse All Files"
-	parse_button.pressed.connect(on_parse_button_pressed.bind(country_data))
+	parse_button.pressed.connect(on_parse_button_pressed.bind())
 	add_custom_control(parse_button)
 	
 
@@ -46,8 +43,15 @@ func _parse_begin(object: Object) -> void:
 
 	
 	scroll_container.add_child(data_container)
-	update_display("")
 	add_custom_control(scroll_container)
 	scroll_container.theme = INSPECTOR_THEME
 	search_container.theme = INSPECTOR_THEME
 	parse_button.theme = INSPECTOR_THEME
+func _parse_begin(object: Object) -> void:
+	create_containers()
+	create_ui_containers()
+	
+	var country_data = object as CountryData
+	set_country_data(country_data)
+	
+	

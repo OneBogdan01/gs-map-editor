@@ -17,6 +17,28 @@
 #include <godot_cpp/classes/editor_inspector_plugin.hpp>
 using namespace godot;
 
+namespace
+{
+TreeItem *find_country_item(TreeItem *root, const String &country_id)
+{
+	if (root == nullptr)
+	{
+		return nullptr;
+	}
+
+	TreeItem *child = root->get_first_child();
+	while (child != nullptr)
+	{
+		if (child->get_metadata(0) == country_id)
+		{
+			return child;
+		}
+		child = child->get_next();
+	}
+
+	return nullptr;
+}
+} // namespace
 void CountryInspector::_bind_methods()
 {
 	ClassDB::bind_method(D_METHOD("on_parse_button_pressed"), &CountryInspector::on_parse_button_pressed);
@@ -435,7 +457,48 @@ void CountryInspector::on_country_transfer_selected(int index, const String &pro
 		new_country_info["provinces"] = new_provinces;
 		display_data[new_country_id] = new_country_info;
 	}
+	// update tree container
+	Tree *tree_display = Object::cast_to<Tree>(data_container->get_children()[0]);
+	if (tree_display == nullptr)
+	{
+		popup->hide();
+		return;
+	}
 
+	TreeItem *root = tree_display->get_root();
+	if (root == nullptr)
+	{
+		popup->hide();
+		return;
+	}
+	TreeItem *old_country_item = find_country_item(root, current_country_id);
+	if (old_country_item != nullptr)
+	{
+		TreeItem *child = old_country_item->get_first_child();
+		while (child != nullptr)
+		{
+			if (child->get_metadata(0) == province_id)
+			{
+				old_country_item->remove_child(child);
+				break;
+			}
+			child = child->get_next();
+		}
+	}
+
+	TreeItem *new_country_item = find_country_item(root, new_country_id);
+	if (new_country_item != nullptr)
+	{
+		TreeItem *new_province_item = tree_display->create_item(new_country_item);
+		new_province_item->set_text(0, province_id);
+		new_province_item->set_expand_right(0, true);
+		new_province_item->set_metadata(0, province_id);
+		new_province_item->set_metadata(1, new_country_id);
+		new_province_item->set_selectable(1, false);
+		new_province_item->set_editable(1, false);
+		new_province_item->set_text(1, "");
+		new_province_item->set_custom_bg_color(1, Color(0, 0, 0, 0));
+	}
 	popup->hide();
 }
 
