@@ -46,10 +46,13 @@ func update_viewports():
 		#output.render_target_update_mode = SubViewport.UPDATE_ONCE
 
 func update_color_map(province_id, new_color):
-	var x = province_id % color_map.get_width()
-	var y = province_id / color_map.get_height()
-	
+	var witdh = color_map.get_width()
+	var x = province_id % witdh
+	var y = province_id / witdh
 	color_map.set_pixel(x, y, new_color)
+
+	update_material_parameters("color_map", ImageTexture.create_from_image(color_map))
+	update_viewports()
 
 	
 func _ready():
@@ -422,7 +425,7 @@ func create_lookup_texture():
 func on_province_selector_province_selected(province_id: int) -> void:
 	if is_getting_country == false and selected_country.is_empty() == false:
 		country_data.change_province_owner(province_id, selected_country)
-		update_color_map(province_id, country_data.get_country_color(selected_country))
+		time_function("Update color map",update_color_map.bind(province_id, country_data.country_id_to_color[selected_country]))
 
 
 func on_province_selector_country_selected(country: String) -> void:
