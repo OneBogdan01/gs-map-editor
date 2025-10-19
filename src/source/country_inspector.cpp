@@ -49,7 +49,6 @@ void CountryInspector::_bind_methods()
 
 	ClassDB::bind_method(D_METHOD("on_tree_item_edited"), &CountryInspector::on_tree_item_edited);
 	ClassDB::bind_method(D_METHOD("on_tree_item_rmb_selected"), &CountryInspector::on_tree_item_rmb_selected);
-	ClassDB::bind_method(D_METHOD("on_province_context_menu_selected", "id", "province_id", "old_country_id", "province_item"), &CountryInspector::on_province_context_menu_selected);
 	ClassDB::bind_method(D_METHOD("on_color_changed", "new_color", "item", "country_id"), &CountryInspector::on_color_changed);
 	ClassDB::bind_method(D_METHOD("on_color_picker_closed", "popup"), &CountryInspector::on_color_picker_closed);
 	ClassDB::bind_method(D_METHOD("on_context_menu_closed", "menu"), &CountryInspector::on_context_menu_closed);
@@ -506,28 +505,6 @@ void CountryInspector::on_transfer_popup_closed(PopupPanel *popup)
 {
 	popup->queue_free();
 }
-void CountryInspector::on_province_context_menu_selected(int id, const String &province_id, const String &old_country_id, TreeItem *province_item)
-{
-	if (id == 0)
-	{
-		return; // "Change Owner" header
-	}
-
-	PopupMenu *menu = Object::cast_to<PopupMenu>(province_item->get_tree()->get_viewport()->gui_get_focus_owner());
-	if (!menu)
-	{
-		return;
-	}
-
-	String new_country_id = menu->get_item_metadata(id);
-
-	// Refresh display
-	cache_display_data();
-	update_display("");
-
-	UtilityFunctions::print("Transferred province ", province_id, " from ", old_country_id, " to ", new_country_id);
-}
-
 void CountryInspector::on_color_changed(Color new_color, TreeItem *item, const String &country_id)
 {
 	item->set_custom_bg_color(1, new_color);
@@ -587,10 +564,8 @@ void CountryInspector::set_country_data(CountryData *data)
 			on_parse_button_pressed();
 			return;
 		}
-		if (display_data.is_empty())
-		{
-			cache_display_data();
-		}
+
+		cache_display_data();
 	}
 
 	update_display("");

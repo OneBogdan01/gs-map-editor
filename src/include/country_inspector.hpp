@@ -49,8 +49,6 @@ protected:
 	// Cleanup when transfer popup is closed
 	void on_transfer_popup_closed(PopupPanel *popup);
 
-	// Transfer province to new country (if you don't already have this)
-	void on_province_context_menu_selected(int id, const String &province_id, const String &old_country_id, TreeItem *province_item);
 	void on_color_changed(Color new_color, TreeItem *item, const String &country_id);
 	void on_color_picker_closed(PopupPanel *popup);
 	void on_context_menu_closed(PopupMenu *menu);
