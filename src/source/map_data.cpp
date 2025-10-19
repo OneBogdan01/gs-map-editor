@@ -43,14 +43,22 @@ void MapData::_bind_methods()
 
 	// province data
 	ClassDB::bind_method(D_METHOD("get_province_data"), &MapData::get_province_data);
+	ClassDB::bind_method(D_METHOD("get_province_from_color", "color"), &MapData::get_province_from_color);
+
+	ClassDB::bind_method(D_METHOD("get_province_id_from_color", "color"), &MapData::get_province_id_from_color);
 	ClassDB::bind_method(D_METHOD("set_province_data", "data"), &MapData::set_province_data);
 	ADD_PROPERTY(PropertyInfo(Variant::ARRAY, "province_data"),
 			"set_province_data", "get_province_data");
-}
 
-MapData::MapData() = default;
-MapData::~MapData()
-{
+	ClassDB::bind_method(D_METHOD("get_province_color_to_name"), &MapData::get_province_color_to_name);
+	ClassDB::bind_method(D_METHOD("set_province_color_to_name", "data"), &MapData::set_province_color_to_name);
+	ADD_PROPERTY(PropertyInfo(Variant::DICTIONARY, "province_color_to_name"),
+			"set_province_color_to_name", "get_province_color_to_name");
+
+	ClassDB::bind_method(D_METHOD("get_province_color_to_id"), &MapData::get_province_color_to_id);
+	ClassDB::bind_method(D_METHOD("set_province_color_to_id", "data"), &MapData::set_province_color_to_id);
+	ADD_PROPERTY(PropertyInfo(Variant::DICTIONARY, "province_color_to_id"),
+			"set_province_color_to_id", "get_province_color_to_id");
 }
 
 void MapData::set_csv_path(const String &p_path)
@@ -101,7 +109,25 @@ Array MapData::get_province_data() const
 {
 	return province_data;
 }
+TypedDictionary<Color, String> MapData::get_province_color_to_name() const
+{
+	return province_color_to_name;
+}
 
+void MapData::set_province_color_to_name(const TypedDictionary<Color, String> &data)
+{
+	province_color_to_name = data;
+}
+
+TypedDictionary<Color, int32_t> MapData::get_province_color_to_id() const
+{
+	return province_color_to_id;
+}
+
+void MapData::set_province_color_to_id(const TypedDictionary<Color, int32_t> &data)
+{
+	province_color_to_id = data;
+}
 bool MapData::get_should_skip_first_row() const
 {
 	return should_skip_first_row;
@@ -110,7 +136,22 @@ void MapData::set_should_skip_first_row(bool value)
 {
 	should_skip_first_row = value;
 }
+void MapData::build_color_lookup()
+{
+	province_color_to_name.clear();
+	province_color_to_id.clear();
 
+	for (int i = 0; i < province_data.size(); i++)
+	{
+		const Dictionary &dict = province_data[i];
+		Color province_color = dict["Color"];
+
+		province_color_to_name[province_color] = dict["Name"];
+		province_color_to_id[province_color] = dict["Id"];
+	}
+
+	UtilityFunctions::print_verbose("Built color lookup with ", province_color_to_name.size());
+}
 void MapData::load_csv_data()
 {
 	if (csv_file_path.is_empty())
@@ -154,4 +195,5 @@ void MapData::load_csv_data()
 		}
 	}
 	UtilityFunctions::print("Loaded ", province_data.size(), " provinces");
+	build_color_lookup();
 }

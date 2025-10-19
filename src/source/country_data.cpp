@@ -25,18 +25,20 @@ CountryData::~CountryData() = default;
 void CountryData::build_look_up_tables()
 {
 	country_id_to_country_name.clear();
+	country_id_to_color.clear();
 	country_name_to_color.clear();
 	province_id_to_owner.clear();
 	province_id_to_name.clear();
-	for (const Dictionary &dict : country_data)
-	{
-		country_id_to_country_name[dict["Id"]] = dict["Name"];
-	}
-
 	for (const Dictionary &dict : country_color_data)
 	{
 		country_name_to_color[dict["Name"]] = dict["Color"];
 	}
+	for (const Dictionary &dict : country_data)
+	{
+		country_id_to_country_name[dict["Id"]] = dict["Name"];
+		country_id_to_color[dict["Id"]] = country_name_to_color[dict["Name"]];
+	}
+
 	for (const Dictionary &dict : province_data)
 	{
 		province_id_to_owner[dict["Id"]] = dict["Owner"];
@@ -50,6 +52,11 @@ Color CountryData::get_country_color(const String &country_id)
 
 	return Color(country_name_to_color[country_name]);
 }
+Color CountryData::get_country_color_from_name(const String &country_name)
+{
+	return Color(country_name_to_color[country_name]);
+}
+
 PackedInt32Array CountryData::populate_color_map_buffers()
 {
 	PackedInt32Array data;
@@ -223,13 +230,7 @@ String CountryData::get_country_from_province(uint32_t province_id)
 
 	String country_id = province_id_to_owner[province_id];
 
-	if (country_id_to_country_name.has(country_id) == false)
-	{
-		print_error("Country id not found: ", country_id);
-		return "None";
-	}
-
-	return country_id_to_country_name[country_id];
+	return country_id;
 }
 Dictionary CountryData::get_country_from_name(String name)
 {

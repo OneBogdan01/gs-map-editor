@@ -30,7 +30,9 @@ public:
 	Color parse_country_color(const String &file_path);
 
 	// Query methods,
+	// this expects the country id  as AAC for example.
 	Color get_country_color(const String &country_id);
+	Color get_country_color_from_name(const String &country_name);
 	String get_country_from_province(uint32_t province_id);
 	PackedStringArray get_country_provinces(const String &country_id);
 
@@ -96,7 +98,7 @@ private:
 	// these are for fast lookups, need to be build at the start
 	TypedDictionary<String, String> country_id_to_country_name;
 	TypedDictionary<String, Color> country_name_to_color;
-	// TODO remove this one
+
 	TypedDictionary<String, Color> country_id_to_color;
 	TypedDictionary<int32_t, String> province_id_to_owner;
 	TypedDictionary<int32_t, String> province_id_to_name;
