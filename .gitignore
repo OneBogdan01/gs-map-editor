@@ -34,3 +34,4 @@ evidence/GemFile.lock
 
 /.cache
 compile_commands.json
+/demo/build
