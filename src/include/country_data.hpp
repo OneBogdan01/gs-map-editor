@@ -23,11 +23,6 @@ public:
 
 	// Initialization
 	void parse_all_files();
-	void build_look_up_tables();
-
-	// Parsing methods
-	String parse_province_owner(const String &file_path);
-	Color parse_country_color(const String &file_path);
 
 	// Query methods,
 	// this expects the country id  as AAC for example.
@@ -36,18 +31,12 @@ public:
 	String get_country_from_province(uint32_t province_id);
 	PackedStringArray get_country_provinces(const String &country_id);
 
-	//  these are deprecated and will be replaced with dictionaries instead of arrays
-	Color get_country_color_from_province_id(uint32_t province_id);
-	Dictionary get_country_from_name(String name);
-	Dictionary get_province_from_id(uint32_t id);
-	PackedStringArray get_country_provinces_depre(uint32_t country_id);
-
 	// Modification methods
 	void change_province_owner(uint32_t province_id, const String &new_country_name);
-	int32_t set_country_color_by_name(const String &country_name, const Color &new_color);
+	bool set_country_color_by_name(const String &country_name, const Color &new_color);
 
 	// Export generation
-	void export_color_data(int64_t color_index);
+	void export_color_data(const String &country_name);
 	void export_owner_data(int64_t province_id);
 	PackedInt32Array populate_color_map_buffers();
 
@@ -59,14 +48,6 @@ public:
 	String get_countries_color_folder() const;
 	void set_provinces_folder(const String &p_path);
 	String get_provinces_folder() const;
-
-	// Arrays
-	void set_province_data(const Array &data);
-	Array get_province_data() const;
-	void set_country_data(const Array &data);
-	Array get_country_data() const;
-	void set_country_color_data(const Array &data);
-	Array get_country_color_data() const;
 
 	// Dictionaries
 	void set_terrain_colors(const TypedDictionary<String, Color> &data) { terrain_colors = data; }
@@ -83,14 +64,15 @@ public:
 	TypedDictionary<int32_t, String> get_province_id_to_name() const { return province_id_to_name; }
 
 private:
+	void build_look_up_tables(const Array &province_data, const Array &country_data, const Array &country_color_data);
+
 	void store_filename_data();
 	bool sort_by_id(const Dictionary &a, const Dictionary &b);
 
 	static void _bind_methods();
-	// TODO can get rid of these and just use dictionaries for everything.
-	Array province_data;	  // 3 AAC SWE
-	Array country_data;		  // // Name ID Sweden SWE // 2
-	Array country_color_data; // Name Color // 2
+	// Parsing methods
+	String parse_province_owner(const String &file_path);
+	Color parse_country_color(const String &file_path);
 	// folders
 	String countries_folder_path;
 	String country_colors_folder_path;
@@ -98,7 +80,6 @@ private:
 	// these are for fast lookups, need to be build at the start
 	TypedDictionary<String, String> country_id_to_country_name;
 	TypedDictionary<String, Color> country_name_to_color;
-
 	TypedDictionary<String, Color> country_id_to_color;
 	TypedDictionary<int32_t, String> province_id_to_owner;
 	TypedDictionary<int32_t, String> province_id_to_name;

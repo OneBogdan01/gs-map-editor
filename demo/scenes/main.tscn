@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://cgoxd520waiho"]
+[gd_scene load_steps=19 format=3 uid="uid://cgoxd520waiho"]
 
 [ext_resource type="Texture2D" uid="uid://c7x6n8v5pq0qm" path="res://assets/provinces.bmp" id="1_o5qli"]
 [ext_resource type="Shader" uid="uid://de8ekpkafjhuh" path="res://shaders/jfa_generation/hqx_borders.gdshader" id="1_o6xl0"]
@@ -9,7 +9,6 @@
 [ext_resource type="Texture2D" uid="uid://b73404h0hkhdt" path="res://assets/color_lookup.png" id="6_85g3d"]
 [ext_resource type="Texture2D" uid="uid://ngjlbjkrfccl" path="res://assets/colormap_water.png" id="7_choun"]
 [ext_resource type="Shader" uid="uid://3nhhwbba4syw" path="res://shaders/jfa_generation/outline_province.gdshader" id="7_tipki"]
-[ext_resource type="Texture2D" uid="uid://bmk5fr67658ye" path="res://assets/political_map.png" id="8_85g3d"]
 [ext_resource type="Script" uid="uid://h7noohpv4w5s" path="res://scripts/province_selector.gd" id="11_ya4ey"]
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_tipki"]
@@ -30,8 +29,6 @@ size = Vector3(56.32, 20.48, 0)
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_tipki"]
 resource_local_to_scene = true
 shader = ExtResource("7_tipki")
-shader_parameter/lookup_map = ExtResource("6_85g3d")
-shader_parameter/mask_map = ExtResource("8_85g3d")
 shader_parameter/max_distance = 16.0
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_o6xl0"]
@@ -4260,7 +4257,7 @@ province_id_to_owner = Dictionary[int, String]({
 1217: "No Owner",
 1218: "WLY",
 1219: "No Owner",
-1220: "GER",
+1220: "ABB",
 1221: "No Owner",
 1222: "ALO",
 1223: "ETH",
@@ -4917,7 +4914,7 @@ province_id_to_owner = Dictionary[int, String]({
 1875: "SAV",
 1876: "FRN",
 1877: "BUR",
-1878: "ABB",
+1878: "No Owner",
 1879: "ENG",
 1880: "HAB",
 1881: "No Owner",
@@ -10915,6 +10912,7 @@ grow_vertical = 2
 
 [node name="CountryDistanceField" type="SubViewport" parent="Map/Subviewports"]
 disable_3d = true
+handle_input_locally = false
 size = Vector2i(5632, 2048)
 render_target_update_mode = 1
 
@@ -10928,6 +10926,7 @@ grow_vertical = 2
 
 [node name="ColorOutput" type="SubViewport" parent="Map/Subviewports"]
 disable_3d = true
+handle_input_locally = false
 size = Vector2i(5632, 2048)
 
 [node name="Output" type="ColorRect" parent="Map/Subviewports/ColorOutput"]
@@ -10938,5 +10937,4 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[connection signal="country_selected" from="Map/ProvinceSelector" to="Map" method="on_province_selector_country_selected"]
-[connection signal="province_selected" from="Map/ProvinceSelector" to="Map" method="on_province_selector_province_selected"]
+[connection signal="map_change_triggered" from="Map/ProvinceSelector" to="Map" method="on_province_selector_map_change_triggered"]

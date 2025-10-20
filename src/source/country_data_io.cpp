@@ -90,34 +90,33 @@ Color CountryData::parse_country_color(const String &file_path)
 	return color;
 }
 
-void CountryData::export_color_data(int64_t color_index)
+void CountryData::export_color_data(const String &country_name)
 {
-	Dictionary color_data = country_color_data.get(color_index);
-	String country_name = color_data["Name"];
-	Color country_color = color_data["Color"];
+	String country_name_export = country_name;
+	Color country_color = country_name_to_color[country_name_export];
 
-	String file_path = country_colors_folder_path.path_join(country_name + ".txt");
+	String file_path = country_colors_folder_path.path_join(country_name_export + ".txt");
 
 	PackedByteArray raw_bytes = gsg::read_file_bytes(file_path);
 	if (raw_bytes.size() == 0)
 	{
-		print_error("Failed to read file for: " + country_name);
+		print_error("Failed to read file for: " + country_name_export);
 		return;
 	}
 	PackedByteArray modified_file = gsg::find_replace_in_file(raw_bytes, "color =", " " + gsg::color_to_string(country_color));
 	if (modified_file.size() == 0)
 	{
-		print_error("Failed to find 'color = ' in file for: " + country_name);
+		print_error("Failed to find 'color = ' in file for: " + country_name_export);
 		return;
 	}
 	// Write the new file
 	if (gsg::write_file_bytes(file_path, modified_file) == false)
 	{
-		print_error("Failed to write color for: " + country_name);
+		print_error("Failed to write color for: " + country_name_export);
 		return;
 	}
 
-	UtilityFunctions::print("Successfully updated color for: " + country_name);
+	UtilityFunctions::print("Successfully updated color for: " + country_name_export);
 }
 void CountryData::export_owner_data(int64_t province_id)
 {

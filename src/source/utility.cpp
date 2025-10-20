@@ -187,7 +187,7 @@ String gsg::get_terrain_owner(const String &filename)
 			lower_name.contains("white sea") || lower_name.contains("kara sea") ||
 			lower_name.contains("english channel") || lower_name.contains("irish sea") ||
 			lower_name.contains("bay of biscay") || lower_name.contains("gulf of bothnia") ||
-			lower_name.contains("kattegat"))
+			lower_name.contains("kattegat") || lower_name.contains("alands hav"))
 	{
 		return "Ocean";
 	}

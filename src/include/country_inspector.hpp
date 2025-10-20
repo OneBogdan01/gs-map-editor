@@ -63,8 +63,9 @@ protected:
 
 private:
 	Dictionary display_data;
-	int32_t save_color_index{ -1 };
+
 	Timer *search_timer;
 	String pending_search_term;
+	String country_color_save;
 };
 } // namespace godot
