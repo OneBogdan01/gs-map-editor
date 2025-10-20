@@ -8,10 +8,11 @@ const RAY_LENGTH = 1000.0
 @export var province_map: Sprite3D 
 @export var province_tex: Texture2D
 var province_image
-signal province_selected(province_id: int)
-signal country_selected(country_id: String)
-
-
+#signal province_selected(province_id: int)
+#signal country_selected(country_id: String)
+signal map_change_triggered()
+var country_id: String
+var province_id: int
 var last_mouse_position: Vector2 = Vector2.ZERO
 
 
@@ -76,18 +77,20 @@ func select_province() -> void:
 		print("Province Name: ", province_name)
 		
 		var time_before_province_id = Time.get_ticks_usec()
-		var province_id: int = province_parser.province_color_to_id[province_color]
+		province_id = province_parser.province_color_to_id[province_color]
 		var time_after_province_id = Time.get_ticks_usec()
 		print("Province ID: ", province_id)
 		
 		var time_before_country_lookup = Time.get_ticks_usec()
-		var country_id: String = country_data.province_id_to_owner[province_id]
+		country_id = country_data.province_id_to_owner[province_id]
 		var time_after_country_lookup = Time.get_ticks_usec()
 		print("country_id ID: ", country_id)
 		
 		var time_before_signals = Time.get_ticks_usec()
-		province_selected.emit(province_id)
-		country_selected.emit(country_id)
+		# signal emit is too slow too slow
+		#province_selected.emit(province_id)
+		#country_selected.emit(country_id)
+		map_change_triggered.emit()
 		var time_after_signals = Time.get_ticks_usec()
 		
 		var time_end = Time.get_ticks_usec()

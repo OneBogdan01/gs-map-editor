@@ -22,6 +22,7 @@ var distance_material: ShaderMaterial
 
 var color_lookup: Image
 var color_map: Image
+var color_texture:ImageTexture
 var political_map: Image
 
 var is_getting_country = false
@@ -29,6 +30,7 @@ var selected_country: String
 var is_political = true
 # Rudimentary profiling
 func time_function(name: String, callable: Callable):
+	
 	if not profiler_enabled:
 		return callable.call()
 	
@@ -37,21 +39,23 @@ func time_function(name: String, callable: Callable):
 	var time_ms = (Time.get_ticks_usec() - start) / 1000.0
 	print("[%s] %.2f ms" % [name, time_ms])
 	return result
+
 func update_material_parameters(name, parameterVariant):
 		output_material.set_shader_parameter(name, parameterVariant)
 		distance_material.set_shader_parameter(name, parameterVariant)
 
 func update_viewports():
 		country_field.render_target_update_mode = SubViewport.UPDATE_ONCE
-		#output.render_target_update_mode = SubViewport.UPDATE_ONCE
+		await RenderingServer.frame_post_draw
+		output.render_target_update_mode = SubViewport.UPDATE_ONCE
 
 func update_color_map(province_id, new_color):
 	var witdh = color_map.get_width()
 	var x = province_id % witdh
 	var y = province_id / witdh
 	color_map.set_pixel(x, y, new_color)
-
-	update_material_parameters("color_map", ImageTexture.create_from_image(color_map))
+	color_texture.update(color_map)
+	update_material_parameters("color_map", color_texture)
 	update_viewports()
 
 	
@@ -341,7 +345,8 @@ func create_color_map_texture():
 	color_map = result_image
 	# for debugging
 	result_image.save_png("res://assets/color_map.png")
-	update_material_parameters("color_map", ImageTexture.create_from_image(color_map))
+	color_texture = ImageTexture.create_from_image(color_map)
+	update_material_parameters("color_map", color_texture)
 	
 	
 	return result_image
@@ -424,7 +429,7 @@ func create_lookup_texture():
 
 func on_province_selector_province_selected(province_id: int) -> void:
 	if is_getting_country == false and selected_country.is_empty() == false:
-		country_data.change_province_owner(province_id, selected_country)
+		time_function("Change owner",country_data.change_province_owner.bind(province_id, selected_country))
 		time_function("Update color map",update_color_map.bind(province_id, country_data.country_id_to_color[selected_country]))
 
 
@@ -433,3 +438,11 @@ func on_province_selector_country_selected(country: String) -> void:
 		selected_country = country
 		print("Selected country: ", selected_country)
 		is_getting_country = false
+
+
+func on_province_selector_map_change_triggered() -> void:
+	var province_id:int = province_selector.province_id
+	var country_id:String = province_selector.country_id
+	
+	time_function("Selector province",on_province_selector_province_selected.bind(province_id))
+	time_function("Selector country",on_province_selector_country_selected.bind(country_id))

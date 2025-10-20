@@ -274,8 +274,6 @@ void CountryData::change_province_owner(uint32_t province_id, const String &new_
 
 	province_id_to_owner[province_id] = country["Id"];
 	UtilityFunctions::print_verbose("After owner:", province_id_to_owner[province_id]);
-
-	// UtilityFunctions::print(get_country_provinces(country_data.find(country)));
 }
 Color CountryData::get_country_color_from_province_id(uint32_t province_id)
 {
