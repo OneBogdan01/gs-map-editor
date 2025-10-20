@@ -60,8 +60,8 @@ Ref<RDTextureFormat> ComputeHelper::texture_format_from_texture_2d(Vector2i text
 	Ref<RDTextureFormat> fm;
 	fm.instantiate();
 
-	fm->set_width(output_texture_size.x);
-	fm->set_height(output_texture_size.y);
+	fm->set_width(texture_size.x);
+	fm->set_height(texture_size.y);
 	fm->set_format(format);
 	fm->set_usage_bits(bits);
 	return fm;
