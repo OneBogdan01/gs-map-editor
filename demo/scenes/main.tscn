@@ -10915,6 +10915,7 @@ grow_vertical = 2
 
 [node name="CountryDistanceField" type="SubViewport" parent="Map/Subviewports"]
 disable_3d = true
+handle_input_locally = false
 size = Vector2i(5632, 2048)
 render_target_update_mode = 1
 
@@ -10928,6 +10929,7 @@ grow_vertical = 2
 
 [node name="ColorOutput" type="SubViewport" parent="Map/Subviewports"]
 disable_3d = true
+handle_input_locally = false
 size = Vector2i(5632, 2048)
 
 [node name="Output" type="ColorRect" parent="Map/Subviewports/ColorOutput"]

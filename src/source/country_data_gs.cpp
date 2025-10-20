@@ -7,32 +7,6 @@
 
 using namespace godot;
 
-void CountryData::set_country_data(const Array &data)
-{
-	country_data = data;
-}
-Array CountryData::get_country_data() const
-{
-	return country_data;
-}
-
-void CountryData::set_province_data(const Array &data)
-{
-	province_data = data;
-}
-Array CountryData::get_province_data() const
-{
-	return province_data;
-}
-void CountryData::set_country_color_data(const Array &data)
-{
-	country_color_data = data;
-}
-Array CountryData::get_country_color_data() const
-{
-	return country_color_data;
-}
-
 void CountryData::set_provinces_folder(const String &path)
 {
 	provinces_folder_path = path;
@@ -70,14 +44,6 @@ void CountryData::_bind_methods()
 	ClassDB::bind_method(D_METHOD("set_countries_color_folder", "path"), &CountryData::set_countries_color_folder);
 	ClassDB::bind_method(D_METHOD("get_countries_color_folder"), &CountryData::get_countries_color_folder);
 
-	// data
-	ClassDB::bind_method(D_METHOD("get_province_data"), &CountryData::get_province_data);
-	ClassDB::bind_method(D_METHOD("set_province_data"), &CountryData::set_province_data);
-	ClassDB::bind_method(D_METHOD("get_country_data"), &CountryData::get_country_data);
-	ClassDB::bind_method(D_METHOD("set_country_data", "data"), &CountryData::set_country_data);
-	ClassDB::bind_method(D_METHOD("get_country_color_data"), &CountryData::get_country_color_data);
-	ClassDB::bind_method(D_METHOD("set_country_color_data", "data"), &CountryData::set_country_color_data);
-
 	// dictionaries
 	ClassDB::bind_method(D_METHOD("get_country_id_to_country_name"), &CountryData::get_country_id_to_country_name);
 	ClassDB::bind_method(D_METHOD("set_country_id_to_country_name", "data"), &CountryData::set_country_id_to_country_name);
@@ -108,7 +74,6 @@ void CountryData::_bind_methods()
 	ClassDB::bind_method(D_METHOD("get_country_provinces"), &CountryData::get_country_provinces);
 
 	ClassDB::bind_method(D_METHOD("change_province_owner", "province_id", "new_country"), &CountryData::change_province_owner);
-	ClassDB::bind_method(D_METHOD("get_country_color_from_province_id", "name"), &CountryData::get_country_color_from_province_id);
 	ClassDB::bind_method(D_METHOD("get_country_color_from_name", "country_name"), &CountryData::get_country_color_from_name);
 	ClassDB::bind_method(D_METHOD("get_country_color", "country_id"), &CountryData::get_country_color);
 	ClassDB::bind_method(D_METHOD("populate_color_map_buffers"), &CountryData::populate_color_map_buffers);

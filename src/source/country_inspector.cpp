@@ -312,7 +312,7 @@ void CountryInspector::on_tree_item_edited()
 	PopupPanel *popup = memnew(PopupPanel);
 	popup->add_child(color_picker);
 	data_container->add_child(popup);
-	save_color_index = -1;
+	country_color_save = "";
 	color_picker->connect("color_changed", callable_mp(this, &CountryInspector::on_color_changed).bind(item, country_id));
 	popup->connect("popup_hide", callable_mp(this, &CountryInspector::on_color_picker_closed).bind(popup));
 
@@ -510,7 +510,12 @@ void CountryInspector::on_color_changed(Color new_color, TreeItem *item, const S
 	item->set_custom_bg_color(1, new_color);
 
 	String country_name = item->get_text(0).split(" (ID:")[0];
-	save_color_index = country_data->set_country_color_by_name(country_name, new_color);
+
+	if (country_data->set_country_color_by_name(country_name, new_color))
+	{
+		// to export
+		country_color_save = country_name;
+	}
 	if (display_data.has(country_id))
 	{
 		Dictionary country_info = display_data[country_id];
@@ -521,10 +526,8 @@ void CountryInspector::on_color_changed(Color new_color, TreeItem *item, const S
 
 void CountryInspector::on_color_picker_closed(PopupPanel *popup)
 {
-	if (save_color_index != -1)
-	{
-		country_data->export_color_data(save_color_index);
-	}
+	country_data->export_color_data(country_color_save);
+
 	popup->queue_free();
 }
 

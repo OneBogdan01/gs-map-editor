@@ -45,9 +45,14 @@ func update_material_parameters(name, parameterVariant):
 		distance_material.set_shader_parameter(name, parameterVariant)
 
 func update_viewports():
+
 		country_field.render_target_update_mode = SubViewport.UPDATE_ONCE
+		country_field.render_target_clear_mode = SubViewport.CLEAR_MODE_ONCE
+		
 		await RenderingServer.frame_post_draw
 		output.render_target_update_mode = SubViewport.UPDATE_ONCE
+		output.render_target_clear_mode = SubViewport.CLEAR_MODE_ONCE
+
 
 func update_color_map(province_id, new_color):
 	var witdh = color_map.get_width()
@@ -430,7 +435,7 @@ func create_lookup_texture():
 func on_province_selector_province_selected(province_id: int) -> void:
 	if is_getting_country == false and selected_country.is_empty() == false:
 		time_function("Change owner",country_data.change_province_owner.bind(province_id, selected_country))
-		time_function("Update color map",update_color_map.bind(province_id, country_data.country_id_to_color[selected_country]))
+		call_deferred("update_color_map",province_id, country_data.country_id_to_color[selected_country])
 
 
 func on_province_selector_country_selected(country: String) -> void:

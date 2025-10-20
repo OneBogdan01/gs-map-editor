@@ -128,7 +128,6 @@ scale = Vector2(0.12, 0.12)
 disable_3d = true
 handle_input_locally = false
 size = Vector2i(5632, 2048)
-render_target_update_mode = 4
 
 [node name="DistanceTex" type="ColorRect" parent="Distance/Distance"]
 texture_filter = 4
