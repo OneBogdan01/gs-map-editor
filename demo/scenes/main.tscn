@@ -4260,7 +4260,7 @@ province_id_to_owner = Dictionary[int, String]({
 1217: "No Owner",
 1218: "WLY",
 1219: "No Owner",
-1220: "GER",
+1220: "ABB",
 1221: "No Owner",
 1222: "ALO",
 1223: "ETH",
@@ -4917,7 +4917,7 @@ province_id_to_owner = Dictionary[int, String]({
 1875: "SAV",
 1876: "FRN",
 1877: "BUR",
-1878: "ABB",
+1878: "AAC",
 1879: "ENG",
 1880: "HAB",
 1881: "No Owner",
@@ -10938,5 +10938,4 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[connection signal="country_selected" from="Map/ProvinceSelector" to="Map" method="on_province_selector_country_selected"]
-[connection signal="province_selected" from="Map/ProvinceSelector" to="Map" method="on_province_selector_province_selected"]
+[connection signal="map_change_triggered" from="Map/ProvinceSelector" to="Map" method="on_province_selector_map_change_triggered"]
