@@ -260,14 +260,12 @@ func create_lookup_texture():
 
 	var output_uniform = create_uniform(output_image, 1, RenderingDevice.UNIFORM_TYPE_IMAGE)
 
-	var province_data = map_data.province_data
+	var color_keys = map_data.province_color_to_id.keys()
 	
 	var colors := PackedInt32Array()
 
-	for i in province_data.size():
-		var dict = province_data[i]
-		var color: Color = dict["Color"]
-		var id: int = dict["Id"]
+	for color in color_keys:
+		var id = map_data.province_color_to_id[color]
 		colors.append_array(PackedInt32Array([color.r8, color.g8, color.b8, id]))
 			
 	var color_bytes := colors.to_byte_array()

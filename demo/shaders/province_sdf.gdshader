@@ -20,7 +20,7 @@ void fragment()
 	}
 	else{
 	vec4 center_color = get_province_color(uv);
-	
+
 	vec2 pixel_size = 1.0 / vec2(textureSize(lookup_map, 0));
 
 	float min_distance = max_distance;

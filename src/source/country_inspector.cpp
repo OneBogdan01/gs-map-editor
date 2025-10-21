@@ -7,13 +7,11 @@
 #include "godot_cpp/classes/node.hpp"
 #include "godot_cpp/classes/popup_menu.hpp"
 #include "godot_cpp/classes/rich_text_label.hpp"
-#include "godot_cpp/classes/time.hpp"
 #include "godot_cpp/classes/tree.hpp"
 #include "godot_cpp/classes/v_box_container.hpp"
 #include "godot_cpp/core/memory.hpp"
 #include "godot_cpp/variant/color.hpp"
 #include "godot_cpp/variant/string.hpp"
-#include <cstdint>
 #include <godot_cpp/classes/editor_inspector_plugin.hpp>
 using namespace godot;
 
@@ -39,27 +37,7 @@ TreeItem *find_country_item(TreeItem *root, const String &country_id)
 	return nullptr;
 }
 } // namespace
-void CountryInspector::_bind_methods()
-{
-	ClassDB::bind_method(D_METHOD("on_parse_button_pressed"), &CountryInspector::on_parse_button_pressed);
-	ClassDB::bind_method(D_METHOD("create_containers"), &CountryInspector::create_containers);
-	ClassDB::bind_method(D_METHOD("on_search_text_changed", "search_term"), &CountryInspector::on_search_text_changed);
-	ClassDB::bind_method(D_METHOD("on_clear_search"), &CountryInspector::on_clear_search);
-	ClassDB::bind_method(D_METHOD("update_display", "search_term"), &CountryInspector::update_display);
 
-	ClassDB::bind_method(D_METHOD("on_tree_item_edited"), &CountryInspector::on_tree_item_edited);
-	ClassDB::bind_method(D_METHOD("on_tree_item_rmb_selected"), &CountryInspector::on_tree_item_rmb_selected);
-	ClassDB::bind_method(D_METHOD("on_color_changed", "new_color", "item", "country_id"), &CountryInspector::on_color_changed);
-	ClassDB::bind_method(D_METHOD("on_color_picker_closed", "popup"), &CountryInspector::on_color_picker_closed);
-	ClassDB::bind_method(D_METHOD("on_context_menu_closed", "menu"), &CountryInspector::on_context_menu_closed);
-	// getters setters
-	ClassDB::bind_method(D_METHOD("get_search_line_edit"), &CountryInspector::get_search_line_edit);
-	ClassDB::bind_method(D_METHOD("set_search_line_edit", "data"), &CountryInspector::set_search_line_edit);
-	ClassDB::bind_method(D_METHOD("get_data_container"), &CountryInspector::get_data_container);
-	ClassDB::bind_method(D_METHOD("set_data_container", "data"), &CountryInspector::set_data_container);
-	ClassDB::bind_method(D_METHOD("get_country_data"), &CountryInspector::get_country_data);
-	ClassDB::bind_method(D_METHOD("set_country_data", "data"), &CountryInspector::set_country_data);
-}
 void CountryInspector::on_parse_button_pressed()
 {
 	country_data->parse_all_files();
@@ -124,20 +102,9 @@ void CountryInspector::cache_display_data()
 
 	UtilityFunctions::print_verbose("Display data for ", display_data.size());
 }
-#define ENABLE_PROFILING 1
 
-#if ENABLE_PROFILING
-#define PROFILE_START(name) uint64_t profile_##name = Time::get_singleton()->get_ticks_usec()
-#define PROFILE_END(name, label) UtilityFunctions::print("  " label ": ", (Time::get_singleton()->get_ticks_usec() - profile_##name) / 1000.0, " ms")
-#else
-#define PROFILE_START(name)
-#define PROFILE_END(name, label)
-#endif
 void CountryInspector::update_display(const String &search_term)
 {
-	PROFILE_START(total);
-	PROFILE_START(tree_setup);
-
 	Tree *tree_display = nullptr;
 	TypedArray<Node> children = data_container->get_children();
 	if (children.size() > 0)
@@ -162,14 +129,9 @@ void CountryInspector::update_display(const String &search_term)
 		data_container->add_child(tree_display);
 	}
 
-	PROFILE_END(tree_setup, "Tree setup time");
-	PROFILE_START(tree_clear);
-
 	tree_display->clear();
 
 	TreeItem *root = tree_display->create_item();
-
-	PROFILE_END(tree_clear, "Tree clear time");
 
 	TypedDictionary<String, Color> country_name_color = country_data->get_country_name_to_color();
 	// disabled all input for empty color cells
@@ -185,8 +147,6 @@ void CountryInspector::update_display(const String &search_term)
 	tree_display->set_mouse_filter(Control::MOUSE_FILTER_STOP);
 	String search_lower = search_term.to_lower().strip_edges();
 	bool is_searching = !search_lower.is_empty();
-
-	PROFILE_START(populate);
 
 	for (const String &country_id : display_data.keys())
 	{
@@ -215,11 +175,11 @@ void CountryInspector::update_display(const String &search_term)
 		}
 		else
 		{
-			// not searching or the country does not match
+			// Do not search provinces or the country if they do not match.
 			matching_provinces = provinces;
 		}
 
-		// skip neither country or its provinces match
+		// Skip neither country or its provinces match.
 		if (is_searching && !country_matches && matching_provinces.size() == 0)
 		{
 			continue;
@@ -269,9 +229,6 @@ void CountryInspector::update_display(const String &search_term)
 			country_item->set_collapsed(true);
 		}
 	}
-
-	PROFILE_END(populate, "Tree populate time");
-	PROFILE_END(total, "Total update_display");
 }
 void CountryInspector::on_tree_item_edited()
 {
@@ -287,14 +244,12 @@ void CountryInspector::on_tree_item_edited()
 		return;
 	}
 
-	// Get the edited column
 	int column = tree->get_edited_column();
 	if (column != 1)
 	{
 		return;
 	}
 
-	// Check if it's a country
 	String item_type = item->get_metadata(1);
 	if (item_type != "country")
 	{
@@ -304,7 +259,6 @@ void CountryInspector::on_tree_item_edited()
 	String country_id = item->get_metadata(0);
 	Color current_color = item->get_custom_bg_color(1);
 
-	// Create color picker popup
 	ColorPicker *color_picker = memnew(ColorPicker);
 	color_picker->set_pick_color(current_color);
 	color_picker->set_edit_alpha(false);
@@ -327,9 +281,9 @@ void CountryInspector::on_tree_item_rmb_selected()
 	Tree *tree = Object::cast_to<Tree>(data_container->get_child(0));
 	TreeItem *selected = tree->get_selected();
 	TreeItem *parent = selected->get_parent();
-	if (!parent || parent == tree->get_root())
+	// Do not make a pop-up unless it is a province.
+	if ((parent == nullptr) || parent == tree->get_root())
 	{
-		// This is a country
 		return;
 	}
 	Rect2 item_rect = tree->get_item_area_rect(selected);
@@ -362,12 +316,12 @@ void CountryInspector::show_province_context_menu(Vector2 position, const String
 	country_list->set_meta("current_country_id", current_country_id);
 	vbox->add_child(country_list);
 
-	// Populate the list
+	// Populate the list with all countries except the currently opened one.
 	for (const String &country_id : display_data.keys())
 	{
 		if (country_id == current_country_id)
 		{
-			continue; // Skip current owner
+			continue;
 		}
 		Dictionary country_info = display_data[country_id];
 		String country_name = country_info["name"];
@@ -385,18 +339,14 @@ void CountryInspector::show_province_context_menu(Vector2 position, const String
 	popup->set_position(position);
 	popup->popup();
 
-	// Focus the search bar
 	search_bar->grab_focus();
 }
 void CountryInspector::on_country_search_changed(const String &search_text, ItemList *country_list)
 {
 	String search_lower = search_text.to_lower();
 
-	// Store current country_id from the popup context
-	// We need to get the current_country_id that was passed to the popup
 	String current_country_id = country_list->get_meta("current_country_id", "");
 
-	// Clear and rebuild the list
 	country_list->clear();
 
 	for (const String &country_id : display_data.keys())
@@ -409,7 +359,6 @@ void CountryInspector::on_country_search_changed(const String &search_text, Item
 		Dictionary country_info = display_data[country_id];
 		String country_name = country_info["name"];
 
-		// Only add if matches search or search is empty
 		if (search_lower.is_empty() || country_name.to_lower().contains(search_lower))
 		{
 			int idx = country_list->add_item(country_name);
@@ -419,7 +368,7 @@ void CountryInspector::on_country_search_changed(const String &search_text, Item
 }
 void CountryInspector::on_country_transfer_selected(int index, const String &province_id, const String &current_country_id, TreeItem *province_item, PopupPanel *popup)
 {
-	ItemList *country_list = Object::cast_to<ItemList>(popup->get_child(0)->get_child(2)); // Get the ItemList
+	ItemList *country_list = Object::cast_to<ItemList>(popup->get_child(0)->get_child(2));
 
 	if ((country_list == nullptr) || country_list->is_item_disabled(index))
 	{
@@ -429,15 +378,14 @@ void CountryInspector::on_country_transfer_selected(int index, const String &pro
 	String new_country_id = country_list->get_item_metadata(index);
 
 	country_data->change_province_owner(province_id.to_int(), new_country_id);
-	// export data
+
 	country_data->export_owner_data(province_id.to_int());
-	// Update display_data cache
+	// Update display_data cache with new data, so we do not have to recalculate everything.
 	if (display_data.has(current_country_id))
 	{
 		Dictionary old_country_info = display_data[current_country_id];
 		PackedStringArray old_provinces = old_country_info["provinces"];
 
-		// Remove province from old country
 		int province_index = old_provinces.find(province_id);
 		if (province_index != -1)
 		{
@@ -452,12 +400,11 @@ void CountryInspector::on_country_transfer_selected(int index, const String &pro
 		Dictionary new_country_info = display_data[new_country_id];
 		PackedStringArray new_provinces = new_country_info["provinces"];
 
-		// Add province to new country
 		new_provinces.append(province_id);
 		new_country_info["provinces"] = new_provinces;
 		display_data[new_country_id] = new_country_info;
 	}
-	// update tree container
+	// Update the tree container:
 	Tree *tree_display = Object::cast_to<Tree>(data_container->get_children()[0]);
 	if (tree_display == nullptr)
 	{
@@ -480,7 +427,6 @@ void CountryInspector::on_country_transfer_selected(int index, const String &pro
 			if (child->get_metadata(0) == province_id)
 			{
 				old_country_item->remove_child(child);
-				memdelete(child);
 				break;
 			}
 			child = child->get_next();
@@ -536,42 +482,4 @@ void CountryInspector::on_color_picker_closed(PopupPanel *popup)
 void CountryInspector::on_context_menu_closed(PopupMenu *menu)
 {
 	menu->queue_free();
-}
-LineEdit *CountryInspector::get_search_line_edit()
-{
-	return search_line_edit;
-}
-void CountryInspector::set_search_line_edit(LineEdit *value)
-{
-	search_line_edit = value;
-}
-VBoxContainer *CountryInspector::get_data_container()
-{
-	return data_container;
-}
-void CountryInspector::set_data_container(VBoxContainer *value)
-{
-	data_container = value;
-}
-CountryData *CountryInspector::get_country_data()
-{
-	return country_data;
-}
-
-void CountryInspector::set_country_data(CountryData *data)
-{
-	if (country_data == nullptr)
-	{
-		country_data = data;
-		// prepare data for the first time
-		if (country_data->get_country_name_to_color().is_empty())
-		{
-			on_parse_button_pressed();
-			return;
-		}
-
-		cache_display_data();
-	}
-
-	update_display("");
 }

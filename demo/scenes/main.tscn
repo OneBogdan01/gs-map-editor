@@ -347,9 +347,9 @@ color_map_size = Vector2i(256, 256)
 shape = SubResource("BoxShape3D_o5qli")
 debug_color = Color(0.979217, 0, 0.389855, 0.42)
 
-[node name="ProvinceSelector" type="Node3D" parent="Map" node_paths=PackedStringArray("province_parser", "country_data", "province_map")]
+[node name="ProvinceSelector" type="Node3D" parent="Map" node_paths=PackedStringArray("map_data", "country_data", "province_map")]
 script = ExtResource("11_ya4ey")
-province_parser = NodePath("MapData")
+map_data = NodePath("MapData")
 country_data = NodePath("CountryData")
 province_map = NodePath("..")
 province_tex = ExtResource("1_o5qli")

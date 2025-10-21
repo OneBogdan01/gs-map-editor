@@ -3,7 +3,7 @@ class_name ProvinceSelector
 
 const RAY_LENGTH = 1000.0
 
-@export var province_parser: MapData
+@export var map_data: MapData
 @export var country_data: CountryData
 @export var province_map: Sprite3D 
 @export var province_tex: Texture2D
@@ -71,12 +71,12 @@ func select_province() -> void:
 		print("Province Color Value: ", province_color)
 		
 
-		var province_name: String = province_parser.province_color_to_name[province_color]
+		var province_name: String = map_data.province_color_to_name[province_color]
 
 		print("Province Name: ", province_name)
 		
 
-		province_id = province_parser.province_color_to_id[province_color]
+		province_id = map_data.province_color_to_id[province_color]
 		print("Province ID: ", province_id)
 		
 

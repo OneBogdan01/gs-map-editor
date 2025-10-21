@@ -2,12 +2,14 @@
 #include "godot_cpp/classes/editor_inspector_plugin.hpp"
 #include "godot_cpp/classes/item_list.hpp"
 #include "godot_cpp/classes/line_edit.hpp"
+#include "godot_cpp/classes/popup_menu.hpp"
 #include "godot_cpp/classes/popup_panel.hpp"
 #include "godot_cpp/classes/timer.hpp"
 #include "godot_cpp/classes/tree_item.hpp"
 #include "godot_cpp/classes/v_box_container.hpp"
 #include "godot_cpp/variant/dictionary.hpp"
 #include "godot_cpp/variant/string.hpp"
+
 namespace godot
 {
 class CountryData;
@@ -51,7 +53,7 @@ protected:
 	void on_color_picker_closed(PopupPanel *popup);
 	void on_context_menu_closed(PopupMenu *menu);
 	void on_search_timer_timeout();
-	// Called whenever the data is changed, it is used to for update_display function.
+	// Called whenever the data is changed, it is used for update_display function.
 	void cache_display_data();
 	static void _bind_methods();
 

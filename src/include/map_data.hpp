@@ -14,9 +14,7 @@ class MapData : public Node
 	GDCLASS(MapData, Node)
 
 public:
-	String get_province_from_color(Color color);
-	int32_t get_province_id_from_color(Color color);
-	void build_color_lookup();
+	void build_color_lookup(const Array &province_data);
 	void load_csv_data();
 	// setter and getters
 	TypedDictionary<Color, String> get_province_color_to_name() const;
@@ -24,8 +22,6 @@ public:
 	TypedDictionary<Color, int32_t> get_province_color_to_id() const;
 	void set_province_color_to_id(const TypedDictionary<Color, int32_t> &data);
 
-	Array get_province_data() const;
-	void set_province_data(const Array &p_data);
 	void set_csv_path(const String &p_path);
 	String get_csv_path() const;
 	bool get_should_skip_first_row() const;
@@ -39,7 +35,7 @@ private:
 	TypedDictionary<Color, int32_t> province_color_to_id;
 
 	String csv_file_path{ "res://assets/definition.csv" };
-	Array province_data;
+
 	bool should_skip_first_row{ true };
 };
 } // namespace godot
