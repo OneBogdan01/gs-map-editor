@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bv367ytim7rkg"
-path="res://.godot/imported/edge_map.png-0827c95fab0bff5cc23106e0f6e143b9.ctex"
+uid="uid://b73404h0hkhdt"
+path="res://.godot/imported/color_lookup_map.png-e9c0f3b557d7daa5794ff1fa9c92bb39.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/edge_map.png"
-dest_files=["res://.godot/imported/edge_map.png-0827c95fab0bff5cc23106e0f6e143b9.ctex"]
+source_file="res://assets/color_lookup_map.png"
+dest_files=["res://.godot/imported/color_lookup_map.png-e9c0f3b557d7daa5794ff1fa9c92bb39.ctex"]
 
 [params]
 
@@ -20,15 +20,15 @@ compress/high_quality=false
 compress/lossy_quality=0.7
 compress/hdr_compression=1
 compress/normal_map=0
-compress/channel_pack=0
+compress/channel_pack=1
 mipmaps/generate=false
 mipmaps/limit=-1
 roughness/mode=0
 roughness/src_normal=""
-process/fix_alpha_border=true
+process/fix_alpha_border=false
 process/premult_alpha=false
 process/normal_map_invert_y=false
 process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
 process/size_limit=0
-detect_3d/compress_to=1
+detect_3d/compress_to=0

@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://bmk5fr67658ye"
-path="res://.godot/imported/political_map.png-52b814cc5700b0763bdf2d797d729eb5.ctex"
+path="res://.godot/imported/mask_political_map.png-9691d832d414be0228107a93a69a1ba6.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/political_map.png"
-dest_files=["res://.godot/imported/political_map.png-52b814cc5700b0763bdf2d797d729eb5.ctex"]
+source_file="res://assets/mask_political_map.png"
+dest_files=["res://.godot/imported/mask_political_map.png-9691d832d414be0228107a93a69a1ba6.ctex"]
 
 [params]
 

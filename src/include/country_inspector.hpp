@@ -9,6 +9,7 @@
 #include "godot_cpp/classes/v_box_container.hpp"
 #include "godot_cpp/variant/dictionary.hpp"
 #include "godot_cpp/variant/string.hpp"
+#include <cstddef>
 #include <cstdint>
 namespace godot
 {
@@ -19,7 +20,7 @@ class CountryInspector : public EditorInspectorPlugin
 
 public:
 	CountryInspector() = default;
-	~CountryInspector() = default;
+	~CountryInspector() override = default;
 
 protected:
 	// Getters and setters
@@ -60,11 +61,10 @@ protected:
 	CountryData *country_data{ nullptr };
 	LineEdit *search_line_edit{ nullptr };
 	VBoxContainer *data_container{ nullptr };
+	Timer *search_timer{ nullptr };
 
 private:
 	Dictionary display_data;
-
-	Timer *search_timer;
 	String pending_search_term;
 	String country_color_save;
 };

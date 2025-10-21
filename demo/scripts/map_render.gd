@@ -10,10 +10,20 @@ extends ComputeHelper
 @export var province_selector: ProvinceSelector
 @export var province_map: Texture2D
 
+@export_group("Texture & Shader Configuration")
+@export var color_map_size: Vector2i 
+@export_file var lookup_path_shader = "res://shaders/generate_color_lookup.glsl"
+@export_file var color_path_shader = "res://shaders/generate_color_map.glsl"
+@export_file var mask_political_path_shader = "res://shaders/mask_political_map.glsl"
+
 
 @export_group("Debugging & Profiling")
 @export var profiler_enabled := true
 @export var save_images_to_file := true
+@export_file var lookup_save_path = "res://assets/color_lookup_map.png"
+@export_file var color_map_save_path = "res://assets/color_map.png"
+@export_file var mask_political_save_path = "res://assets/mask_political_map.png"
+
 
 
 # Update the viewport materials
@@ -22,11 +32,13 @@ var distance_material: ShaderMaterial
 var province_material: ShaderMaterial
 
 
+# Cached variables
 var color_lookup: Image
 var color_map: Image
 var color_texture: ImageTexture
 var political_map: Image
 
+# Gameplay
 var is_getting_country = false
 var selected_country: String
 var is_political = true
@@ -162,7 +174,7 @@ func create_political_map_mask_texture():
 	var political_uniform = create_uniform(political_image, 2, RenderingDevice.UNIFORM_TYPE_IMAGE)
 
 	
-	var shader = compile_shader("res://shaders/political_map.glsl")
+	var shader = compile_shader(mask_political_path_shader)
    
 
 	var byte_data: PackedByteArray = compute_result([political_uniform, color_uniform, lookup_uniform], political_image, shader)
@@ -171,10 +183,11 @@ func create_political_map_mask_texture():
 	# Create new image from the result
 	var result_image = Image.create_from_data(color_lookup.get_width(), color_lookup.get_height(), false, Image.FORMAT_RGBA8, byte_data)
 	if save_images_to_file:
-		result_image.save_png("res://assets/political_map.png")
+		result_image.save_png(mask_political_save_path)
 	
 	update_material_static_parameters("mask_map", ImageTexture.create_from_image(result_image))
 	
+	clean_up()
 	
 func create_color_map_texture():
 	# Size of the colormap
@@ -193,7 +206,7 @@ func create_color_map_texture():
 	var buffer_storage = create_ssbo(buffer_bytes.size(), buffer_bytes)
 	var uniform_buffer = create_uniform(buffer_storage, 1, RenderingDevice.UNIFORM_TYPE_STORAGE_BUFFER)
 
-	var shader = compile_shader("res://shaders/generate_color_map.glsl")
+	var shader = compile_shader(color_path_shader)
    
 	var byte_data: PackedByteArray = compute_result([output_uniform, uniform_buffer], output_image, shader);
 
@@ -202,10 +215,11 @@ func create_color_map_texture():
 	color_map = result_image
 	# for debugging
 	if save_images_to_file:
-		result_image.save_png("res://assets/color_map.png")
+		result_image.save_png(color_map_save_path)
+	# store the texture so it can be updated later
 	color_texture = ImageTexture.create_from_image(color_map)
 	update_material_dynamic_parameters("color_map", color_texture)
-	
+	clean_up()
 	return result_image
 	
 func create_lookup_texture():
@@ -215,7 +229,7 @@ func create_lookup_texture():
 	var province_size = province_map.get_size()
 
 
-	var shader = compile_shader("res://shaders/generate_color_lookup.glsl")
+	var shader = compile_shader(lookup_path_shader)
    
 	var input_format = texture_format_from_texture_2d(province_size,
 	 RenderingDevice.DATA_FORMAT_R8G8B8A8_UINT,
@@ -278,12 +292,11 @@ func create_lookup_texture():
 	color_lookup = result_image
 	# for debugging
 	if save_images_to_file:
-		result_image.save_png("res://assets/color_lookup.png")
+		result_image.save_png(lookup_save_path)
 	var result_tex = ImageTexture.create_from_image(color_lookup)
 	update_material_dynamic_parameters("lookup_map", result_tex)
 	update_material_static_parameters("lookup_map", result_tex)
 	clean_up()
-	print("Texture lookup created successfully!")
 
 
 func on_province_selector_province_selected(province_id: int) -> void:

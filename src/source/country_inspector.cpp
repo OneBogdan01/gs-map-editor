@@ -103,6 +103,7 @@ void CountryInspector::create_containers()
 
 	UtilityFunctions::print_verbose("Inspector initialized containers");
 }
+
 void CountryInspector::cache_display_data()
 {
 	display_data.clear();
@@ -479,6 +480,7 @@ void CountryInspector::on_country_transfer_selected(int index, const String &pro
 			if (child->get_metadata(0) == province_id)
 			{
 				old_country_item->remove_child(child);
+				memdelete(child);
 				break;
 			}
 			child = child->get_next();

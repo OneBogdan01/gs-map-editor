@@ -5,9 +5,6 @@
 
 using namespace godot;
 
-CameraController::CameraController() = default;
-CameraController::~CameraController() = default;
-
 float CameraController::get_acceleration()
 {
 	return acceleration;

@@ -31,10 +31,7 @@ void ComputeHelper::clean_up()
 	}
 	resources_to_delete.clear();
 }
-// Image ComputeHelper::create_lookup_texture()
-// {
-// 	return {};
-// }
+
 RID ComputeHelper::compile_shader(const String &path)
 {
 	Ref<RDShaderFile> shader_file = ResourceLoader::get_singleton()->load(path);

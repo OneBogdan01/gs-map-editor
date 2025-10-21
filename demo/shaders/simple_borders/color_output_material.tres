@@ -2,7 +2,7 @@
 
 [ext_resource type="Shader" uid="uid://sswv8rlsaoha" path="res://shaders/jfa_generation/outine.gdshader" id="1_dqgna"]
 [ext_resource type="Texture2D" uid="uid://bro5urv8mkvw0" path="res://assets/color_map.png" id="2_dqgna"]
-[ext_resource type="Texture2D" uid="uid://b73404h0hkhdt" path="res://assets/color_lookup.png" id="3_psbgn"]
+[ext_resource type="Texture2D" uid="uid://b73404h0hkhdt" path="res://assets/color_lookup_map.png" id="3_psbgn"]
 
 [resource]
 resource_local_to_scene = true

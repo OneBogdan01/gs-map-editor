@@ -11,8 +11,6 @@ class CameraController : public Node3D
 	GDCLASS(CameraController, Node3D);
 
 public:
-	CameraController();
-	~CameraController();
 	void _process(double delta) override;
 	float get_acceleration();
 	void set_acceleration(float value);
