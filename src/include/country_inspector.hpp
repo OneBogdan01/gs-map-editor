@@ -1,5 +1,4 @@
 #pragma once
-
 #include "godot_cpp/classes/editor_inspector_plugin.hpp"
 #include "godot_cpp/classes/item_list.hpp"
 #include "godot_cpp/classes/line_edit.hpp"
@@ -9,8 +8,6 @@
 #include "godot_cpp/classes/v_box_container.hpp"
 #include "godot_cpp/variant/dictionary.hpp"
 #include "godot_cpp/variant/string.hpp"
-#include <cstddef>
-#include <cstdint>
 namespace godot
 {
 class CountryData;

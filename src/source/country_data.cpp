@@ -88,7 +88,7 @@ void CountryData::store_filename_data()
 	for (const String &country_filename : country_filenames)
 	{
 		Dictionary country_codes;
-		// this is how the file names are AAC - Aachen.txt
+		// This is how the file names are AAC - Aachen.txt.
 		country_codes["Id"] = country_filename.substr(0, 3);			  // gets AAC identifier
 		country_codes["Name"] = country_filename.substr(6).split(".")[0]; // get country name Aachen
 
@@ -118,7 +118,7 @@ void CountryData::store_filename_data()
 	}
 	for (const String &province_filename : province_filenames)
 	{
-		// 1-Uppland.txt
+		// This will be 1-Uppland.txt.
 		Dictionary province_codes;
 		String filename = province_filename.get_file();
 
@@ -131,10 +131,10 @@ void CountryData::store_filename_data()
 		{
 			parts = filename.split("-");
 		}
-		// Check if we got the expected number of parts
+		// Check if we got the expected number of parts.
 		if (parts.size() < 2)
 		{
-			continue; // Skip this file
+			continue;
 		}
 		province_codes["Id"] = parts[0].strip_edges().to_int();
 		province_codes["Name"] = parts[1].split(".txt")[0].strip_edges(); // gets "Uppland"
@@ -142,9 +142,9 @@ void CountryData::store_filename_data()
 		province_codes["Owner"] = parse_province_owner(full_path);
 		province_data.push_back(province_codes);
 	}
-	// sort them by id
+	// This is so, we can get the data in a logical way.
 	province_data.sort_custom(callable_mp(this, &CountryData::sort_by_id));
-	// build the cache
+
 	build_look_up_tables(province_data, country_data, country_color_data);
 }
 void CountryData::parse_all_files()

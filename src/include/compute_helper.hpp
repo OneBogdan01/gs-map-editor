@@ -1,12 +1,10 @@
 #pragma once
 #include "godot_cpp/classes/image.hpp"
-#include "godot_cpp/classes/node3d.hpp"
 #include "godot_cpp/classes/rd_texture_format.hpp"
 #include "godot_cpp/classes/rd_texture_view.hpp"
 #include "godot_cpp/classes/ref.hpp"
 #include "godot_cpp/classes/sprite3d.hpp"
 #include "godot_cpp/classes/texture2d.hpp"
-
 #include "godot_cpp/variant/array.hpp"
 #include "godot_cpp/variant/rid.hpp"
 #include "godot_cpp/variant/string.hpp"

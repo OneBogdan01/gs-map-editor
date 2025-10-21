@@ -61,7 +61,6 @@ void CameraController::_process(double delta)
 	}
 
 	Vector3 step = max_speed * acceleration * direction;
-	// UtilityFunctions::print(direction);
 	speed = Math::clamp<Vector3>(speed + step, -max_speed, max_speed);
 
 	global_translate(speed * delta);

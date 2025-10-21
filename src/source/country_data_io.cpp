@@ -65,7 +65,7 @@ Color CountryData::parse_country_color(const String &file_path)
 	String province_owner = content.substr(value_start, line_end - value_start).strip_edges();
 	PackedStringArray fields = province_owner.split(" ");
 
-	// only add numbers
+	// only add numbers that make the color
 	Array rgb;
 
 	for (String field : fields)

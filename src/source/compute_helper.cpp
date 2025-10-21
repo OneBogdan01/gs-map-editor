@@ -47,7 +47,7 @@ RID ComputeHelper::compile_shader(const String &path)
 		print_error("Failed to compiler shader file: ", path);
 		return {};
 	}
-	// Add to the front so it works like a queue
+	// Add to the front so it works like a queue.
 	resources_to_delete.push_front(shader);
 
 	return shader;
@@ -117,8 +117,8 @@ void ComputeHelper::_bind_methods()
 	ClassDB::bind_method(D_METHOD("create_ssbo", "size_bytes", "data"), &ComputeHelper::create_ssbo);
 	ClassDB::bind_method(D_METHOD("create_uniform", "size_bytes", "id", "binding"), &ComputeHelper::create_uniform);
 	ClassDB::bind_method(D_METHOD("create_texture", "format", "view", "data"), &ComputeHelper::create_texture);
-	// others
 
+	// Other graphics resources
 	ClassDB::bind_method(D_METHOD("create_rd"), &ComputeHelper::create_rd);
 	ClassDB::bind_method(D_METHOD("texture_format_from_texture_2d", "texure_size", "format", "bits"), &ComputeHelper::texture_format_from_texture_2d);
 	ClassDB::bind_method(D_METHOD("compute_result", "uniforms", "texture_id", "shader"), &ComputeHelper::compute_result);
@@ -128,6 +128,5 @@ void ComputeHelper::_bind_methods()
 	ClassDB::bind_method(D_METHOD("get_output_texture_size"), &ComputeHelper::get_output_texture_size);
 	ClassDB::bind_method(D_METHOD("clean_up"), &ComputeHelper::clean_up);
 
-	// Signals
 	ADD_SIGNAL(MethodInfo("texture_updated", PropertyInfo(Variant::PACKED_BYTE_ARRAY, "texture_data")));
 }
