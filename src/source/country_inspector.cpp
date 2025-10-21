@@ -93,7 +93,7 @@ void CountryInspector::create_containers()
 	search_line_edit = memnew(LineEdit);
 	data_container = memnew(VBoxContainer);
 	search_timer = memnew(Timer);
-	search_timer->set_wait_time(0.3); // 300ms delay
+	search_timer->set_wait_time(time_delay);
 	search_timer->set_one_shot(true);
 	search_timer->connect("timeout", callable_mp(this, &CountryInspector::on_search_timer_timeout));
 	search_line_edit->add_child(search_timer);
@@ -107,8 +107,8 @@ void CountryInspector::create_containers()
 void CountryInspector::cache_display_data()
 {
 	display_data.clear();
-	auto country_name_color = country_data->get_country_name_to_color();
-	auto country_id_name = country_data->get_country_id_to_country_name();
+	TypedDictionary<String, Color> country_name_color = country_data->get_country_name_to_color();
+	TypedDictionary<String, String> country_id_name = country_data->get_country_id_to_country_name();
 
 	for (const String &country_id : country_id_name.keys())
 	{
@@ -139,7 +139,7 @@ void CountryInspector::update_display(const String &search_term)
 	PROFILE_START(tree_setup);
 
 	Tree *tree_display = nullptr;
-	auto children = data_container->get_children();
+	TypedArray<Node> children = data_container->get_children();
 	if (children.size() > 0)
 	{
 		tree_display = Object::cast_to<Tree>(children[0]);
@@ -171,7 +171,7 @@ void CountryInspector::update_display(const String &search_term)
 
 	PROFILE_END(tree_clear, "Tree clear time");
 
-	auto country_name_color = country_data->get_country_name_to_color();
+	TypedDictionary<String, Color> country_name_color = country_data->get_country_name_to_color();
 	// disabled all input for empty color cells
 	if (country_name_color.size() == 0)
 	{

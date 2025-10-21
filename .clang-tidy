@@ -12,6 +12,7 @@ clang-analyzer-*,-clang-analyzer-osx*,bugprone-*,concurrency-*,cppcoreguidelines
 -bugprone-macro-parentheses,-bugprone-narrowing-conversions,-bugprone-easily-swappable-parameters,-bugprone-switch-missing-default-case,-bugprone-unhandled-self-assignment,
 -cppcoreguidelines-pro-type-union-access,-cppcoreguidelines-avoid-magic-numbers,-cppcoreguidelines-macro-usage,-cppcoreguidelines-special-member-functions,
 -cppcoreguidelines-pro-type-reinterpret-cast,-cppcoreguidelines-pro-type-const-cast,-cppcoreguidelines-narrowing-conversions,-cppcoreguidelines-owning-memory,
--cppcoreguidelines-macro-to-enum,-cppcoreguidelines-avoid-c-arrays,-cppcoreguidelines-pro-bounds-constant-array-index, -readability-function-cognitive-complexity, -cppcoreguidelines-no-malloc, -cppcoreguidelines-pro-bounds-pointer-arithmetic, -cppcoreguidelines-avoid-do-while, -readability-identifier-length, -cppcoreguidelines-avoid-non-const-global-variables, -cppcoreguidelines-avoid-goto
+-cppcoreguidelines-macro-to-enum,-cppcoreguidelines-avoid-c-arrays,-cppcoreguidelines-pro-bounds-constant-array-index, -readability-function-cognitive-complexity, -cppcoreguidelines-no-malloc, -cppcoreguidelines-pro-bounds-pointer-arithmetic, -cppcoreguidelines-avoid-do-while, -readability-identifier-length, -cppcoreguidelines-avoid-non-const-global-variables, -cppcoreguidelines-avoid-goto,
+-performance-implicit-conversion-in-loop
 '
 FormatStyle: file

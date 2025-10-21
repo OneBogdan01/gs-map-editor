@@ -27,8 +27,8 @@ private:
 	Vector3 speed;
 
 	bool local = false;
-	float acceleration{ 1.0f };
-	float deceleration{ 0.4f };
+	float acceleration{ 1.0 };
+	float deceleration{ 0.4 };
 	Vector3 max_speed{ 1.0, 1.0, 1.0 };
 };
 } // namespace godot

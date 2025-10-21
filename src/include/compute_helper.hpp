@@ -20,7 +20,6 @@ class ComputeHelper : public Sprite3D
 	GDCLASS(ComputeHelper, Sprite3D);
 
 public:
-	// Image create_lookup_texture();
 	// resources
 	void create_rd();
 	RID compile_shader(const String &path);
@@ -28,9 +27,9 @@ public:
 	RID create_ssbo(uint32_t size_bytes, const PackedByteArray &data);
 	Ref<RDUniform> create_uniform(const RID &id, int32_t binding, RenderingDevice::UniformType uniform_type = RenderingDevice::UNIFORM_TYPE_IMAGE);
 	Ref<RDTextureFormat> texture_format_from_texture_2d(Vector2i texture_size, RenderingDevice::DataFormat format, BitField<RenderingDevice::TextureUsageBits> bits);
-
+	// get the texture data specified in texture_id.
 	PackedByteArray compute_result(const TypedArray<Ref<RDUniform>> &uniforms, const RID &texture_id, const RID &shader);
-
+	// deletes all RIDs in the vector and clears itself.
 	void clean_up();
 	// Getters and setters
 	void set_output_texture_size(Vector2i size)

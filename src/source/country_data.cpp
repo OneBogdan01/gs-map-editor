@@ -73,7 +73,7 @@ void CountryData::store_filename_data()
 	PackedStringArray country_color_filenames = get_txt_files_in_folder(country_colors_folder_path);
 	PackedStringArray province_filenames = get_txt_files_in_folder(provinces_folder_path);
 
-	for (const auto &country_color_filename : country_color_filenames)
+	for (const String &country_color_filename : country_color_filenames)
 	{
 		// filenames are like this: Aachen.txt
 		Dictionary country_colors;
@@ -85,7 +85,7 @@ void CountryData::store_filename_data()
 		country_color_data.push_back(country_colors);
 	}
 
-	for (const auto &country_filename : country_filenames)
+	for (const String &country_filename : country_filenames)
 	{
 		Dictionary country_codes;
 		// this is how the file names are AAC - Aachen.txt
@@ -103,7 +103,7 @@ void CountryData::store_filename_data()
 		terrain_colors["No Owner"] = Color(0.7, 0.5, 0.1, 1.0);
 
 		Array terrain_keys = terrain_colors.keys();
-		for (const auto &terrain_key : terrain_keys)
+		for (const String &terrain_key : terrain_keys)
 		{
 			Dictionary terrain_dict;
 			String terrain_name = terrain_key;
@@ -116,7 +116,7 @@ void CountryData::store_filename_data()
 			country_data.push_back(terrain_data);
 		}
 	}
-	for (const auto &province_filename : province_filenames)
+	for (const String &province_filename : province_filenames)
 	{
 		// 1-Uppland.txt
 		Dictionary province_codes;
@@ -174,7 +174,7 @@ PackedStringArray CountryData::get_country_provinces(const String &country_id)
 	PackedStringArray provinces_output;
 	Array province_ids = province_id_to_owner.keys();
 
-	for (const auto &i : province_ids)
+	for (int32_t i : province_ids)
 	{
 		int32_t province_id = i;
 

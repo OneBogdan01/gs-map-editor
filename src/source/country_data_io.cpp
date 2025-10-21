@@ -14,7 +14,7 @@ String CountryData::parse_province_owner(const String &file_path)
 	String content = file->get_buffer(file->get_length()).get_string_from_ascii();
 
 	String owner_token = "owner =";
-	int owner_pos = content.find(owner_token);
+	int32_t owner_pos = content.find(owner_token);
 	// check if the token is at the beginning of the file or line
 	bool on_start_of_the_line = (owner_pos - 1) < 0 || content.substr(owner_pos - 1, 1).contains("\n");
 	// patch the EU4 data, the owner needs to be at the beginning of the line.
@@ -35,12 +35,12 @@ String CountryData::parse_province_owner(const String &file_path)
 		return "No Owner";
 	}
 
-	int value_start = owner_pos + owner_token.length();
-	int line_end = content.find("\n", value_start);
+	int32_t value_start = owner_pos + owner_token.length();
+	int32_t line_end = content.find("\n", value_start);
 	// get ID
 	String province_owner = content.substr(value_start, line_end - value_start).strip_edges();
 	// strip comments
-	int comment_pos = province_owner.find("#");
+	int32_t comment_pos = province_owner.find("#");
 	if (comment_pos == -1)
 	{
 		comment_pos = province_owner.find("//");
@@ -58,9 +58,9 @@ Color CountryData::parse_country_color(const String &file_path)
 	String content = file->get_buffer(file->get_length()).get_string_from_ascii();
 
 	String owner_token = "color = ";
-	int owner_pos = content.find(owner_token);
-	int value_start = owner_pos + owner_token.length();
-	int line_end = content.find("\n", value_start);
+	int32_t owner_pos = content.find(owner_token);
+	int32_t value_start = owner_pos + owner_token.length();
+	int32_t line_end = content.find("\n", value_start);
 	// get ID
 	String province_owner = content.substr(value_start, line_end - value_start).strip_edges();
 	PackedStringArray fields = province_owner.split(" ");
@@ -68,7 +68,7 @@ Color CountryData::parse_country_color(const String &file_path)
 	// only add numbers
 	Array rgb;
 
-	for (auto field : fields)
+	for (String field : fields)
 	{
 		// try to remove non numbers
 		field = field.replace("}", "");
@@ -80,9 +80,9 @@ Color CountryData::parse_country_color(const String &file_path)
 	}
 	if (rgb.size() != 3)
 	{
-		UtilityFunctions::print("Could not parse", rgb);
-		UtilityFunctions::print("Found Strings", fields);
-		UtilityFunctions::print("Could not parse file:", file_path);
+		print_error("Could not parse", rgb);
+		print_error("Found Strings", fields);
+		print_error("Could not parse file:", file_path);
 		return color;
 	}
 	color = Color::from_rgba8(rgb[0], rgb[1], rgb[2]);
@@ -144,5 +144,5 @@ void CountryData::export_owner_data(int64_t province_id)
 		return;
 	}
 
-	UtilityFunctions::print("Successfully updated owner for: " + province_name);
+	UtilityFunctions::print_verbose("Successfully updated owner for: " + province_name);
 }

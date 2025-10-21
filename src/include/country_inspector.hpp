@@ -29,10 +29,10 @@ protected:
 	VBoxContainer *get_data_container();
 	void set_data_container(VBoxContainer *value);
 	CountryData *get_country_data();
-	void update_display(const String &search_term);
 	void set_country_data(CountryData *data);
 	// call on parse begin
 	void create_containers();
+	void update_display(const String &search_term);
 	void on_parse_button_pressed();
 	void on_search_text_changed(const String &search_term);
 	void on_clear_search();
@@ -62,6 +62,7 @@ protected:
 	LineEdit *search_line_edit{ nullptr };
 	VBoxContainer *data_container{ nullptr };
 	Timer *search_timer{ nullptr };
+	float time_delay = 0.3;
 
 private:
 	Dictionary display_data;

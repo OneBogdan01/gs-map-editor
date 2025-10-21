@@ -17,7 +17,7 @@ void initialize_example_module(ModuleInitializationLevel p_level)
 {
 	if (p_level == MODULE_INITIALIZATION_LEVEL_EDITOR)
 	{
-		GDREGISTER_VIRTUAL_CLASS(CountryInspector);
+		GDREGISTER_CLASS(CountryInspector);
 		return;
 	}
 	else if (p_level != MODULE_INITIALIZATION_LEVEL_SCENE)
@@ -27,9 +27,9 @@ void initialize_example_module(ModuleInitializationLevel p_level)
 	// used for province selecting
 	GDREGISTER_CLASS(MapData);
 	GDREGISTER_CLASS(CountryData);
-
+	// helper for everything compute related
 	GDREGISTER_CLASS(ComputeHelper);
-	// can be done in gd
+	// should be stripped of the final plugin
 	GDREGISTER_RUNTIME_CLASS(CameraController);
 }
 

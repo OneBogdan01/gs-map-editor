@@ -25,7 +25,7 @@ void ComputeHelper::create_rd()
 }
 void ComputeHelper::clean_up()
 {
-	for (auto &resource : resources_to_delete)
+	for (RID resource : resources_to_delete)
 	{
 		rd->free_rid(resource);
 	}
