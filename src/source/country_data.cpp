@@ -19,9 +19,6 @@
 using namespace godot;
 using namespace godot::gsg;
 
-CountryData::CountryData() = default;
-CountryData::~CountryData() = default;
-
 void CountryData::build_look_up_tables(const Array &province_data, const Array &country_data, const Array &country_color_data)
 {
 	country_id_to_country_name.clear();
@@ -47,17 +44,6 @@ void CountryData::build_look_up_tables(const Array &province_data, const Array &
 	UtilityFunctions::print("Parsed Provinces:", province_data.size());
 	UtilityFunctions::print("Parsed Country Colors:", country_color_data.size());
 	UtilityFunctions::print("Parsed Countries:", country_data.size());
-}
-
-Color CountryData::get_country_color(const String &country_id)
-{
-	String country_name = country_id_to_country_name[country_id];
-
-	return Color(country_name_to_color[country_name]);
-}
-Color CountryData::get_country_color_from_name(const String &country_name)
-{
-	return Color(country_name_to_color[country_name]);
 }
 
 PackedInt32Array CountryData::populate_color_map_buffers()
@@ -199,18 +185,6 @@ PackedStringArray CountryData::get_country_provinces(const String &country_id)
 	}
 
 	return provinces_output;
-}
-String CountryData::get_country_from_province(uint32_t province_id)
-{
-	if (province_id_to_owner.has(province_id) == false)
-	{
-		print_error("Province id not found: ", province_id);
-		return "None";
-	}
-
-	String country_id = province_id_to_owner[province_id];
-
-	return country_id;
 }
 
 void CountryData::change_province_owner(uint32_t province_id, const String &new_country_name)

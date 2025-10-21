@@ -18,17 +18,13 @@ class CountryData : public Node
 
 public:
 	// Constructor/Destructor
-	CountryData();
-	~CountryData() override;
+	CountryData() = default;
+	~CountryData() override = default;
 
 	// Initialization
 	void parse_all_files();
 
-	// Query methods,
-	// this expects the country id  as AAC for example.
-	Color get_country_color(const String &country_id);
-	Color get_country_color_from_name(const String &country_name);
-	String get_country_from_province(uint32_t province_id);
+	// Query
 	PackedStringArray get_country_provinces(const String &country_id);
 
 	// Modification methods
@@ -65,7 +61,6 @@ public:
 
 private:
 	void build_look_up_tables(const Array &province_data, const Array &country_data, const Array &country_color_data);
-
 	void store_filename_data();
 	bool sort_by_id(const Dictionary &a, const Dictionary &b);
 
