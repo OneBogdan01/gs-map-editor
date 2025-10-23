@@ -9,53 +9,20 @@
 	<methods>
 		<method name="change_province_owner">
 			<return type="void" />
-			<param index="0" name="_unnamed_arg0" type="int" />
-			<param index="1" name="_unnamed_arg1" type="String" />
+			<param index="0" name="province_id" type="int" />
+			<param index="1" name="new_country" type="String" />
 			<description>
 			</description>
 		</method>
 		<method name="export_color_data">
 			<return type="void" />
-			<param index="0" name="_unnamed_arg0" type="int" />
-			<description>
-			</description>
-		</method>
-		<method name="get_country_color">
-			<return type="Color" />
-			<param index="0" name="name" type="String" />
-			<description>
-			</description>
-		</method>
-		<method name="get_country_color_data" qualifiers="const">
-			<return type="Array" />
-			<description>
-			</description>
-		</method>
-		<method name="get_country_color_from_province_id">
-			<return type="Color" />
-			<param index="0" name="name" type="int" />
-			<description>
-			</description>
-		</method>
-		<method name="get_country_data" qualifiers="const">
-			<return type="Array" />
-			<description>
-			</description>
-		</method>
-		<method name="get_country_id_from_name">
-			<return type="int" />
 			<param index="0" name="_unnamed_arg0" type="String" />
 			<description>
 			</description>
 		</method>
 		<method name="get_country_provinces">
 			<return type="PackedStringArray" />
-			<param index="0" name="_unnamed_arg0" type="int" />
-			<description>
-			</description>
-		</method>
-		<method name="get_province_data" qualifiers="const">
-			<return type="Array" />
+			<param index="0" name="_unnamed_arg0" type="String" />
 			<description>
 			</description>
 		</method>
@@ -76,21 +43,25 @@
 			<description>
 			</description>
 		</method>
-		<method name="set_province_data">
-			<return type="void" />
-			<param index="0" name="_unnamed_arg0" type="Array" />
-			<description>
-			</description>
-		</method>
 	</methods>
 	<members>
 		<member name="countries_color_folder" type="String" setter="set_countries_color_folder" getter="get_countries_color_folder" default="&quot;&quot;">
 		</member>
 		<member name="countries_folder" type="String" setter="set_countries_folder" getter="get_countries_folder" default="&quot;&quot;">
 		</member>
-		<member name="map_data" type="String" setter="set_countries_folder" getter="get_countries_folder" default="&quot;&quot;">
+		<member name="country_id_to_color" type="Dictionary[String, Color]" setter="set_country_id_to_color" getter="get_country_id_to_color" default="{}">
+		</member>
+		<member name="country_id_to_country_name" type="Dictionary[String, String]" setter="set_country_id_to_country_name" getter="get_country_id_to_country_name" default="{}">
+		</member>
+		<member name="country_name_to_color" type="Dictionary[String, Color]" setter="set_country_name_to_color" getter="get_country_name_to_color" default="{}">
+		</member>
+		<member name="province_id_to_name" type="Dictionary[int, String]" setter="set_province_id_to_name" getter="get_province_id_to_name" default="{}">
+		</member>
+		<member name="province_id_to_owner" type="Dictionary[int, String]" setter="set_province_id_to_owner" getter="get_province_id_to_owner" default="{}">
 		</member>
 		<member name="provinces_folder" type="String" setter="set_provinces_folder" getter="get_provinces_folder" default="&quot;&quot;">
+		</member>
+		<member name="terrain_colors" type="Dictionary[String, Color]" setter="set_terrain_colors" getter="get_terrain_colors" default="{}">
 		</member>
 	</members>
 </class>

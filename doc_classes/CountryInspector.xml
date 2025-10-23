@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="CountryInspector" inherits="EditorInspectorPlugin" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
+	<brief_description>
+	</brief_description>
+	<description>
+	</description>
+	<tutorials>
+	</tutorials>
+	<methods>
+		<method name="create_containers">
+			<return type="void" />
+			<description>
+			</description>
+		</method>
+		<method name="get_country_data">
+			<return type="CountryData" />
+			<description>
+			</description>
+		</method>
+		<method name="get_data_container">
+			<return type="VBoxContainer" />
+			<description>
+			</description>
+		</method>
+		<method name="get_search_line_edit">
+			<return type="LineEdit" />
+			<description>
+			</description>
+		</method>
+		<method name="on_clear_search">
+			<return type="void" />
+			<description>
+			</description>
+		</method>
+		<method name="on_color_changed">
+			<return type="void" />
+			<param index="0" name="new_color" type="Color" />
+			<param index="1" name="item" type="TreeItem" />
+			<param index="2" name="country_id" type="String" />
+			<description>
+			</description>
+		</method>
+		<method name="on_color_picker_closed">
+			<return type="void" />
+			<param index="0" name="popup" type="PopupPanel" />
+			<description>
+			</description>
+		</method>
+		<method name="on_context_menu_closed">
+			<return type="void" />
+			<param index="0" name="menu" type="PopupMenu" />
+			<description>
+			</description>
+		</method>
+		<method name="on_parse_button_pressed">
+			<return type="void" />
+			<description>
+			</description>
+		</method>
+		<method name="on_search_text_changed">
+			<return type="void" />
+			<param index="0" name="search_term" type="String" />
+			<description>
+			</description>
+		</method>
+		<method name="on_tree_item_edited">
+			<return type="void" />
+			<description>
+			</description>
+		</method>
+		<method name="on_tree_item_rmb_selected">
+			<return type="void" />
+			<description>
+			</description>
+		</method>
+		<method name="set_country_data">
+			<return type="void" />
+			<param index="0" name="data" type="CountryData" />
+			<description>
+			</description>
+		</method>
+		<method name="set_data_container">
+			<return type="void" />
+			<param index="0" name="data" type="VBoxContainer" />
+			<description>
+			</description>
+		</method>
+		<method name="set_search_line_edit">
+			<return type="void" />
+			<param index="0" name="data" type="LineEdit" />
+			<description>
+			</description>
+		</method>
+		<method name="update_display">
+			<return type="void" />
+			<param index="0" name="search_term" type="String" />
+			<description>
+			</description>
+		</method>
+	</methods>
+</class>

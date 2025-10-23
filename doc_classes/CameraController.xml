@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <class name="CameraController" inherits="Node3D" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
-	<brief_description>
+	<brief_description>	
+		Minimal camera used for the demo of this plugin.
 	</brief_description>
 	<description>
+		This camera can be easily replaced by another camera controller. It is not relevant for the plugin as a whole.
+le and only used for the demo scene.
 	</description>
 	<tutorials>
 	</tutorials>

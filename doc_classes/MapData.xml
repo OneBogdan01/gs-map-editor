@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <class name="MapData" inherits="Node" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
 	<brief_description>
-	Used to get province color data for map interaction.
+		Selects a province based on its unique color from the province map texture.
 	</brief_description>
 	<description>
+		Class responsible for parsing the "definition.csv" file, containing a list of unique RGB as unsigned integer values, province names and a flag character.
 	</description>
 	<tutorials>
 	</tutorials>
@@ -11,13 +12,18 @@
 		<method name="load_csv_data">
 			<return type="void" />
 			<description>
+				Parses the file csv path provided into the
 			</description>
 		</method>
 	</methods>
 	<members>
 		<member name="csv_file_path" type="String" setter="set_csv_path" getter="get_csv_path" default="&quot;res://assets/definition.csv&quot;">
 		</member>
-		<member name="province_data" type="Array" setter="set_province_data" getter="get_province_data" default="[]">
+		<member name="province_color_to_id" type="Dictionary[Color, int]" setter="set_province_color_to_id" getter="get_province_color_to_id" default="{}">
+		</member>
+		<member name="province_color_to_name" type="Dictionary[Color, String]" setter="set_province_color_to_name" getter="get_province_color_to_name" default="{}">
+		</member>
+		<member name="should_skip_first_row" type="bool" setter="set_should_skip_first_row" getter="get_should_skip_first_row" default="true">
 		</member>
 	</members>
 </class>
