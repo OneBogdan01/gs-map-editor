@@ -11194,4 +11194,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
+[node name="MapSprite" type="Sprite3D" parent="Map"]
+material_override = SubResource("ShaderMaterial_85g3d")
+
 [connection signal="map_change_triggered" from="Map/ProvinceSelector" to="Map" method="on_province_selector_map_change_triggered"]
