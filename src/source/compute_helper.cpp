@@ -31,7 +31,16 @@ void ComputeHelper::clean_up()
 	}
 	resources_to_delete.clear();
 }
-
+void ComputeHelper::set_output_texture_size(Vector2i size)
+{
+	output_texture_size = size;
+	compute_group_size.x = (output_texture_size.x + 7) / 8;
+	compute_group_size.y = (output_texture_size.y + 7) / 8;
+}
+Vector2i ComputeHelper::get_output_texture_size()
+{
+	return output_texture_size;
+}
 RID ComputeHelper::compile_shader(const String &path)
 {
 	Ref<RDShaderFile> shader_file = ResourceLoader::get_singleton()->load(path);

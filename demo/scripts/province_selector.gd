@@ -6,17 +6,16 @@ const RAY_LENGTH = 1000.0
 @export var map_data: MapData
 @export var country_data: CountryData
 @export var province_map: Sprite3D 
-@export var province_tex: Texture2D
-var province_image
 
+var province_image: Image:
+	set(value):
+		province_image = value
 signal map_change_triggered()
 var country_id: String
 var province_id: int
 var last_mouse_position: Vector2 = Vector2.ZERO
 
 
-func _ready() -> void:
-	province_image = province_tex.get_image()
 	
 func get_current_camera() -> Camera3D:
 	return get_viewport().get_camera_3d()

@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <class name="ComputeHelper" inherits="Sprite3D" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
 	<brief_description>
+		Abstraction for generating textures using compute shaders.
 	</brief_description>
 	<description>
+		Used to create and manage resources used for texture generation with compute shaders.
 	</description>
 	<tutorials>
 	</tutorials>

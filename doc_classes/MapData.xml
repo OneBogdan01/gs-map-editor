@@ -12,7 +12,7 @@
 		<method name="load_csv_data">
 			<return type="void" />
 			<description>
-				Parses the file csv path provided into the
+				Parses the file csv path provided in the csv_path variable, loading it into "province_color_to_name" and "province_color_to_id".
 			</description>
 		</method>
 	</methods>

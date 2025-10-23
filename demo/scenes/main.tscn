@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://cgoxd520waiho"]
+[gd_scene load_steps=21 format=3 uid="uid://cgoxd520waiho"]
 
 [ext_resource type="Texture2D" uid="uid://c7x6n8v5pq0qm" path="res://assets/provinces.bmp" id="1_o5qli"]
 [ext_resource type="Shader" uid="uid://huxgtaoxjfut" path="res://shaders/final_output_political_map.gdshader" id="1_tipki"]
@@ -23,6 +23,9 @@ shader_parameter/subview_image = SubResource("ViewportTexture_tipki")
 shader_parameter/threshold = 1e-05
 shader_parameter/aa_scale = 17.6
 shader_parameter/base_line_thickness = 0.38197
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_ya4ey"]
+size = Vector2(5632, 2048)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_o5qli"]
 size = Vector3(56.32, 20.48, 0)
@@ -73,12 +76,6 @@ transform = Transform3D(1, 0, 0, 0, 0.258819, 0.965926, 0, -0.965926, 0.258819, 
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.143974, -0.380161, 0.101864)
 
 [node name="Map" type="ComputeHelper" parent="." node_paths=PackedStringArray("country_field", "province_field", "output", "map_data", "country_data", "province_selector")]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
-material_override = SubResource("ShaderMaterial_85g3d")
-cast_shadow = 0
-transparent = false
-double_sided = false
-texture = ExtResource("1_o5qli")
 script = ExtResource("2_0wfyh")
 country_field = NodePath("Subviewports/CountryDistanceField")
 province_field = NodePath("Subviewports/ProvinceDistanceField")
@@ -89,18 +86,11 @@ province_selector = NodePath("ProvinceSelector")
 province_map = ExtResource("1_o5qli")
 color_map_size = Vector2i(256, 256)
 
-[node name="StaticBody3D" type="StaticBody3D" parent="Map"]
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Map/StaticBody3D"]
-shape = SubResource("BoxShape3D_o5qli")
-debug_color = Color(0.979217, 0, 0.389855, 0.42)
-
 [node name="ProvinceSelector" type="Node3D" parent="Map" node_paths=PackedStringArray("map_data", "country_data", "province_map")]
 script = ExtResource("11_ya4ey")
 map_data = NodePath("MapData")
 country_data = NodePath("CountryData")
-province_map = NodePath("..")
-province_tex = ExtResource("1_o5qli")
+province_map = NodePath("../MapSprite")
 
 [node name="MapData" type="MapData" parent="Map/ProvinceSelector"]
 
@@ -10900,6 +10890,17 @@ terrain_colors = Dictionary[String, Color]({
 "Ocean": Color(0.1, 0.4, 0.7, 1)
 })
 
+[node name="MapSprite" type="Sprite3D" parent="Map"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
+material_override = SubResource("ShaderMaterial_85g3d")
+texture = SubResource("PlaceholderTexture2D_ya4ey")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Map/MapSprite"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Map/MapSprite/StaticBody3D"]
+shape = SubResource("BoxShape3D_o5qli")
+debug_color = Color(0.979217, 0, 0.389855, 0.42)
+
 [node name="Subviewports" type="Node" parent="Map"]
 
 [node name="ProvinceDistanceField" type="SubViewport" parent="Map/Subviewports"]
@@ -10941,8 +10942,5 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-
-[node name="MapSprite" type="Sprite3D" parent="Map"]
-material_override = SubResource("ShaderMaterial_85g3d")
 
 [connection signal="map_change_triggered" from="Map/ProvinceSelector" to="Map" method="on_province_selector_map_change_triggered"]
