@@ -4,6 +4,15 @@ uniform sampler2D subview_image : source_color, filter_linear;
 uniform sampler2D ocean_texture : source_color, filter_linear, repeat_enable;
 uniform vec4 ocean_color : source_color;
 
+uniform sampler2D province_distance_field : filter_linear;
+uniform sampler2D noise_texture : filter_linear;
+
+
+uniform float noise_threshold : hint_range(0.0, 1.0, 0.01) = 0.3;
+uniform float min_center : hint_range(0.0, 2.0, 0.01) = 1.3;
+uniform float noise_strength : hint_range(0.0, 1.0, 0.01) = 0.3;
+
+
 // Parameters
 uniform float threshold = 0.00001;
 uniform float aa_scale = 17.6;
@@ -68,6 +77,23 @@ void fragment()
 	if(colors_equal(s, ocean_color)){
 			s = texture(ocean_texture, UV);
 		}
+	else
+	{
+	float df_province = texture(province_distance_field, UV).r;
+
+
+	float center_factor = smoothstep(min_center, 1.0, df_province);
+
+	float noise = texture(noise_texture, UV).r;
+
+	float noise_factor = smoothstep(noise_threshold, 1.0, noise); // Wider range = softer
+
+	float white_amount = center_factor * noise_factor * noise_strength;
+
+	// Fade to white
+	s.rgb = mix(s.rgb, vec3(1.0), white_amount);
+	}
+	
 	ALBEDO = s.rgb; //mix(s.rgb, terrain_texture, 0.4);
 }
 

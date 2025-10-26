@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=3 uid="uid://cgoxd520waiho"]
+[gd_scene load_steps=23 format=3 uid="uid://cgoxd520waiho"]
 
 [ext_resource type="Texture2D" uid="uid://c7x6n8v5pq0qm" path="res://assets/provinces.bmp" id="1_o5qli"]
 [ext_resource type="Shader" uid="uid://huxgtaoxjfut" path="res://shaders/final_output_political_map.gdshader" id="1_tipki"]
@@ -11,6 +11,10 @@
 [ext_resource type="Shader" uid="uid://blf5dq1vsy4ux" path="res://shaders/country_sdf.gdshader" id="8_ya4ey"]
 [ext_resource type="Shader" uid="uid://boobqvbyk5fn8" path="res://shaders/political_map.gdshader" id="10_ya4ey"]
 [ext_resource type="Script" uid="uid://h7noohpv4w5s" path="res://scripts/province_selector.gd" id="11_ya4ey"]
+[ext_resource type="Texture2D" uid="uid://jheu7a5ief82" path="res://assets/noise.tres" id="12_eb6dy"]
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_eb6dy"]
+viewport_path = NodePath("Map/Subviewports/CountryDistanceField")
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_tipki"]
 viewport_path = NodePath("Map/Subviewports/ColorOutput")
@@ -22,6 +26,11 @@ shader = ExtResource("1_tipki")
 shader_parameter/subview_image = SubResource("ViewportTexture_tipki")
 shader_parameter/ocean_texture = ExtResource("5_ya4ey")
 shader_parameter/ocean_color = Color(0.101961, 0.4, 0.701961, 1)
+shader_parameter/province_distance_field = SubResource("ViewportTexture_eb6dy")
+shader_parameter/noise_texture = ExtResource("12_eb6dy")
+shader_parameter/noise_threshold = 0.45
+shader_parameter/min_center = 0.6
+shader_parameter/noise_strength = 0.13
 shader_parameter/threshold = 1e-05
 shader_parameter/aa_scale = 17.6
 shader_parameter/base_line_thickness = 0.38197
@@ -60,12 +69,12 @@ shader_parameter/province_distance_field = SubResource("ViewportTexture_85g3d")
 shader_parameter/lookup_map = ExtResource("6_85g3d")
 shader_parameter/color_map = ExtResource("5_tipki")
 shader_parameter/edge_smoothness = 0.0
-shader_parameter/edge_threshold = 0.21
+shader_parameter/edge_threshold = 0.26
 shader_parameter/border_color = Color(0, 0, 0, 1)
 shader_parameter/gradient_strength = 0.38
-shader_parameter/edge_size = 0.125
+shader_parameter/edge_size = 0.109
 shader_parameter/province_size_size = 0.08334
-shader_parameter/province_border_color = Color(0, 0, 0, 0.145098)
+shader_parameter/province_border_color = Color(0, 0, 0, 0.0588235)
 
 [node name="Node" type="Node"]
 
@@ -10892,7 +10901,7 @@ terrain_colors = Dictionary[String, Color]({
 })
 
 [node name="MapSprite" type="Sprite3D" parent="Map"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0.121717, -1.19209e-07, -0.0098877)
 material_override = SubResource("ShaderMaterial_85g3d")
 texture = SubResource("PlaceholderTexture2D_ya4ey")
 
