@@ -15,10 +15,6 @@ run/main_scene="uid://cgoxd520waiho"
 config/features=PackedStringArray("4.4", "Forward Plus")
 config/icon="res://icon.svg"
 
-[debug]
-
-settings/stdout/verbose_stdout=true
-
 [editor_plugins]
 
 enabled=PackedStringArray("res://addons/country_parser/plugin.cfg")
