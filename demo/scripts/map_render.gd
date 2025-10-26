@@ -11,7 +11,7 @@ extends ComputeHelper
 @export var province_map: Texture2D
 
 @export_group("Texture & Shader Configuration")
-@export var color_map_size: Vector2i 
+@export var color_map_size: Vector2i
 @export_file var lookup_path_shader = "res://shaders/generate_color_lookup.glsl"
 @export_file var color_path_shader = "res://shaders/generate_color_map.glsl"
 @export_file var mask_political_path_shader = "res://shaders/mask_political_map.glsl"
@@ -23,7 +23,6 @@ extends ComputeHelper
 @export_file var lookup_save_path = "res://assets/color_lookup_map.png"
 @export_file var color_map_save_path = "res://assets/color_map.png"
 @export_file var mask_political_save_path = "res://assets/mask_political_map.png"
-
 
 
 # Update the viewport materials
@@ -188,8 +187,7 @@ func create_political_map_mask_texture():
 	
 	update_material_static_parameters("mask_map", ImageTexture.create_from_image(result_image))
 	
-	clean_up()
-	
+
 func create_color_map_texture():
 	# Size of the colormap
 	const TEXTURE_SIZE = Vector2i(256, 256)
@@ -220,7 +218,7 @@ func create_color_map_texture():
 	# store the texture so it can be updated later
 	color_texture = ImageTexture.create_from_image(color_map)
 	update_material_dynamic_parameters("color_map", color_texture)
-	clean_up()
+
 	return result_image
 	
 func create_lookup_texture():
@@ -295,12 +293,13 @@ func create_lookup_texture():
 	var result_tex = ImageTexture.create_from_image(color_lookup)
 	update_material_dynamic_parameters("lookup_map", result_tex)
 	update_material_static_parameters("lookup_map", result_tex)
-	clean_up()
 
 
 func on_province_selector_province_selected(province_id: int) -> void:
 	if is_getting_country == false and selected_country.is_empty() == false:
-		time_function("Change owner", country_data.change_province_owner.bind(province_id, selected_country))
+		# change the province owner
+		country_data.province_id_to_owner[province_id] = selected_country;
+
 		call_deferred("update_color_map", province_id, country_data.country_id_to_color[selected_country])
 
 

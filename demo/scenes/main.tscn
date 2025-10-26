@@ -95,6 +95,9 @@ province_map = NodePath("../MapSprite")
 [node name="MapData" type="MapData" parent="Map/ProvinceSelector"]
 
 [node name="CountryData" type="CountryData" parent="Map/ProvinceSelector"]
+provinces_folder = "res://map/provinces"
+countries_folder = "res://map/countries"
+countries_color_folder = "res://map/country_colors"
 country_id_to_country_name = Dictionary[String, String]({
 "AAC": "Aachen",
 "ABB": "Dongola",
@@ -10882,9 +10885,6 @@ province_id_to_name = Dictionary[int, String]({
 4940: "Lake Tulare",
 4941: "Lake Cahuilla"
 })
-provinces_folder = "res://map/provinces"
-countries_folder = "res://map/countries"
-countries_color_folder = "res://map/country_colors"
 terrain_colors = Dictionary[String, Color]({
 "No Owner": Color(0.7, 0.5, 0.1, 1),
 "Ocean": Color(0.1, 0.4, 0.7, 1)

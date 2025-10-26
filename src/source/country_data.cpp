@@ -2,8 +2,6 @@
 
 #include "utility.hpp"
 
-#include "godot_cpp/classes/file_access.hpp"
-
 #include "godot_cpp/core/error_macros.hpp"
 #include "godot_cpp/core/print_string.hpp"
 #include "godot_cpp/variant/array.hpp"
@@ -147,6 +145,10 @@ void CountryData::store_filename_data()
 
 	build_look_up_tables(province_data, country_data, country_color_data);
 }
+void CountryData::_ready()
+{
+	parse_all_files();
+}
 void CountryData::parse_all_files()
 {
 	UtilityFunctions::print("Parsing countries ...");
@@ -185,23 +187,4 @@ PackedStringArray CountryData::get_country_provinces(const String &country_id)
 	}
 
 	return provinces_output;
-}
-
-void CountryData::change_province_owner(uint32_t province_id, const String &new_country_name)
-{
-	UtilityFunctions::print_verbose("Before owner:", province_id_to_owner[province_id]);
-
-	province_id_to_owner[province_id] = new_country_name;
-	UtilityFunctions::print_verbose("After owner:", province_id_to_owner[province_id]);
-}
-
-bool CountryData::set_country_color_by_name(const String &country_name, const Color &new_color)
-{
-	if (country_name_to_color.has(country_name))
-	{
-		country_name_to_color[country_name] = new_color;
-		return true;
-	}
-
-	return false;
 }

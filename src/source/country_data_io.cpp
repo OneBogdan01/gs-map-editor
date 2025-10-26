@@ -116,7 +116,7 @@ void CountryData::export_color_data(const String &country_name)
 		return;
 	}
 
-	UtilityFunctions::print("Successfully updated color for: " + country_name_export);
+	UtilityFunctions::print_verbose("Successfully updated color for: " + country_name_export);
 }
 void CountryData::export_owner_data(int64_t province_id)
 {

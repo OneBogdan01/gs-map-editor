@@ -39,10 +39,15 @@ void CountryData::_bind_methods()
 	// folders
 	ClassDB::bind_method(D_METHOD("set_provinces_folder", "path"), &CountryData::set_provinces_folder);
 	ClassDB::bind_method(D_METHOD("get_provinces_folder"), &CountryData::get_provinces_folder);
+	ADD_PROPERTY(PropertyInfo(Variant::STRING, "provinces_folder", PROPERTY_HINT_DIR), "set_provinces_folder", "get_provinces_folder");
+
 	ClassDB::bind_method(D_METHOD("set_countries_folder", "path"), &CountryData::set_countries_folder);
 	ClassDB::bind_method(D_METHOD("get_countries_folder"), &CountryData::get_countries_folder);
+	ADD_PROPERTY(PropertyInfo(Variant::STRING, "countries_folder", PROPERTY_HINT_DIR), "set_countries_folder", "get_countries_folder");
+
 	ClassDB::bind_method(D_METHOD("set_countries_color_folder", "path"), &CountryData::set_countries_color_folder);
 	ClassDB::bind_method(D_METHOD("get_countries_color_folder"), &CountryData::get_countries_color_folder);
+	ADD_PROPERTY(PropertyInfo(Variant::STRING, "countries_color_folder", PROPERTY_HINT_DIR), "set_countries_color_folder", "get_countries_color_folder");
 
 	// dictionaries
 	ClassDB::bind_method(D_METHOD("get_country_id_to_country_name"), &CountryData::get_country_id_to_country_name);
@@ -68,20 +73,12 @@ void CountryData::_bind_methods()
 	// others
 	ClassDB::bind_method(D_METHOD("get_terrain_colors"), &CountryData::get_terrain_colors);
 	ClassDB::bind_method(D_METHOD("set_terrain_colors", "data"), &CountryData::set_terrain_colors);
+	ADD_PROPERTY(PropertyInfo(Variant::DICTIONARY, "terrain_colors", PROPERTY_HINT_DICTIONARY_TYPE, "String:Color"), "set_terrain_colors", "get_terrain_colors");
 
 	ClassDB::bind_method(D_METHOD("parse_all_files"), &CountryData::parse_all_files);
-	ClassDB::bind_method(D_METHOD("get_country_provinces"), &CountryData::get_country_provinces);
-
-	ClassDB::bind_method(D_METHOD("change_province_owner", "province_id", "new_country"), &CountryData::change_province_owner);
+	ClassDB::bind_method(D_METHOD("get_country_provinces", "country_id"), &CountryData::get_country_provinces);
 
 	ClassDB::bind_method(D_METHOD("populate_color_map_buffers"), &CountryData::populate_color_map_buffers);
 
-	ClassDB::bind_method(D_METHOD("set_country_color_by_name", "name", "color"), &CountryData::set_country_color_by_name);
-
-	ClassDB::bind_method(D_METHOD("export_color_data"), &CountryData::export_color_data);
-
-	ADD_PROPERTY(PropertyInfo(Variant::STRING, "provinces_folder", PROPERTY_HINT_DIR), "set_provinces_folder", "get_provinces_folder");
-	ADD_PROPERTY(PropertyInfo(Variant::STRING, "countries_folder", PROPERTY_HINT_DIR), "set_countries_folder", "get_countries_folder");
-	ADD_PROPERTY(PropertyInfo(Variant::STRING, "countries_color_folder", PROPERTY_HINT_DIR), "set_countries_color_folder", "get_countries_color_folder");
-	ADD_PROPERTY(PropertyInfo(Variant::DICTIONARY, "terrain_colors", PROPERTY_HINT_DICTIONARY_TYPE, "String:Color"), "set_terrain_colors", "get_terrain_colors");
+	ClassDB::bind_method(D_METHOD("export_color_data", "country_name"), &CountryData::export_color_data);
 }
