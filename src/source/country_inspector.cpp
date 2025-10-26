@@ -1,18 +1,21 @@
 #include "country_inspector.hpp"
 #include "country_data.hpp"
+#include "godot_cpp/classes/button.hpp"
 #include "godot_cpp/classes/color_picker.hpp"
+#include "godot_cpp/classes/h_box_container.hpp"
 #include "godot_cpp/classes/item_list.hpp"
 #include "godot_cpp/classes/label.hpp"
 #include "godot_cpp/classes/line_edit.hpp"
 #include "godot_cpp/classes/node.hpp"
 #include "godot_cpp/classes/popup_menu.hpp"
+#include "godot_cpp/classes/popup_panel.hpp"
 #include "godot_cpp/classes/rich_text_label.hpp"
+#include "godot_cpp/classes/scroll_container.hpp"
+#include "godot_cpp/classes/timer.hpp"
 #include "godot_cpp/classes/tree.hpp"
 #include "godot_cpp/classes/v_box_container.hpp"
 #include "godot_cpp/core/memory.hpp"
 #include "godot_cpp/variant/color.hpp"
-#include "godot_cpp/variant/string.hpp"
-#include <godot_cpp/classes/editor_inspector_plugin.hpp>
 using namespace godot;
 
 namespace
@@ -66,20 +69,51 @@ void CountryInspector::on_search_timer_timeout()
 {
 	update_display(pending_search_term);
 }
+
 void CountryInspector::create_containers()
 {
-	search_line_edit = memnew(LineEdit);
-	data_container = memnew(VBoxContainer);
 	search_timer = memnew(Timer);
-	search_timer->set_wait_time(time_delay);
+	search_timer->set_wait_time(search_delay);
 	search_timer->set_one_shot(true);
 	search_timer->connect("timeout", callable_mp(this, &CountryInspector::on_search_timer_timeout));
-	search_line_edit->add_child(search_timer);
 
+	parse_button = memnew(Button);
+	parse_button->set_text("Parse All Files");
+	parse_button->connect("pressed", callable_mp(this, &CountryInspector::on_parse_button_pressed));
+	add_custom_control(parse_button);
+
+	search_container = memnew(HBoxContainer);
+
+	search_label = memnew(Label);
+	search_label->set_text("Filter:");
+	search_label->set_custom_minimum_size(Vector2(50, 0));
+	search_container->add_child(search_label);
+
+	search_line_edit = memnew(LineEdit);
+	search_line_edit->set_placeholder("Search entities or provinces...");
+	search_line_edit->set_h_size_flags(Control::SIZE_EXPAND_FILL);
+	search_line_edit->connect("text_changed", callable_mp(this, &CountryInspector::on_search_text_changed));
+	search_container->add_child(search_line_edit);
+
+	clear_button = memnew(Button);
+	clear_button->set_text("Clear");
+	clear_button->connect("pressed", callable_mp(this, &CountryInspector::on_clear_search));
+	search_container->add_child(clear_button);
+	search_container->add_child(search_timer);
+	add_custom_control(search_container);
+
+	scroll_container = memnew(ScrollContainer);
+	scroll_container->set_custom_minimum_size(Vector2i(200, 600));
+	scroll_container->set_v_size_flags(Control::SIZE_EXPAND_FILL);
+
+	data_container = memnew(VBoxContainer);
+	data_container->set_name("ParsedDataContainer");
+	data_container->set_custom_minimum_size(Vector2(400, 0));
 	data_container->set_h_size_flags(Control::SIZE_EXPAND_FILL);
 	data_container->set_v_size_flags(Control::SIZE_EXPAND_FILL);
 
-	UtilityFunctions::print_verbose("Inspector initialized containers");
+	scroll_container->add_child(data_container);
+	add_custom_control(scroll_container);
 }
 
 void CountryInspector::cache_display_data()
@@ -179,7 +213,7 @@ void CountryInspector::update_display(const String &search_term)
 			matching_provinces = provinces;
 		}
 
-		// Skip neither country or its provinces match.
+		// Skip country or its provinces if they do not match.
 		if (is_searching && !country_matches && matching_provinces.size() == 0)
 		{
 			continue;
@@ -377,7 +411,7 @@ void CountryInspector::on_country_transfer_selected(int index, const String &pro
 
 	String new_country_id = country_list->get_item_metadata(index);
 
-	country_data->change_province_owner(province_id.to_int(), new_country_id);
+	country_data->get_province_id_to_owner()[province_id.to_int()] = new_country_id;
 
 	country_data->export_owner_data(province_id.to_int());
 	// Update display_data cache with new data, so we do not have to recalculate everything.
@@ -459,23 +493,27 @@ void CountryInspector::on_color_changed(Color new_color, TreeItem *item, const S
 
 	String country_name = item->get_text(0).split(" (ID:")[0];
 
-	if (country_data->set_country_color_by_name(country_name, new_color))
+	TypedDictionary<String, Color> name_color = country_data->get_country_name_to_color();
+	if (name_color.has(country_name))
 	{
-		// to export
 		country_color_save = country_name;
-	}
-	if (display_data.has(country_id))
-	{
-		Dictionary country_info = display_data[country_id];
-		country_info["color"] = new_color;
-		display_data[country_id] = country_info;
+		name_color[country_name] = new_color;
+
+		if (display_data.has(country_id))
+		{
+			Dictionary country_info = display_data[country_id];
+			country_info["color"] = new_color;
+			display_data[country_id] = country_info;
+		}
 	}
 }
 
 void CountryInspector::on_color_picker_closed(PopupPanel *popup)
 {
-	country_data->export_color_data(country_color_save);
-
+	if (country_color_save.is_empty() == false)
+	{
+		country_data->export_color_data(country_color_save);
+	}
 	popup->queue_free();
 }
 

@@ -31,7 +31,16 @@ void ComputeHelper::clean_up()
 	}
 	resources_to_delete.clear();
 }
-
+void ComputeHelper::set_output_texture_size(Vector2i size)
+{
+	output_texture_size = size;
+	compute_group_size.x = (output_texture_size.x + 7) / 8;
+	compute_group_size.y = (output_texture_size.y + 7) / 8;
+}
+Vector2i ComputeHelper::get_output_texture_size()
+{
+	return output_texture_size;
+}
 RID ComputeHelper::compile_shader(const String &path)
 {
 	Ref<RDShaderFile> shader_file = ResourceLoader::get_singleton()->load(path);
@@ -110,22 +119,28 @@ PackedByteArray ComputeHelper::compute_result(const TypedArray<Ref<RDUniform>> &
 	emit_signal("texture_updated", data);
 	return data;
 }
+void ComputeHelper::_exit_tree()
+{
+	clean_up();
+}
 void ComputeHelper::_bind_methods()
 {
 	// RID
-	ClassDB::bind_method(D_METHOD("compile_shader"), &ComputeHelper::compile_shader);
+	ClassDB::bind_method(D_METHOD("compile_shader", "path"), &ComputeHelper::compile_shader);
 	ClassDB::bind_method(D_METHOD("create_ssbo", "size_bytes", "data"), &ComputeHelper::create_ssbo);
 	ClassDB::bind_method(D_METHOD("create_uniform", "size_bytes", "id", "binding"), &ComputeHelper::create_uniform);
 	ClassDB::bind_method(D_METHOD("create_texture", "format", "view", "data"), &ComputeHelper::create_texture);
 
 	// Other graphics resources
 	ClassDB::bind_method(D_METHOD("create_rd"), &ComputeHelper::create_rd);
-	ClassDB::bind_method(D_METHOD("texture_format_from_texture_2d", "texure_size", "format", "bits"), &ComputeHelper::texture_format_from_texture_2d);
+	ClassDB::bind_method(D_METHOD("texture_format_from_texture_2d", "texture_size", "format", "bits"), &ComputeHelper::texture_format_from_texture_2d);
 	ClassDB::bind_method(D_METHOD("compute_result", "uniforms", "texture_id", "shader"), &ComputeHelper::compute_result);
 
 	// Getters setters
 	ClassDB::bind_method(D_METHOD("set_output_texture_size", "size"), &ComputeHelper::set_output_texture_size);
 	ClassDB::bind_method(D_METHOD("get_output_texture_size"), &ComputeHelper::get_output_texture_size);
+	ADD_PROPERTY(PropertyInfo(Variant::VECTOR2I, "output_texture_size"), "set_output_texture_size", "get_output_texture_size");
+
 	ClassDB::bind_method(D_METHOD("clean_up"), &ComputeHelper::clean_up);
 
 	ADD_SIGNAL(MethodInfo("texture_updated", PropertyInfo(Variant::PACKED_BYTE_ARRAY, "texture_data")));

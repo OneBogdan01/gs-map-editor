@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="ComputeHelper" inherits="Node" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
+	<brief_description>
+		Abstraction for generating textures using compute shaders.
+	</brief_description>
+	<description>
+		Used to create and manage resources used for texture generation with compute shaders. It handles clean-up on its own.
+	</description>
+	<tutorials>
+	</tutorials>
+	<methods>
+		<method name="clean_up">
+			<return type="void" />
+			<description>
+				Iterates over all RIDs that were stored and frees them.
+			</description>
+		</method>
+		<method name="compile_shader">
+			<return type="RID" />
+			<param index="0" name="path" type="String" />
+			<description>
+				Takes the path to the ".glsl" shader and returns the created RID.
+			</description>
+		</method>
+		<method name="compute_result">
+			<return type="PackedByteArray" />
+			<param index="0" name="uniforms" type="RDUniform[]" />
+			<param index="1" name="texture_id" type="RID" />
+			<param index="2" name="shader" type="RID" />
+			<description>
+				Creates the compute pipeline and start the compute shader. It forces synchronization with the CPU and returns the buffer data at the "texture_id" RID.
+			</description>
+		</method>
+		<method name="create_rd">
+			<return type="void" />
+			<description>
+				Should be called once at the beginning, creates a local rendering device for using the compute shader API.
+			</description>
+		</method>
+		<method name="create_ssbo">
+			<return type="RID" />
+			<param index="0" name="size_bytes" type="int" />
+			<param index="1" name="data" type="PackedByteArray" />
+			<description>
+				Creates a storage buffer object and returns its RID.
+			</description>
+		</method>
+		<method name="create_texture">
+			<return type="RID" />
+			<param index="0" name="format" type="RDTextureFormat" />
+			<param index="1" name="view" type="RDTextureView" />
+			<param index="2" name="data" type="PackedByteArray[]" />
+			<description>
+				Creates a new texture using the specified parameters and returns its RID.
+			</description>
+		</method>
+		<method name="create_uniform">
+			<return type="RDUniform" />
+			<param index="0" name="size_bytes" type="RID" />
+			<param index="1" name="id" type="int" />
+			<param index="2" name="binding" type="int" enum="RenderingDevice.UniformType" />
+			<description>
+				Creates the uniform using the specified parameters and returns its RID.
+			</description>
+		</method>
+		<method name="texture_format_from_texture_2d">
+			<return type="RDTextureFormat" />
+			<param index="0" name="texture_size" type="Vector2i" />
+			<param index="1" name="format" type="int" enum="RenderingDevice.DataFormat" />
+			<param index="2" name="bits" type="int" enum="RenderingDevice.TextureUsageBits" is_bitfield="true" />
+			<description>
+			</description>
+		</method>
+	</methods>
+	<members>
+		<member name="output_texture_size" type="Vector2i" setter="set_output_texture_size" getter="get_output_texture_size" default="Vector2i(5632, 2048)">
+			Size used internally for starting the compute shader.
+		</member>
+	</members>
+	<signals>
+		<signal name="texture_updated">
+			<param index="0" name="texture_data" type="PackedByteArray" />
+			<description>
+				Called when the texture output data from "compute_result" is ready to be read on the CPU.
+			</description>
+		</signal>
+	</signals>
+</class>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="CountryInspector" inherits="EditorInspectorPlugin" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
+	<brief_description>
+		Custom inspector for displaying and editing country data.
+	</brief_description>
+	<description>
+		Used as a base for .gd scripts that aim to create a custom inspector interface. This is used to edit and view parsed country data.
+	</description>
+	<tutorials>
+	</tutorials>
+	<methods>
+		<method name="create_containers">
+			<return type="void" />
+			<description>
+				Should be the first thing called on "parse_begin()". Initializes the top UI nodes used to display the inspector.
+			</description>
+		</method>
+	</methods>
+	<members>
+		<member name="clear_button" type="Button" setter="set_clear_button" getter="get_clear_button">
+			Button used to clear the search query.
+		</member>
+		<member name="country_data" type="CountryData" setter="set_country_data" getter="get_country_data">
+			Data used for display in the inspector. It should be set on "parse_begin()" as the object that is currently selected.
+		</member>
+		<member name="data_container" type="VBoxContainer" setter="set_data_container" getter="get_data_container">
+			Child of "scroll_container", that holds all the relevant data.
+		</member>
+		<member name="parse_button" type="Button" setter="set_parse_button" getter="get_parse_button">
+			Button at the top of the inspector tab, that parses all files, caches the data and displays.
+		</member>
+		<member name="scroll_container" type="ScrollContainer" setter="set_scroll_container" getter="get_scroll_container">
+			Scroll container, holds the tree structure formed from the country data.
+		</member>
+		<member name="search_container" type="HBoxContainer" setter="set_search_container" getter="get_search_container">
+			Container used for search queries on provines or countries. It searches for names, as well as IDs.
+		</member>
+		<member name="search_delay" type="float" setter="set_search_delay" getter="get_search_delay" default="0.3">
+		</member>
+		<member name="search_label" type="Label" setter="set_search_label" getter="get_search_label">
+			Search text, child of the "search_container".
+		</member>
+		<member name="search_line_edit" type="LineEdit" setter="set_search_line_edit" getter="get_search_line_edit">
+			Line edit used for getting the user input in the search query.
+		</member>
+	</members>
+</class>

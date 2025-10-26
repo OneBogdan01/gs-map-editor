@@ -7,7 +7,6 @@
 #include "godot_cpp/variant/packed_string_array.hpp"
 #include "godot_cpp/variant/string.hpp"
 #include "godot_cpp/variant/typed_dictionary.hpp"
-#include <cstdint>
 
 namespace godot
 {
@@ -21,15 +20,12 @@ public:
 	CountryData() = default;
 	~CountryData() override = default;
 
+	void _ready() override;
 	// Initialization
 	void parse_all_files();
 
 	// Query
 	PackedStringArray get_country_provinces(const String &country_id);
-
-	// Modification methods
-	void change_province_owner(uint32_t province_id, const String &new_country_name);
-	bool set_country_color_by_name(const String &country_name, const Color &new_color);
 
 	// Export generation
 	void export_color_data(const String &country_name);

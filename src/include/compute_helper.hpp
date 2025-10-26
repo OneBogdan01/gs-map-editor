@@ -1,9 +1,9 @@
 #pragma once
 #include "godot_cpp/classes/image.hpp"
+#include "godot_cpp/classes/node.hpp"
 #include "godot_cpp/classes/rd_texture_format.hpp"
 #include "godot_cpp/classes/rd_texture_view.hpp"
 #include "godot_cpp/classes/ref.hpp"
-#include "godot_cpp/classes/sprite3d.hpp"
 #include "godot_cpp/classes/texture2d.hpp"
 #include "godot_cpp/variant/array.hpp"
 #include "godot_cpp/variant/rid.hpp"
@@ -13,9 +13,9 @@
 namespace godot
 {
 class RenderingDevice;
-class ComputeHelper : public Sprite3D
+class ComputeHelper : public Node
 {
-	GDCLASS(ComputeHelper, Sprite3D);
+	GDCLASS(ComputeHelper, Node);
 
 public:
 	// resources
@@ -30,16 +30,10 @@ public:
 	// deletes all RIDs in the vector and clears itself.
 	void clean_up();
 	// Getters and setters
-	void set_output_texture_size(Vector2i size)
-	{
-		output_texture_size = size;
-		compute_group_size.x = (output_texture_size.x + 7) / 8;
-		compute_group_size.y = (output_texture_size.y + 7) / 8;
-	}
-	Vector2i get_output_texture_size()
-	{
-		return output_texture_size;
-	}
+	void set_output_texture_size(Vector2i size);
+	Vector2i get_output_texture_size();
+
+	void _exit_tree() override;
 
 protected:
 	static void _bind_methods();

@@ -11,7 +11,7 @@ extends ComputeHelper
 @export var province_map: Texture2D
 
 @export_group("Texture & Shader Configuration")
-@export var color_map_size: Vector2i 
+@export var color_map_size: Vector2i
 @export_file var lookup_path_shader = "res://shaders/generate_color_lookup.glsl"
 @export_file var color_path_shader = "res://shaders/generate_color_map.glsl"
 @export_file var mask_political_path_shader = "res://shaders/mask_political_map.glsl"
@@ -23,7 +23,6 @@ extends ComputeHelper
 @export_file var lookup_save_path = "res://assets/color_lookup_map.png"
 @export_file var color_map_save_path = "res://assets/color_map.png"
 @export_file var mask_political_save_path = "res://assets/mask_political_map.png"
-
 
 
 # Update the viewport materials
@@ -43,21 +42,21 @@ var is_getting_country = false
 var selected_country: String
 var is_political = true
 # Rudimentary profiling
-func time_function(name: String, callable: Callable):
+func time_function(function_name: String, callable: Callable):
 	if not profiler_enabled:
 		return callable.call()
 	
 	var start = Time.get_ticks_usec()
 	var result = callable.call()
 	var time_ms = (Time.get_ticks_usec() - start) / 1000.0
-	print("[%s] %.2f ms" % [name, time_ms])
+	print("[%s] %.2f ms" % [function_name, time_ms])
 	return result
 
-func update_material_dynamic_parameters(name, parameterVariant):
-		output_material.set_shader_parameter(name, parameterVariant)
-		distance_material.set_shader_parameter(name, parameterVariant)
-func update_material_static_parameters(name, parameterVariant):
-		province_material.set_shader_parameter(name, parameterVariant)
+func update_material_dynamic_parameters(parameter_name, parameter_variant):
+		output_material.set_shader_parameter(parameter_name, parameter_variant)
+		distance_material.set_shader_parameter(parameter_name, parameter_variant)
+func update_material_static_parameters(parameter_name, parameter_variant):
+		province_material.set_shader_parameter(parameter_name, parameter_variant)
 func update_viewports_dynamic():
 		country_field.render_target_update_mode = SubViewport.UPDATE_ONCE
 		country_field.render_target_clear_mode = SubViewport.CLEAR_MODE_ONCE
@@ -78,6 +77,7 @@ func update_color_map(province_id, new_color):
 
 	
 func _ready():
+	province_selector.province_image = province_map.get_image()
 	# Initialize compute helper
 	create_rd()
 	set_output_texture_size(province_map.get_size())
@@ -107,7 +107,7 @@ func _ready():
 	update_viewports_dynamic()
 		
 
-func _physics_process(delta: float) -> void:
+func _physics_process(_delta: float) -> void:
 	if Input.is_action_just_pressed("country_select"):
 		is_getting_country = true
 		province_selector.select_province()
@@ -187,8 +187,7 @@ func create_political_map_mask_texture():
 	
 	update_material_static_parameters("mask_map", ImageTexture.create_from_image(result_image))
 	
-	clean_up()
-	
+
 func create_color_map_texture():
 	# Size of the colormap
 	const TEXTURE_SIZE = Vector2i(256, 256)
@@ -219,7 +218,7 @@ func create_color_map_texture():
 	# store the texture so it can be updated later
 	color_texture = ImageTexture.create_from_image(color_map)
 	update_material_dynamic_parameters("color_map", color_texture)
-	clean_up()
+
 	return result_image
 	
 func create_lookup_texture():
@@ -294,12 +293,13 @@ func create_lookup_texture():
 	var result_tex = ImageTexture.create_from_image(color_lookup)
 	update_material_dynamic_parameters("lookup_map", result_tex)
 	update_material_static_parameters("lookup_map", result_tex)
-	clean_up()
 
 
 func on_province_selector_province_selected(province_id: int) -> void:
 	if is_getting_country == false and selected_country.is_empty() == false:
-		time_function("Change owner", country_data.change_province_owner.bind(province_id, selected_country))
+		# change the province owner
+		country_data.province_id_to_owner[province_id] = selected_country;
+
 		call_deferred("update_color_map", province_id, country_data.country_id_to_color[selected_country])
 
 

@@ -1,79 +1,16 @@
-[gd_scene load_steps=20 format=3 uid="uid://cgoxd520waiho"]
+[gd_scene load_steps=21 format=3 uid="uid://cgoxd520waiho"]
 
 [ext_resource type="Texture2D" uid="uid://c7x6n8v5pq0qm" path="res://assets/provinces.bmp" id="1_o5qli"]
+[ext_resource type="Shader" uid="uid://huxgtaoxjfut" path="res://shaders/final_output_political_map.gdshader" id="1_tipki"]
 [ext_resource type="Script" uid="uid://cguys746q2lng" path="res://scripts/map_render.gd" id="2_0wfyh"]
+[ext_resource type="Shader" uid="uid://b1mv5q7sso3au" path="res://shaders/province_sdf.gdshader" id="5_choun"]
 [ext_resource type="Texture2D" uid="uid://bro5urv8mkvw0" path="res://assets/color_map.png" id="5_tipki"]
 [ext_resource type="Texture2D" uid="uid://b73404h0hkhdt" path="res://assets/color_lookup_map.png" id="6_85g3d"]
 [ext_resource type="Texture2D" uid="uid://ngjlbjkrfccl" path="res://assets/colormap_water.png" id="7_choun"]
 [ext_resource type="Texture2D" uid="uid://bmk5fr67658ye" path="res://assets/mask_political_map.png" id="7_ya4ey"]
+[ext_resource type="Shader" uid="uid://blf5dq1vsy4ux" path="res://shaders/country_sdf.gdshader" id="8_ya4ey"]
+[ext_resource type="Shader" uid="uid://boobqvbyk5fn8" path="res://shaders/political_map.gdshader" id="10_ya4ey"]
 [ext_resource type="Script" uid="uid://h7noohpv4w5s" path="res://scripts/province_selector.gd" id="11_ya4ey"]
-
-[sub_resource type="Shader" id="Shader_o6xl0"]
-code = "shader_type spatial;
-render_mode unshaded;
-#define PRECISION 0.0001
-uniform sampler2D subview_image : source_color, filter_linear;
-
-// Parameters
-uniform float threshold = 0.00001;
-uniform float aa_scale = 17.6;
-uniform float base_line_thickness = 0.38197;
-const int ML = 0;
-
-// Diagonal line blending logic
-bool diag(inout vec4 sum, vec2 ip, vec2 p1, vec2 p2, float thickness)
-{
-	vec4 v1 = texelFetch(subview_image, ivec2(ip + p1), ML);
-	vec4 v2 = texelFetch(subview_image, ivec2(ip + p2), ML);
-
-	if (length(v1 - v2) < threshold)
-	{
-		vec2 dir = normalize(vec2((p2 - p1).y, -(p2 - p1).x));
-		vec2 lp = ip - (floor(ip + p1) + vec2(0.5));
-		float l = clamp((thickness - dot(lp, dir)) * aa_scale, 0.0, 1.0);
-		sum = mix(sum, v1, l);
-		return true;
-	}
-	return false;
-}
-
-void fragment()
-{
-
-
-	// Apply smoothing
-	vec2 tex_size = vec2(textureSize(subview_image, 0));
-	vec2 ip = UV * tex_size;
-	vec4 s = texelFetch(subview_image, ivec2(ip), ML);
-	if (diag(s, ip, vec2(-1, 0), vec2(0, 1), base_line_thickness))
-	{
-		diag(s, ip, vec2(-1, 0), vec2(1, 1), 0.25);
-		diag(s, ip, vec2(-1, -1), vec2(0, 1), 0.25);
-	}
-	if (diag(s, ip, vec2(0, 1), vec2(1, 0), base_line_thickness))
-	{
-		diag(s, ip, vec2(0, 1), vec2(1, -1), 0.25);
-		diag(s, ip, vec2(-1, 1), vec2(1, 0), 0.25);
-	}
-	if (diag(s, ip, vec2(1, 0), vec2(0, -1), base_line_thickness))
-	{
-		diag(s, ip, vec2(1, 0), vec2(-1, -1), 0.25);
-		diag(s, ip, vec2(1, 1), vec2(0, -1), 0.25);
-	}
-	if (diag(s, ip, vec2(0, -1), vec2(-1, 0), base_line_thickness))
-	{
-		diag(s, ip, vec2(0, -1), vec2(-1, 1), 0.25);
-		diag(s, ip, vec2(1, -1), vec2(-1, 0), 0.25);
-	}
-
-	ALBEDO = s.rgb; //mix(s.rgb, terrain_texture, 0.4);
-}
-
-//void light() {
-//	// Called for every pixel for every light affecting the material.
-//	// Uncomment to replace the default light processing function with this one.
-//}
-"
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_tipki"]
 viewport_path = NodePath("Map/Subviewports/ColorOutput")
@@ -81,216 +18,30 @@ viewport_path = NodePath("Map/Subviewports/ColorOutput")
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_85g3d"]
 resource_local_to_scene = true
 render_priority = 0
-shader = SubResource("Shader_o6xl0")
+shader = ExtResource("1_tipki")
 shader_parameter/subview_image = SubResource("ViewportTexture_tipki")
 shader_parameter/threshold = 1e-05
 shader_parameter/aa_scale = 17.6
 shader_parameter/base_line_thickness = 0.38197
 
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_ya4ey"]
+size = Vector2(5632, 2048)
+
 [sub_resource type="BoxShape3D" id="BoxShape3D_o5qli"]
 size = Vector3(56.32, 20.48, 0)
 
-[sub_resource type="Shader" id="Shader_tipki"]
-code = "shader_type canvas_item;
-
-uniform sampler2D lookup_map : filter_nearest;
-uniform sampler2D mask_map : filter_nearest;
-
-uniform float max_distance : hint_range(1.0, 50.0, 1.0) = 10.0;
-
-vec4 get_province_color(vec2 uv)
-{
-	vec4 lookup = texture(lookup_map, uv);
-	return lookup;
-}
-
-void fragment()
-{
-	vec2 uv = UV;
-	float alpha = texture(mask_map, uv).a;
-	if(alpha < 0.1){
-		COLOR = vec4(1.0);
-	}
-	else{
-	vec4 center_color = get_province_color(uv);
-	
-	vec2 pixel_size = 1.0 / vec2(textureSize(lookup_map, 0));
-
-	float min_distance = max_distance;
-	bool found_edge = false;
-
-	int max_radius = int(max_distance);
-	for (int radius = 1; radius <= max_radius; radius++)
-	{
-		for (int x = -radius; x <= radius; x++)
-		{
-			for (int y = -radius; y <= radius; y++)
-			{
-				if (abs(x) == radius || abs(y) == radius)
-				{
-					vec2 offset = vec2(float(x), float(y));
-					vec2 sample_uv = uv + offset * pixel_size;
-					vec4 sample_color = get_province_color(sample_uv);
-
-					if (sample_color != center_color)
-					{
-						float dist = length(offset);
-						min_distance = min(min_distance, dist);
-						found_edge = true;
-					}
-				}
-			}
-		}
-
-		if (found_edge && float(radius) > min_distance)
-		{
-			break;
-		}
-	}
-
-	float normalized_distance = min_distance / max_distance;
-	COLOR = vec4(vec3(normalized_distance), 1.0);
-	}
-}"
-
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_tipki"]
 resource_local_to_scene = true
-shader = SubResource("Shader_tipki")
+shader = ExtResource("5_choun")
 shader_parameter/lookup_map = ExtResource("6_85g3d")
 shader_parameter/mask_map = ExtResource("7_ya4ey")
 shader_parameter/max_distance = 16.0
 
-[sub_resource type="Shader" id="Shader_85g3d"]
-code = "shader_type canvas_item;
-
-uniform sampler2D lookup_map : filter_nearest;
-uniform sampler2D color_map : source_color, filter_nearest;
-uniform float max_distance : hint_range(1.0, 50.0, 1.0) = 10.0;
-
-vec4 get_province_color(vec2 uv)
-{
-	vec4 lookup = texture(lookup_map, uv);
-	vec2 province_id = lookup.rg * 255.0;
-	vec2 color_map_size = vec2(textureSize(color_map, 0));
-	vec2 color_uv = province_id / color_map_size;
-	return texture(color_map, color_uv);
-}
-
-void fragment()
-{
-	vec2 uv = UV;
-	vec4 center_color = get_province_color(uv);
-	vec2 pixel_size = 1.0 / vec2(textureSize(lookup_map, 0));
-
-	float min_distance = max_distance;
-	bool found_edge = false;
-
-	int max_radius = int(max_distance);
-	for (int radius = 1; radius <= max_radius; radius++)
-	{
-		for (int x = -radius; x <= radius; x++)
-		{
-			for (int y = -radius; y <= radius; y++)
-			{
-				if (abs(x) == radius || abs(y) == radius)
-				{
-					vec2 offset = vec2(float(x), float(y));
-					vec2 sample_uv = uv + offset * pixel_size;
-					vec4 sample_color = get_province_color(sample_uv);
-
-					if (sample_color != center_color)
-					{
-						float dist = length(offset);
-						min_distance = min(min_distance, dist);
-						found_edge = true;
-					}
-				}
-			}
-		}
-
-		if (found_edge && float(radius) > min_distance)
-		{
-			break;
-		}
-	}
-
-	// Normalize distance to 0-1 range and output
-	float normalized_distance = min_distance / max_distance;
-	COLOR = vec4(vec3(normalized_distance), 1.0);
-}"
-
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_o6xl0"]
-shader = SubResource("Shader_85g3d")
+shader = ExtResource("8_ya4ey")
 shader_parameter/lookup_map = ExtResource("6_85g3d")
 shader_parameter/color_map = ExtResource("5_tipki")
 shader_parameter/max_distance = 10.0
-
-[sub_resource type="Shader" id="Shader_choun"]
-code = "shader_type canvas_item;
-render_mode unshaded;
-uniform sampler2D ocean_texture : source_color, filter_linear, repeat_enable;
-uniform vec4 ocean_color : source_color;
-const float EPSILON = 0.0001;
-uniform sampler2D country_distance_field : source_color, filter_linear;
-uniform sampler2D province_distance_field : source_color, filter_linear_mipmap;
-
-uniform sampler2D lookup_map : filter_nearest;
-uniform sampler2D color_map : source_color, filter_nearest;
-uniform float edge_smoothness : hint_range(0.0, 2., 0.001) = 0.01;
-uniform float edge_threshold : hint_range(0.0, 1.0, 0.01) = 0.5;
-
-uniform vec4 border_color : source_color = vec4(0.0, 0.0, 0.0, 1.0);
-uniform float gradient_strength : hint_range(0.0, 1.0, 0.01) = 1.0;
-uniform float edge_size : hint_range(0.0, 1.0, 0.001) = 0.1;
-uniform float province_size_size : hint_range(0.0, 1.0, 0.00001) = 0.1;
-uniform vec4 province_border_color : source_color = vec4(0.0, 0.0, 0.0, 0.80);
-bool colors_equal(vec4 a, vec4 b)
-{
-	return all(lessThan(abs(a - b), vec4(EPSILON)));
-}
-vec4 get_province_color(vec2 uv)
-{
-	vec4 lookup = texture(lookup_map, uv);
-	vec2 province_id = lookup.rg * 255.0;
-	vec2 color_map_size = vec2(textureSize(color_map, 0));
-	vec2 color_uv = province_id / color_map_size;
-	return texture(color_map, color_uv);
-}
-
-void fragment()
-{
-	vec2 uv = UV;
-	float df = texture(country_distance_field, UV).r;
-	float df_province = texture(province_distance_field, UV).r;
-
-	vec4 province_color = get_province_color(uv);
-
-
-	float province_border_factor = smoothstep(0,
-			0.5,
-			df_province);
-	float gradient_factor = smoothstep(edge_threshold - edge_smoothness,
-			edge_threshold + edge_smoothness,
-			df);
-
-	vec3 final_color = mix(border_color.rgb, province_color.rgb, gradient_factor);
-
-	final_color = mix(province_color.rgb, final_color, gradient_strength);
-	if (df < edge_size)
-	{
-		final_color = border_color.rgb;
-	}
-	vec4 output = vec4(final_color.rgb, province_color.a);
-	if (df_province < province_size_size)
-	{
-		output = mix(output, province_border_color, province_border_color.a);
-	}
-	if(colors_equal(output, ocean_color)){
-		output =  texture(ocean_texture, uv);
-	}
-	COLOR = output;
-
-}"
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_choun"]
 viewport_path = NodePath("Map/Subviewports/CountryDistanceField")
@@ -300,7 +51,7 @@ viewport_path = NodePath("Map/Subviewports/ProvinceDistanceField")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ya4ey"]
 resource_local_to_scene = true
-shader = SubResource("Shader_choun")
+shader = ExtResource("10_ya4ey")
 shader_parameter/ocean_texture = ExtResource("7_choun")
 shader_parameter/ocean_color = Color(0.101961, 0.4, 0.701961, 1)
 shader_parameter/country_distance_field = SubResource("ViewportTexture_choun")
@@ -325,12 +76,6 @@ transform = Transform3D(1, 0, 0, 0, 0.258819, 0.965926, 0, -0.965926, 0.258819, 
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.143974, -0.380161, 0.101864)
 
 [node name="Map" type="ComputeHelper" parent="." node_paths=PackedStringArray("country_field", "province_field", "output", "map_data", "country_data", "province_selector")]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
-material_override = SubResource("ShaderMaterial_85g3d")
-cast_shadow = 0
-transparent = false
-double_sided = false
-texture = ExtResource("1_o5qli")
 script = ExtResource("2_0wfyh")
 country_field = NodePath("Subviewports/CountryDistanceField")
 province_field = NodePath("Subviewports/ProvinceDistanceField")
@@ -341,22 +86,18 @@ province_selector = NodePath("ProvinceSelector")
 province_map = ExtResource("1_o5qli")
 color_map_size = Vector2i(256, 256)
 
-[node name="StaticBody3D" type="StaticBody3D" parent="Map"]
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Map/StaticBody3D"]
-shape = SubResource("BoxShape3D_o5qli")
-debug_color = Color(0.979217, 0, 0.389855, 0.42)
-
 [node name="ProvinceSelector" type="Node3D" parent="Map" node_paths=PackedStringArray("map_data", "country_data", "province_map")]
 script = ExtResource("11_ya4ey")
 map_data = NodePath("MapData")
 country_data = NodePath("CountryData")
-province_map = NodePath("..")
-province_tex = ExtResource("1_o5qli")
+province_map = NodePath("../MapSprite")
 
 [node name="MapData" type="MapData" parent="Map/ProvinceSelector"]
 
 [node name="CountryData" type="CountryData" parent="Map/ProvinceSelector"]
+provinces_folder = "res://map/provinces"
+countries_folder = "res://map/countries"
+countries_color_folder = "res://map/country_colors"
 country_id_to_country_name = Dictionary[String, String]({
 "AAC": "Aachen",
 "ABB": "Dongola",
@@ -11144,13 +10885,21 @@ province_id_to_name = Dictionary[int, String]({
 4940: "Lake Tulare",
 4941: "Lake Cahuilla"
 })
-provinces_folder = "res://map/provinces"
-countries_folder = "res://map/countries"
-countries_color_folder = "res://map/country_colors"
 terrain_colors = Dictionary[String, Color]({
 "No Owner": Color(0.7, 0.5, 0.1, 1),
 "Ocean": Color(0.1, 0.4, 0.7, 1)
 })
+
+[node name="MapSprite" type="Sprite3D" parent="Map"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
+material_override = SubResource("ShaderMaterial_85g3d")
+texture = SubResource("PlaceholderTexture2D_ya4ey")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Map/MapSprite"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Map/MapSprite/StaticBody3D"]
+shape = SubResource("BoxShape3D_o5qli")
+debug_color = Color(0.979217, 0, 0.389855, 0.42)
 
 [node name="Subviewports" type="Node" parent="Map"]
 
