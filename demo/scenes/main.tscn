@@ -5,8 +5,8 @@
 [ext_resource type="Script" uid="uid://cguys746q2lng" path="res://scripts/map_render.gd" id="2_0wfyh"]
 [ext_resource type="Shader" uid="uid://b1mv5q7sso3au" path="res://shaders/province_sdf.gdshader" id="5_choun"]
 [ext_resource type="Texture2D" uid="uid://bro5urv8mkvw0" path="res://assets/color_map.png" id="5_tipki"]
+[ext_resource type="Texture2D" uid="uid://ngjlbjkrfccl" path="res://assets/colormap_water.png" id="5_ya4ey"]
 [ext_resource type="Texture2D" uid="uid://b73404h0hkhdt" path="res://assets/color_lookup_map.png" id="6_85g3d"]
-[ext_resource type="Texture2D" uid="uid://ngjlbjkrfccl" path="res://assets/colormap_water.png" id="7_choun"]
 [ext_resource type="Texture2D" uid="uid://bmk5fr67658ye" path="res://assets/mask_political_map.png" id="7_ya4ey"]
 [ext_resource type="Shader" uid="uid://blf5dq1vsy4ux" path="res://shaders/country_sdf.gdshader" id="8_ya4ey"]
 [ext_resource type="Shader" uid="uid://boobqvbyk5fn8" path="res://shaders/political_map.gdshader" id="10_ya4ey"]
@@ -20,6 +20,8 @@ resource_local_to_scene = true
 render_priority = 0
 shader = ExtResource("1_tipki")
 shader_parameter/subview_image = SubResource("ViewportTexture_tipki")
+shader_parameter/ocean_texture = ExtResource("5_ya4ey")
+shader_parameter/ocean_color = Color(0.101961, 0.4, 0.701961, 1)
 shader_parameter/threshold = 1e-05
 shader_parameter/aa_scale = 17.6
 shader_parameter/base_line_thickness = 0.38197
@@ -52,17 +54,16 @@ viewport_path = NodePath("Map/Subviewports/ProvinceDistanceField")
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ya4ey"]
 resource_local_to_scene = true
 shader = ExtResource("10_ya4ey")
-shader_parameter/ocean_texture = ExtResource("7_choun")
 shader_parameter/ocean_color = Color(0.101961, 0.4, 0.701961, 1)
 shader_parameter/country_distance_field = SubResource("ViewportTexture_choun")
 shader_parameter/province_distance_field = SubResource("ViewportTexture_85g3d")
 shader_parameter/lookup_map = ExtResource("6_85g3d")
 shader_parameter/color_map = ExtResource("5_tipki")
 shader_parameter/edge_smoothness = 0.0
-shader_parameter/edge_threshold = 0.25
+shader_parameter/edge_threshold = 0.21
 shader_parameter/border_color = Color(0, 0, 0, 1)
-shader_parameter/gradient_strength = 0.29
-shader_parameter/edge_size = 0.106
+shader_parameter/gradient_strength = 0.38
+shader_parameter/edge_size = 0.125
 shader_parameter/province_size_size = 0.08334
 shader_parameter/province_border_color = Color(0, 0, 0, 0.145098)
 

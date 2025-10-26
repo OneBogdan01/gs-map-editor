@@ -1,6 +1,5 @@
 shader_type canvas_item;
 render_mode unshaded;
-uniform sampler2D ocean_texture : source_color, filter_linear, repeat_enable;
 uniform vec4 ocean_color : source_color;
 const float EPSILON = 0.0001;
 uniform sampler2D country_distance_field : source_color, filter_linear;
@@ -36,15 +35,12 @@ void fragment()
 	float df_province = texture(province_distance_field, UV).r;
 
 	vec4 province_color = get_province_color(uv);
-
-
-	float province_border_factor = smoothstep(0,
-			0.5,
-			df_province);
+	
 	float gradient_factor = smoothstep(edge_threshold - edge_smoothness,
 			edge_threshold + edge_smoothness,
 			df);
-
+	
+	
 	vec3 final_color = mix(border_color.rgb, province_color.rgb, gradient_factor);
 
 	final_color = mix(province_color.rgb, final_color, gradient_strength);
@@ -57,9 +53,9 @@ void fragment()
 	{
 		output = mix(output, province_border_color, province_border_color.a);
 	}
-	if(colors_equal(output, ocean_color)){
-		output =  texture(ocean_texture, uv);
-	}
+	if(colors_equal(province_color, ocean_color)){
+			output = ocean_color;
+		}
 	COLOR = output;
 
 }
