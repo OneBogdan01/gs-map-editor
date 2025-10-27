@@ -27,6 +27,8 @@ public:
 	bool get_should_skip_first_row() const;
 	void set_should_skip_first_row(bool value);
 
+	void _ready() override;
+
 protected:
 	static void _bind_methods();
 

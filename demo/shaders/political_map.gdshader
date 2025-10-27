@@ -35,12 +35,12 @@ void fragment()
 	float df_province = texture(province_distance_field, UV).r;
 
 	vec4 province_color = get_province_color(uv);
-	
+
 	float gradient_factor = smoothstep(edge_threshold - edge_smoothness,
 			edge_threshold + edge_smoothness,
 			df);
-	
-	
+
+
 	vec3 final_color = mix(border_color.rgb, province_color.rgb, gradient_factor);
 
 	final_color = mix(province_color.rgb, final_color, gradient_strength);
