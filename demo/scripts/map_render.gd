@@ -93,9 +93,6 @@ func _ready():
 	province_material = province_output.material
 	
 	
-	# Load data
-	country_data.parse_all_files()
-	map_data.load_csv_data()
 	# Only needs to be created once
 	create_lookup_texture()
 	create_color_map_texture()

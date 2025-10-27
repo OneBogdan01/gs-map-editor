@@ -4,12 +4,12 @@ uniform sampler2D subview_image : source_color, filter_linear;
 uniform sampler2D ocean_texture : source_color, filter_linear, repeat_enable;
 uniform vec4 ocean_color : source_color;
 
-uniform sampler2D province_distance_field : filter_linear;
+uniform sampler2D distance_field : filter_linear;
 uniform sampler2D noise_texture : filter_linear;
 
 
 uniform float noise_threshold : hint_range(0.0, 1.0, 0.01) = 0.3;
-uniform float min_center : hint_range(0.0, 2.0, 0.01) = 1.3;
+uniform float min_center : hint_range(0.0, 0.16, 0.01) = 1.0;
 uniform float noise_strength : hint_range(0.0, 1.0, 0.01) = 0.3;
 
 
@@ -79,7 +79,7 @@ void fragment()
 		}
 	else
 	{
-	float df_province = texture(province_distance_field, UV).r;
+	float df_province = texture(distance_field, UV).r;
 
 
 	float center_factor = smoothstep(min_center, 1.0, df_province);
@@ -90,14 +90,8 @@ void fragment()
 
 	float white_amount = center_factor * noise_factor * noise_strength;
 
-	// Fade to white
 	s.rgb = mix(s.rgb, vec3(1.0), white_amount);
 	}
 	
-	ALBEDO = s.rgb; //mix(s.rgb, terrain_texture, 0.4);
+	ALBEDO = s.rgb; 
 }
-
-//void light() {
-//	// Called for every pixel for every light affecting the material.
-//	// Uncomment to replace the default light processing function with this one.
-//}

@@ -25,6 +25,10 @@ bool colors_equal(const Color &a, const Color &b, float tolerance = 0.001f)
 }
 } // namespace
 
+void MapData::_ready()
+{
+	load_csv_data();
+}
 void MapData::_bind_methods()
 {
 	// csv

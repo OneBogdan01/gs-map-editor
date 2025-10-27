@@ -1,8 +1,7 @@
 [gd_resource type="NoiseTexture2D" load_steps=2 format=3 uid="uid://jheu7a5ief82"]
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_okis3"]
-seed = 430
-frequency = 0.008
+frequency = 0.0151
 metadata/_preview_in_3d_space_ = true
 
 [resource]
