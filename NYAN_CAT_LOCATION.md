@@ -27,10 +27,16 @@ The file appears in these commits:
 3. `f368dfbad9d389a159813c0e037e64eefd54eed8` - "Clean up shaders" (master branch)
 
 ## Branches Containing the Nyan Cat
-The file exists in the following branches:
-- `master` (origin/master)
-- `copilot/find-nyan-cat-commit` (current branch)
-- All branches that include or are based on commit `1c02fcfe0ed3c086bd5d9a6a303a7f5626343a30` or later
+The file exists in all of the following branches:
+- `origin/c++-cleanup`
+- `origin/copilot/find-nyan-cat-commit` (current branch)
+- `origin/jfa`
+- `origin/map-enchance`
+- `origin/master`
+- `origin/patching-eu4-data`
+- `origin/revamp-inspector`
+- `origin/sdf-with-jfa`
+- `origin/speeding-up-compute`
 
 ## Context
 This image was added as part of work on SDF (Signed Distance Field) border visual effects. The file appears to be a backup file (indicated by the `~` suffix) that was used for testing the distance field generation algorithms.
