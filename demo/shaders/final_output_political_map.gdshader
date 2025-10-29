@@ -1,7 +1,7 @@
 shader_type spatial;
 render_mode unshaded;
 uniform sampler2D subview_image : source_color, filter_linear;
-uniform sampler2D ocean_texture : source_color, filter_linear, repeat_enable;
+uniform sampler2D ocean_texture : source_color, filter_linear;
 uniform vec4 ocean_color : source_color;
 
 uniform sampler2D distance_field : filter_linear;
@@ -48,10 +48,10 @@ void fragment()
 	// Apply smoothing
 	vec2 tex_size = vec2(textureSize(subview_image, 0));
 	vec2 ip = UV * tex_size;
-	
+
 	vec4 original_color =  texelFetch(subview_image, ivec2(ip), ML);
 	vec4 s = original_color;
-	
+
 	if (diag(s, ip, vec2(-1, 0), vec2(0, 1), base_line_thickness))
 	{
 		diag(s, ip, vec2(-1, 0), vec2(1, 1), 0.25);
@@ -72,8 +72,8 @@ void fragment()
 		diag(s, ip, vec2(0, -1), vec2(-1, 1), 0.25);
 		diag(s, ip, vec2(1, -1), vec2(-1, 0), 0.25);
 	}
-	
-	
+
+
 	if(colors_equal(s, ocean_color)){
 			s = texture(ocean_texture, UV);
 		}
@@ -92,6 +92,6 @@ void fragment()
 
 	s.rgb = mix(s.rgb, vec3(1.0), white_amount);
 	}
-	
-	ALBEDO = s.rgb; 
+
+	ALBEDO = s.rgb;
 }
