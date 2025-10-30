@@ -1,0 +1,27 @@
+# No previous file for Wahpekute
+
+tribal_owner = SIO
+culture = dakota
+religion = totemism
+capital = "Wahpekute"
+trade_goods = unknown
+hre = no
+base_tax = 1 
+base_production = 1
+base_manpower = 1
+native_size = 5
+native_ferocity = 1
+native_hostileness = 2
+
+
+
+discovered_by = north_american
+
+1738.1.1 = { discovered_by = FRA }# Pierre Gaultier de Varennes, no real settlements until the 1800's
+1813.10.5 = { 
+	owner = SIO
+	controller = SIO
+	add_core = SIO
+	is_city = yes
+	trade_goods = naval_supplies
+}

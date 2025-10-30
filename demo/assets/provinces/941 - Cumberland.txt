@@ -1,0 +1,52 @@
+#941 - Cumberland
+
+owner = CCA
+controller = CCA
+add_core = CCA
+is_city = yes
+culture = yuchi
+religion = totemism
+capital = "Ouasioto"
+trade_goods = fur
+hre = no
+base_tax = 1
+base_production = 1
+base_manpower = 1
+native_size = 5
+native_ferocity = 1
+native_hostileness = 6
+
+
+
+discovered_by = north_american
+
+
+1671.1.1 = { discovered_by = ENG } # Abraham Wood
+1672.1.1 = {
+	owner = IRO
+	controller = IRO
+	culture = iroquois
+} #Taken by Iroquois in Beaver Wars.
+1682.1.1 = { discovered_by = FRA } # Estimated
+1701.8.14 = {
+	owner = ---
+	controller = ---
+	remove_core = HWK
+	is_city = no
+	culture = shawnee
+} #Vast areas left deserted after the Beaver Wars and the Iroquois withdrawal
+1707.5.12 = { discovered_by = GBR }
+1774.10.19= {
+	owner = GBR
+	controller = GBR
+	add_core = GBR
+	culture = american
+	religion = protestant
+} #Treaty of Camp Charlotte, becomes part of Virginia
+1776.7.4 = {
+	owner = USA
+	controller = USA
+	add_core = USA
+	remove_core = GBR
+} #Then part of Virginia, one of the thirteen colonies.
+1779.1.1 = { capital = "Jonesboro" }

@@ -1,0 +1,45 @@
+graphical_culture = muslimgfx
+
+color = { 139 69 19 }
+
+historical_idea_groups = {
+	trade_ideas
+	defensive_ideas
+	religious_ideas
+	administrative_ideas
+	humanist_ideas
+	diplomatic_ideas
+	offensive_ideas
+	economic_ideas
+}
+
+historical_units = {
+	muslim_tech_infantry
+	muslim_tech_cavalry
+}
+
+monarch_names = {
+	"Ahmad #0" = 10
+	"Ali #0" = 10
+	"Muhammad #0" = 15
+	"Omar #0" = 10
+	"Hassan #0" = 10
+	"Ibrahim #0" = 10
+	"Yusuf #0" = 10
+	"Mahmud #0" = 10
+}
+
+leader_names = {
+	"ibn Ahmad"
+	"ibn Ali"
+	"ibn Muhammad"
+	"ibn Omar"
+	"ibn Hassan"
+	"ibn Ibrahim"
+	"ibn Yusuf"
+	"ibn Mahmud"
+}
+
+ship_names = {
+	"Al-Sahara" "Al-Fezzan" "Al-Baraka" "Al-Nur" "Al-Salam"
+}

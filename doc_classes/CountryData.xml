@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="CountryData" inherits="Node" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
+	<brief_description>
+		Parses all data in the specified folders.
+	</brief_description>
+	<description>
+		Parses all files specified in the given folders and creates typed dictionaries for fast lookups. This is used by the inspector as well as the runtime logic.
+	</description>
+	<tutorials>
+	</tutorials>
+	<methods>
+		<method name="export_color_data">
+			<return type="void" />
+			<param index="0" name="country_name" type="String" />
+			<description>
+				Exports color information of a country to file.
+			</description>
+		</method>
+		<method name="get_country_provinces">
+			<return type="PackedStringArray" />
+			<param index="0" name="country_id" type="String" />
+			<description>
+				Gets all provinces associated with the country id. It will return a string that is indented to be displayed by the inspector with the name and ID of the province.
+			</description>
+		</method>
+		<method name="parse_all_files">
+			<return type="void" />
+			<description>
+				Parses all files from the folder paths specified. The data is stored in dictionaries for fast lookups.
+			</description>
+		</method>
+		<method name="populate_color_map_buffers">
+			<return type="PackedInt32Array" />
+			<description>
+				Function used to create a buffer data for creating a color map texture with compute shaders.
+			</description>
+		</method>
+	</methods>
+	<members>
+		<member name="countries_color_folder" type="String" setter="set_countries_color_folder" getter="get_countries_color_folder" default="&quot;&quot;">
+			Path for the files that contain country names and color.
+		</member>
+		<member name="countries_folder" type="String" setter="set_countries_folder" getter="get_countries_folder" default="&quot;&quot;">
+			Path for the files that contain country names and their IDs (like AAC).
+		</member>
+		<member name="country_id_to_color" type="Dictionary[String, Color]" setter="set_country_id_to_color" getter="get_country_id_to_color" default="{}">
+			Dictionary with country id (like AAC) to color.
+		</member>
+		<member name="country_id_to_country_name" type="Dictionary[String, String]" setter="set_country_id_to_country_name" getter="get_country_id_to_country_name" default="{}">
+			Dictionary with country id (like AAC) to their name.
+		</member>
+		<member name="country_name_to_color" type="Dictionary[String, Color]" setter="set_country_name_to_color" getter="get_country_name_to_color" default="{}">
+			Dictionary with country name to their color.
+		</member>
+		<member name="province_id_to_name" type="Dictionary[int, String]" setter="set_province_id_to_name" getter="get_province_id_to_name" default="{}">
+			Dictionary with province id, that is represented as a number, to their name.
+		</member>
+		<member name="province_id_to_owner" type="Dictionary[int, String]" setter="set_province_id_to_owner" getter="get_province_id_to_owner" default="{}">
+			Dictionary with province id, that is represented as a number, to their country owner. The owner is equivalent to the country ID (like AAC).
+		</member>
+		<member name="provinces_folder" type="String" setter="set_provinces_folder" getter="get_provinces_folder" default="&quot;&quot;">
+			Path for the files that contain province names, IDs and their country owners (equivalent to country IDs).
+		</member>
+		<member name="terrain_colors" type="Dictionary[String, Color]" setter="set_terrain_colors" getter="get_terrain_colors" default="{}">
+			Maps terrain type names to their display colors. Used to assign colors to unowned provinces such as oceans, lakes, wastelands, and colonizable territories. Provinces matching ocean keywords are colored accordingly, while other unowned provinces use the "No Owner" color.
+		</member>
+	</members>
+</class>
