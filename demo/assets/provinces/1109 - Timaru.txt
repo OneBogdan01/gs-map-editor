@@ -1,0 +1,18 @@
+#1109 - Timaru
+
+
+culture = maori
+religion = animism
+hre = no
+capital = "Kaiapoi"
+trade_goods = naval_supplies
+base_tax = 1
+base_production = 1
+base_manpower = 1
+discovered_by = polynesian_tech
+native_size = 10
+native_ferocity = 4
+native_hostileness = 9
+
+
+1642.1.1 = { discovered_by = NED } # Abel Tasman

@@ -1,0 +1,30 @@
+#942 - Wea
+
+culture = miami
+religion = totemism
+capital = "Wea" 
+trade_goods = unknown
+hre = no 
+base_tax = 1
+base_production = 1
+base_manpower = 1
+native_size = 5
+native_ferocity = 1
+native_hostileness = 6
+tribal_owner = MMI
+
+
+discovered_by = north_american
+
+
+1670.1.1 = { discovered_by = FRA } # René-Robert Cavelier claimed the territory
+1679.1.1 = { discovered_by = ENG }
+1707.5.12 = { discovered_by = GBR }
+1750.1.1 = { discovered_by = GBR }
+1804.1.1 = {
+	owner = USA
+	controller = USA
+	add_core = USA
+	culture = american
+	religion = protestant
+} # Treaty of Vincennes and subsequent, Natives cede much of this region

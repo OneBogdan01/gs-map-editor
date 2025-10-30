@@ -1,0 +1,14 @@
+[remap]
+
+importer="glsl"
+type="RDShaderFile"
+uid="uid://dgi8n2nlwpg04"
+path="res://.godot/imported/generate_borders.glsl-7c63f575f76e1c4fad0a9518842f299f.res"
+
+[deps]
+
+source_file="res://shaders/generate_borders.glsl"
+dest_files=["res://.godot/imported/generate_borders.glsl-7c63f575f76e1c4fad0a9518842f299f.res"]
+
+[params]
+

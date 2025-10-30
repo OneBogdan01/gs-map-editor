@@ -1,0 +1,14 @@
+[remap]
+
+importer="glsl"
+type="RDShaderFile"
+uid="uid://c47154uqtcvaj"
+path="res://.godot/imported/generate_color_lookup.glsl-36766f665eedbaaa5a3c4fe05a054281.res"
+
+[deps]
+
+source_file="res://shaders/generate_color_lookup.glsl"
+dest_files=["res://.godot/imported/generate_color_lookup.glsl-36766f665eedbaaa5a3c4fe05a054281.res"]
+
+[params]
+

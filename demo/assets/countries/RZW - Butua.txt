@@ -1,0 +1,64 @@
+government = tribal
+add_government_reform = tribal_despotism
+government_rank = 1
+primary_culture = shona
+religion = shamanism
+technology_group = central_african
+unlock_cult = mwari_cult
+unlock_cult = central_african_ancestor_cult
+unlock_cult = cwezi_cult
+
+unit_type = sub_saharan
+capital = 1185	# Butua
+
+#Torwa Dynasty
+1444.1.1 = {
+	monarch = {
+		name = "Dlembeu"
+		dynasty = "Torwa"
+		adm = 3
+		dip = 2
+		mil = 2
+	}
+}
+
+1490.1.1 = {
+	monarch = {
+		name = "Dlembeu II"
+		dynasty = "Torwa"
+		adm = 2
+		dip = 2
+		mil = 3
+	}
+}
+
+
+1535.1.1 = {
+	monarch = {
+		name = "Dlembeu III"
+		dynasty = "Torwa"
+		adm = 3
+		dip = 2
+		mil = 2
+	}
+}
+
+1580.1.1 = {
+	monarch = {
+		name = "Dlembeu IV"
+		dynasty = "Torwa"
+		adm = 3
+		dip = 2
+		mil = 2
+	}
+}
+
+1640.1.1 = {
+	monarch = {
+		name = "Dlembeu V"
+		dynasty = "Torwa"
+		adm = 2
+		dip = 3
+		mil = 3
+	}
+}

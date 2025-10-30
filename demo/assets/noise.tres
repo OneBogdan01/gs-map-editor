@@ -1,0 +1,11 @@
+[gd_resource type="NoiseTexture2D" load_steps=2 format=3 uid="uid://jheu7a5ief82"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_okis3"]
+frequency = 0.0151
+metadata/_preview_in_3d_space_ = true
+
+[resource]
+width = 5632
+height = 2048
+seamless = true
+noise = SubResource("FastNoiseLite_okis3")

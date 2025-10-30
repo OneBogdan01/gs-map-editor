@@ -1,0 +1,31 @@
+# No previous file for Yazoo
+
+owner = QUI
+controller = QUI
+add_core = QUI
+is_city = yes
+culture = natchez
+religion = totemism
+capital = "Yazoo"
+trade_goods = cotton
+hre = no
+base_tax = 2
+base_production = 2
+base_manpower = 1
+native_size = 5
+native_ferocity = 1
+native_hostileness = 2
+
+
+
+discovered_by = north_american
+
+1540.1.1 = { discovered_by = SPA } # Hernando De Soto
+
+1786.1.10= {
+	owner = USA
+	controller = USA
+	add_core = USA
+	culture = american
+	religion = protestant 
+} #Treaty of Hopewell (with the Chickasaw), come under US authority

@@ -1,0 +1,31 @@
+# No previous file for Ashshipite
+
+owner = KIO
+controller = KIO
+add_core = KIO
+is_city = yes
+culture = kiowa
+religion = totemism
+capital = "Ashshipite"
+trade_goods = unknown
+hre = no
+base_tax = 1 
+base_production = 1
+base_manpower = 1
+native_size = 5
+native_ferocity = 1
+native_hostileness = 2
+
+
+
+discovered_by = north_american
+
+
+1760.1.1 = {
+	owner = ---
+	controller = ---
+	remove_core = KIO
+	culture = pawnee
+	trade_goods = fur
+	is_city = no
+} #19th century native expansion

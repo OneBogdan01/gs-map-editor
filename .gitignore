@@ -1,0 +1,41 @@
+# Godot 4+ specific ignores
+.godot/
+
+# Godot-specific ignores
+.import/
+export.cfg
+export_presets.cfg
+
+# Imported translations (automatically generated from CSV files)
+*.translation
+
+# Mono-specific ignores
+.mono/
+data_*/
+mono_crash.*.json
+
+# Objects.
+.scons-cache/
+*.os
+
+# SConstruct
+.sconf_temp
+.sconsign.dblite
+*.pyc
+
+# MacOS
+.DS_Store
+
+# Editors
+
+# Ignore library files but not the gdextension file
+demo/bin/*
+
+
+/.cache
+compile_commands.json
+*.pdb
+*.ilk
+*.obj
+*.TMP
+/demo/build

@@ -1,0 +1,40 @@
+government = monarchy
+add_government_reform = autocracy_reform
+government_rank = 1
+primary_culture = malayan
+religion = mahayana
+technology_group = chinese
+capital = 598
+
+
+1399.1.1 = {
+	monarch = {
+		name = "Dewa Sura"
+		dynasty = "Pahang"
+		adm = 4
+		dip = 3
+		mil = 2
+	}
+}
+
+1425.1.1 = {
+	heir = {
+		name = "Putri Wanang Seri"
+		dynasty = "Pahang"
+		female = yes
+		birth_date = 1425.1.1
+		death_date = 1455.1.1
+		claim = 95
+		adm = 4
+		dip = 4
+		mil = 2
+	}
+}
+1480.1.1 = {
+	monarch = {
+		adm = 3
+		dip = 3
+		mil = 3
+		regent = yes
+	}
+}

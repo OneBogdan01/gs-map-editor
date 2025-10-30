@@ -1,0 +1,15 @@
+#Bafuriru
+
+owner = RWA
+controller = RWA
+add_core = RWA
+culture = rwandan
+religion = shamanism #Fetishism
+capital = "Bafuriru"
+trade_goods = grain
+hre = no
+base_tax = 2
+base_production = 2
+base_manpower = 3
+is_city = yes
+discovered_by = central_african

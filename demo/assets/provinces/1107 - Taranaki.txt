@@ -1,0 +1,18 @@
+#1107 - Taranaki
+
+add_core = TNK
+owner = TNK
+controller = TNK
+culture = maori
+religion = animism
+hre = no
+capital = "Ngamotu"
+is_city = yes
+trade_goods = salt
+base_tax = 4
+base_production = 4
+base_manpower = 2
+discovered_by = polynesian_tech
+
+
+1642.1.1 = { discovered_by = NED } # Abel Tasman
