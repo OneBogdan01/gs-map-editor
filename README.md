@@ -17,7 +17,7 @@ GS Map is a Godot 4.4 GDExtension that provides editor tools for interacting wit
 In the `main.tscn` scene you can understand how to use the custom nodes:
 ![alt text](./docs/preview/preview_demo.png)
 
-## Controls
+[🎮 Play on Itch.io ](https://tycro-dev.itch.io/grand-strategy-map-demo)
 
 Arrow keys to move the camera
 Middle mouse to zoom in or out
