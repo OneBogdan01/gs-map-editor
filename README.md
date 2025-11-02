@@ -24,6 +24,9 @@ Middle mouse to zoom in or out
 Ctrl + Click will select a country
 Click will change ownership between the province clicked and the selected country if there is one
 
+## Blog post
+You can read a blog post on the basics of map rendering [here](https://tycro-games.github.io/posts/Grand-Strategy-Editor-using-Gdextension-in-Godot-with-C++/).
+
 ## References
 
 The intel [paper](https://www.intel.com/content/dam/develop/external/us/en/documents/optimized-gradient-border-rendering-in-imperator-rome.pdf) describing the shader techniques.
