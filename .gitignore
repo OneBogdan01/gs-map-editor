@@ -39,3 +39,4 @@ compile_commands.json
 *.obj
 *.TMP
 /demo/build
+demo/addons/map_editor/windows/~map_editor.windows.template_debug.x86_64.dll
