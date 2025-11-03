@@ -2,7 +2,7 @@
 
 ![Map preview](/docs/preview/demo_final.gif)
 
-GS Map is a Godot 4.4 GDExtension that provides editor tools for interacting with Europa Universalis provinces and country data as well as a shader pipeline that renders a map with smooth borders.
+GS Map is a Godot 4.5 GDExtension that provides editor tools for interacting with Europa Universalis provinces and country data as well as a shader pipeline that renders a map with smooth borders.
 
 ## Features
 
@@ -12,9 +12,9 @@ GS Map is a Godot 4.4 GDExtension that provides editor tools for interacting wit
 - Custom Inspector window for editing country data
 
 
-## Minimal Demo Example using Gdscript
+## Minimal Demo Example using Gdscript with Borders
 
-In the `main.tscn` scene you can understand how to use the custom nodes:
+In the `main.tscn` scene you can see how to use the custom nodes:
 ![alt text](./docs/preview/preview_demo.png)
 
 [🎮 Play on Itch.io ](https://tycro-dev.itch.io/grand-strategy-map-demo)
@@ -23,6 +23,11 @@ Arrow keys to move the camera
 Middle mouse to zoom in or out
 Ctrl + Click will select a country
 Click will change ownership between the province clicked and the selected country if there is one
+
+## Minimal Political Map
+In the scenes folder `simple_political_map.tscn`, there is a similar demo as the previous one, but without any border rendering.
+
+<img width="1151" height="649" alt="Screenshot 2025-11-03 121425" src="https://github.com/user-attachments/assets/7951592e-f6a0-4105-9b0d-92b75e2b9459" />
 
 ## Blog post
 You can read a blog post on the basics of map rendering [here](https://tycro-games.github.io/posts/Grand-Strategy-Editor-using-Gdextension-in-Godot-with-C++/).
