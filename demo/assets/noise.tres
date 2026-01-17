@@ -7,5 +7,5 @@ metadata/_preview_in_3d_space_ = true
 [resource]
 width = 5632
 height = 2048
-seamless = true
 noise = SubResource("FastNoiseLite_okis3")
+seamless = true

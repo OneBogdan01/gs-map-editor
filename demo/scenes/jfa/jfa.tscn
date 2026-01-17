@@ -1,0 +1,189 @@
+[gd_scene load_steps=18 format=3 uid="uid://bjsefjxrppc7k"]
+
+[ext_resource type="Shader" uid="uid://ca07fapu67ie1" path="res://scenes/jfa/jfa_shaders/jfa_seed.gdshader" id="1_4xki5"]
+[ext_resource type="Script" uid="uid://13dbm6c1j0kp" path="res://scenes/jfa/jfa.gd" id="1_l1j7g"]
+[ext_resource type="Texture2D" uid="uid://c7x6n8v5pq0qm" path="res://assets/provinces.bmp" id="2_ed0g3"]
+[ext_resource type="Texture2D" uid="uid://btjqxdv0tsvex" path="res://scenes/jfa/color_lookup_map.png" id="3_ed0g3"]
+[ext_resource type="Shader" uid="uid://dpr6imoc7c2" path="res://scenes/jfa/jfa_shaders/jfa_pass.gdshader" id="4_ckvqv"]
+[ext_resource type="Shader" uid="uid://dibypkuhl0avs" path="res://scenes/jfa/jfa_shaders/jfa_final.gdshader" id="5_l1j7g"]
+[ext_resource type="Shader" uid="uid://c5opkqpr2xp3f" path="res://scenes/jfa/aa_sampling.gdshader" id="7_dcfui"]
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_l1j7g"]
+viewport_path = NodePath("SubViewport")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_tlq6f"]
+shader = ExtResource("1_4xki5")
+shader_parameter/lookup_map = ExtResource("3_ed0g3")
+shader_parameter/tex_size = Vector2(5632, 2048)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_dygug"]
+shader = ExtResource("4_ckvqv")
+shader_parameter/tex_size = Vector2(5632, 2048)
+shader_parameter/stride = 32.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_mtgmk"]
+shader = ExtResource("4_ckvqv")
+shader_parameter/tex_size = Vector2(5632, 2048)
+shader_parameter/stride = 16.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_b422f"]
+shader = ExtResource("4_ckvqv")
+shader_parameter/tex_size = Vector2(5632, 2048)
+shader_parameter/stride = 8.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_3jxcf"]
+shader = ExtResource("4_ckvqv")
+shader_parameter/tex_size = Vector2(5632, 2048)
+shader_parameter/stride = 4.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_dmjqm"]
+shader = ExtResource("4_ckvqv")
+shader_parameter/tex_size = Vector2(5632, 2048)
+shader_parameter/stride = 2.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_bgley"]
+shader = ExtResource("4_ckvqv")
+shader_parameter/tex_size = Vector2(5632, 2048)
+shader_parameter/stride = 1.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_e38ux"]
+resource_local_to_scene = true
+shader = ExtResource("5_l1j7g")
+shader_parameter/tex_size = Vector2(5632, 2048)
+shader_parameter/max_distance = 63.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ddgcw"]
+shader = ExtResource("7_dcfui")
+shader_parameter/threshold = 1e-05
+shader_parameter/aa_scale = 17.6
+shader_parameter/base_line_thickness = 0.38197
+shader_parameter/corner_cut = 0.999999977648
+shader_parameter/opacity = 1.0
+
+[node name="MultiPassDfs" type="Node2D"]
+script = ExtResource("1_l1j7g")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = SubResource("ViewportTexture_l1j7g")
+centered = false
+
+[node name="SubViewport" type="SubViewport" parent="."]
+disable_3d = true
+use_hdr_2d = true
+canvas_item_default_texture_filter = 0
+size = Vector2i(5632, 2048)
+
+[node name="Sprite2D" type="Sprite2D" parent="SubViewport"]
+texture_filter = 1
+texture = ExtResource("2_ed0g3")
+centered = false
+
+[node name="TextureRect" type="TextureRect" parent="SubViewport"]
+texture_filter = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_ed0g3")
+
+[node name="Seed" type="BackBufferCopy" parent="SubViewport"]
+copy_mode = 2
+
+[node name="Out0" type="ColorRect" parent="SubViewport"]
+texture_filter = 1
+material = SubResource("ShaderMaterial_tlq6f")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="32" type="BackBufferCopy" parent="SubViewport"]
+copy_mode = 2
+
+[node name="Out32" type="ColorRect" parent="SubViewport"]
+texture_filter = 1
+material = SubResource("ShaderMaterial_dygug")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="16" type="BackBufferCopy" parent="SubViewport"]
+copy_mode = 2
+
+[node name="Out16" type="ColorRect" parent="SubViewport"]
+texture_filter = 1
+material = SubResource("ShaderMaterial_mtgmk")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="8" type="BackBufferCopy" parent="SubViewport"]
+copy_mode = 2
+
+[node name="Out8" type="ColorRect" parent="SubViewport"]
+texture_filter = 1
+material = SubResource("ShaderMaterial_b422f")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="4" type="BackBufferCopy" parent="SubViewport"]
+copy_mode = 2
+
+[node name="Out4" type="ColorRect" parent="SubViewport"]
+texture_filter = 1
+material = SubResource("ShaderMaterial_3jxcf")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="5" type="BackBufferCopy" parent="SubViewport"]
+copy_mode = 2
+
+[node name="Out2" type="ColorRect" parent="SubViewport"]
+texture_filter = 1
+material = SubResource("ShaderMaterial_dmjqm")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="6" type="BackBufferCopy" parent="SubViewport"]
+copy_mode = 2
+
+[node name="Out1" type="ColorRect" parent="SubViewport"]
+texture_filter = 1
+material = SubResource("ShaderMaterial_bgley")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Final" type="ColorRect" parent="SubViewport"]
+texture_filter = 1
+material = SubResource("ShaderMaterial_e38ux")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="OtherPerfTests" type="Node2D" parent="."]
+visible = false
+
+[node name="ProvincesAASampled" type="Sprite2D" parent="OtherPerfTests"]
+material = SubResource("ShaderMaterial_ddgcw")
+texture = ExtResource("2_ed0g3")
+centered = false
