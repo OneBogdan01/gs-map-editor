@@ -1,0 +1,127 @@
+[gd_scene load_steps=20 format=3 uid="uid://defm7wh022vla"]
+
+[ext_resource type="Script" uid="uid://b4wbers5g4jde" path="res://scenes/inversed_sdf/inversed_sdf.gd" id="1_2n0ox"]
+[ext_resource type="Texture2D" uid="uid://ngjlbjkrfccl" path="res://assets/colormap_water.png" id="2_85xmn"]
+[ext_resource type="Shader" uid="uid://d3h4vhfh4ntan" path="res://scenes/inversed_sdf/shaders/provinces_shading.gdshader" id="3_4832y"]
+[ext_resource type="Texture2D" uid="uid://dsa0cxjvgcibw" path="res://scenes/inversed_sdf/python_gen_util/provinces.bmp" id="4_re0b4"]
+[ext_resource type="Shader" uid="uid://6rpwua0qcd3k" path="res://scenes/inversed_sdf/shaders/provinces_sampler.gdshader" id="5_o8pc4"]
+[ext_resource type="Texture2D" uid="uid://bmpnb83dd1ntw" path="res://scenes/inversed_sdf/python_gen_util/gradient_border_channel_inv.png" id="6_oxyth"]
+[ext_resource type="Texture2D" uid="uid://cbdmfa2w5jjrh" path="res://scenes/inversed_sdf/terrain.bmp" id="7_0td4q"]
+[ext_resource type="Shader" uid="uid://jbvtr3bwvtt7" path="res://scenes/inversed_sdf/shaders/state_shading.gdshader" id="8_4832y"]
+[ext_resource type="Texture2D" uid="uid://cja42k3q8fcge" path="res://scenes/inversed_sdf/python_gen_util/states.png" id="9_re0b4"]
+[ext_resource type="Shader" uid="uid://dm3t31m7xfwqy" path="res://scenes/inversed_sdf/shaders/state_sampler_2.gdshader" id="10_o8pc4"]
+[ext_resource type="Texture2D" uid="uid://djkt51ybygr62" path="res://scenes/inversed_sdf/python_gen_util/state_gradient_border_channel_inv.png" id="11_oxyth"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_tpgf0"]
+shader = ExtResource("3_4832y")
+shader_parameter/map = ExtResource("4_re0b4")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_o8pc4"]
+shader = ExtResource("8_4832y")
+shader_parameter/map = ExtResource("9_re0b4")
+shader_parameter/exclude_color = Color(1, 1, 0, 1)
+shader_parameter/color_threshold = 0.01
+shader_parameter/min_brightness = 0.4
+shader_parameter/max_brightness = 1.0
+shader_parameter/saturation = 0.5
+shader_parameter/focused_state_id = -1
+shader_parameter/selected_state_id = -1
+shader_parameter/focus_color = Color(1, 1, 0, 1)
+shader_parameter/focus_intensity = 0.45
+shader_parameter/select_color = Color(0, 1, 0, 1)
+shader_parameter/select_intensity = 0.55
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_ywtsf"]
+viewport_path = NodePath("ProvinceRenderer")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_a5cs5"]
+resource_local_to_scene = true
+shader = ExtResource("5_o8pc4")
+shader_parameter/province_renderer = SubResource("ViewportTexture_ywtsf")
+shader_parameter/threshold = 1e-05
+shader_parameter/aa_scale = 17.6
+shader_parameter/base_line_thickness = 0.38197
+shader_parameter/global_alpha = 0.46999998949456
+shader_parameter/distance_field_texture = ExtResource("6_oxyth")
+shader_parameter/transparency_radius = 0.9450000448875
+shader_parameter/center_transparency = 0.7730000367175
+shader_parameter/terrain_texture = ExtResource("7_0td4q")
+shader_parameter/ocean_color = Color(0.039215688, 0.12156863, 0.50980395, 1)
+shader_parameter/ocean_tiles_tint = Color(0.059203014, 0.22898665, 0.59934944, 1)
+shader_parameter/ocean_tolerance = 0.0
+shader_parameter/ocean_alpha = 0.0
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_kynfr"]
+viewport_path = NodePath("ProvinceRenderer")
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_0td4q"]
+viewport_path = NodePath("StateRenderer")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ywtsf"]
+resource_local_to_scene = true
+shader = ExtResource("10_o8pc4")
+shader_parameter/state_renderer = SubResource("ViewportTexture_0td4q")
+shader_parameter/threshold = 1e-05
+shader_parameter/aa_scale = 17.6
+shader_parameter/base_line_thickness = 0.38197
+shader_parameter/global_alpha = 0.6
+shader_parameter/distance_field_texture = ExtResource("11_oxyth")
+shader_parameter/transparency_radius = 0.965
+shader_parameter/center_transparency = 0.2
+shader_parameter/ocean_color = Color(0.031, 0.122, 0.51, 1)
+shader_parameter/ocean_tiles_tint = Color(0.146, 0.385, 0.9, 1)
+shader_parameter/ocean_tolerance = 0.005
+shader_parameter/ocean_alpha = 0.25
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_a5cs5"]
+viewport_path = NodePath("StateRenderer")
+
+[node name="InversedSdf" type="Node2D"]
+script = ExtResource("1_2n0ox")
+
+[node name="Background" type="Sprite2D" parent="."]
+visible = false
+scale = Vector2(2, 2)
+texture = ExtResource("2_85xmn")
+centered = false
+
+[node name="ProvinceRenderer" type="SubViewport" parent="."]
+disable_3d = true
+transparent_bg = true
+size = Vector2i(5632, 2048)
+
+[node name="Output" type="ColorRect" parent="ProvinceRenderer"]
+texture_filter = 1
+material = SubResource("ShaderMaterial_tpgf0")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="StateRenderer" type="SubViewport" parent="."]
+disable_3d = true
+transparent_bg = true
+size = Vector2i(5632, 2048)
+
+[node name="Output" type="ColorRect" parent="StateRenderer"]
+material = SubResource("ShaderMaterial_o8pc4")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Provinces" type="Sprite2D" parent="."]
+material = SubResource("ShaderMaterial_a5cs5")
+texture = SubResource("ViewportTexture_kynfr")
+centered = false
+
+[node name="States" type="Sprite2D" parent="."]
+material = SubResource("ShaderMaterial_ywtsf")
+texture = SubResource("ViewportTexture_a5cs5")
+centered = false
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(2824, 546)
+zoom = Vector2(6, 6)
