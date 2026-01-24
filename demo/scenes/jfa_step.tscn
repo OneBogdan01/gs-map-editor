@@ -1,0 +1,71 @@
+[gd_scene load_steps=10 format=3 uid="uid://ub7y14ruit61"]
+
+[ext_resource type="Script" uid="uid://c3ocpooce5l16" path="res://scripts/jfa_step.gd" id="1_keu2e"]
+[ext_resource type="Texture2D" uid="uid://b73404h0hkhdt" path="res://assets/color_lookup_map.png" id="2_bcry4"]
+[ext_resource type="Texture2D" uid="uid://c7x6n8v5pq0qm" path="res://assets/provinces.bmp" id="2_t4vtj"]
+[ext_resource type="Shader" uid="uid://blf5dq1vsy4ux" path="res://shaders/country_sdf.gdshader" id="4_kvelq"]
+[ext_resource type="Texture2D" uid="uid://bro5urv8mkvw0" path="res://assets/color_map.png" id="5_l27pa"]
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_t4vtj"]
+viewport_path = NodePath("SubViewport")
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_bcry4"]
+viewport_path = NodePath("FinalViewport")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_he8ie"]
+shader = ExtResource("4_kvelq")
+shader_parameter/lookup_map = ExtResource("2_bcry4")
+shader_parameter/color_map = ExtResource("5_l27pa")
+shader_parameter/max_distance = 10.0
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_too36"]
+viewport_path = NodePath("SubViewport2")
+
+[node name="JfaStep" type="Node2D"]
+script = ExtResource("1_keu2e")
+source_texture = ExtResource("2_t4vtj")
+lookup_map = ExtResource("2_bcry4")
+jfa_seed_shader_path = "uid://pp81opuf2vwy"
+jfa_pass_shader_path = "uid://2wltv476w12s"
+jfa_final_shader_path = "uid://exaiv5mu0gkj"
+
+[node name="Display" type="Sprite2D" parent="."]
+position = Vector2(316.99997, 129)
+scale = Vector2(0.1, 0.1)
+texture = SubResource("ViewportTexture_t4vtj")
+
+[node name="SubViewport" type="SubViewport" parent="."]
+disable_3d = true
+use_hdr_2d = true
+canvas_item_default_texture_filter = 0
+size = Vector2i(5632, 2048)
+
+[node name="FinalSPrite2D" type="Sprite2D" parent="."]
+position = Vector2(352, 466.99997)
+scale = Vector2(0.1, 0.1)
+texture = SubResource("ViewportTexture_bcry4")
+
+[node name="FinalViewport" type="SubViewport" parent="."]
+disable_3d = true
+use_hdr_2d = true
+canvas_item_default_texture_filter = 0
+size = Vector2i(5632, 2048)
+
+[node name="SubViewport2" type="SubViewport" parent="."]
+disable_3d = true
+use_hdr_2d = true
+size = Vector2i(5632, 2048)
+
+[node name="ColorRect" type="ColorRect" parent="SubViewport2"]
+texture_filter = 1
+material = SubResource("ShaderMaterial_he8ie")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Naive" type="Sprite2D" parent="."]
+position = Vector2(863.99994, 300)
+scale = Vector2(0.11401367, 0.11401367)
+texture = SubResource("ViewportTexture_too36")
