@@ -1,19 +1,32 @@
-[gd_scene load_steps=18 format=3 uid="uid://bjsefjxrppc7k"]
+[gd_scene load_steps=25 format=3 uid="uid://bjsefjxrppc7k"]
 
 [ext_resource type="Shader" uid="uid://ca07fapu67ie1" path="res://scenes/jfa/jfa_shaders/jfa_seed.gdshader" id="1_4xki5"]
 [ext_resource type="Script" uid="uid://13dbm6c1j0kp" path="res://scenes/jfa/jfa.gd" id="1_l1j7g"]
 [ext_resource type="Texture2D" uid="uid://c7x6n8v5pq0qm" path="res://assets/provinces.bmp" id="2_ed0g3"]
-[ext_resource type="Texture2D" uid="uid://btjqxdv0tsvex" path="res://scenes/jfa/color_lookup_map.png" id="3_ed0g3"]
 [ext_resource type="Shader" uid="uid://dpr6imoc7c2" path="res://scenes/jfa/jfa_shaders/jfa_pass.gdshader" id="4_ckvqv"]
+[ext_resource type="Texture2D" uid="uid://bmk5fr67658ye" path="res://assets/mask_political_map.png" id="4_gs1yn"]
 [ext_resource type="Shader" uid="uid://dibypkuhl0avs" path="res://scenes/jfa/jfa_shaders/jfa_final.gdshader" id="5_l1j7g"]
 [ext_resource type="Shader" uid="uid://c5opkqpr2xp3f" path="res://scenes/jfa/aa_sampling.gdshader" id="7_dcfui"]
+[ext_resource type="Shader" uid="uid://blf5dq1vsy4ux" path="res://shaders/country_sdf.gdshader" id="8_20pvk"]
+[ext_resource type="Texture2D" uid="uid://bro5urv8mkvw0" path="res://assets/color_map.png" id="9_t84dm"]
+[ext_resource type="Texture2D" uid="uid://b73404h0hkhdt" path="res://assets/color_lookup_map.png" id="10_x60kb"]
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_gs1yn"]
+viewport_path = NodePath("SubViewport")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_gs1yn"]
+resource_local_to_scene = true
+shader = ExtResource("5_l1j7g")
+shader_parameter/screen_texture = SubResource("ViewportTexture_gs1yn")
+shader_parameter/tex_size = Vector2(5632, 2048)
+shader_parameter/max_distance = 10.0
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_l1j7g"]
 viewport_path = NodePath("SubViewport")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_tlq6f"]
 shader = ExtResource("1_4xki5")
-shader_parameter/lookup_map = ExtResource("3_ed0g3")
+shader_parameter/lookup_map = ExtResource("4_gs1yn")
 shader_parameter/tex_size = Vector2(5632, 2048)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_dygug"]
@@ -50,7 +63,7 @@ shader_parameter/stride = 1.0
 resource_local_to_scene = true
 shader = ExtResource("5_l1j7g")
 shader_parameter/tex_size = Vector2(5632, 2048)
-shader_parameter/max_distance = 63.0
+shader_parameter/max_distance = 1.0
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ddgcw"]
 shader = ExtResource("7_dcfui")
@@ -60,10 +73,25 @@ shader_parameter/base_line_thickness = 0.38197
 shader_parameter/corner_cut = 0.999999977648
 shader_parameter/opacity = 1.0
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_vvjys"]
+shader = ExtResource("8_20pvk")
+shader_parameter/lookup_map = ExtResource("10_x60kb")
+shader_parameter/color_map = ExtResource("9_t84dm")
+shader_parameter/max_distance = 10.0
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_vot0y"]
+viewport_path = NodePath("CountryDistanceField")
+
 [node name="MultiPassDfs" type="Node2D"]
 script = ExtResource("1_l1j7g")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
+material = SubResource("ShaderMaterial_gs1yn")
+texture = SubResource("ViewportTexture_l1j7g")
+centered = false
+
+[node name="Sprite2D2" type="Sprite2D" parent="."]
+material = SubResource("ShaderMaterial_gs1yn")
 texture = SubResource("ViewportTexture_l1j7g")
 centered = false
 
@@ -72,23 +100,6 @@ disable_3d = true
 use_hdr_2d = true
 canvas_item_default_texture_filter = 0
 size = Vector2i(5632, 2048)
-
-[node name="Sprite2D" type="Sprite2D" parent="SubViewport"]
-texture_filter = 1
-texture = ExtResource("2_ed0g3")
-centered = false
-
-[node name="TextureRect" type="TextureRect" parent="SubViewport"]
-texture_filter = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("2_ed0g3")
-
-[node name="Seed" type="BackBufferCopy" parent="SubViewport"]
-copy_mode = 2
 
 [node name="Out0" type="ColorRect" parent="SubViewport"]
 texture_filter = 1
@@ -171,7 +182,11 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
+[node name="7" type="BackBufferCopy" parent="SubViewport"]
+copy_mode = 2
+
 [node name="Final" type="ColorRect" parent="SubViewport"]
+visible = false
 texture_filter = 1
 material = SubResource("ShaderMaterial_e38ux")
 anchors_preset = 15
@@ -187,3 +202,24 @@ visible = false
 material = SubResource("ShaderMaterial_ddgcw")
 texture = ExtResource("2_ed0g3")
 centered = false
+
+[node name="CountryDistanceField" type="SubViewport" parent="."]
+disable_3d = true
+transparent_bg = true
+handle_input_locally = false
+use_hdr_2d = true
+size = Vector2i(5632, 2048)
+
+[node name="Output" type="ColorRect" parent="CountryDistanceField"]
+texture_filter = 1
+material = SubResource("ShaderMaterial_vvjys")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="NaiveDist" type="Sprite2D" parent="."]
+texture_filter = 1
+position = Vector2(2815, 3033)
+texture = SubResource("ViewportTexture_vot0y")

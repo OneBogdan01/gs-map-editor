@@ -50,5 +50,8 @@ void fragment()
 	}
 
 	float normalized_distance = min_distance / max_distance;
+	if (normalized_distance >0.4)
+	COLOR = vec4(vec3(normalized_distance), 0.0);
+	
 	COLOR = vec4(vec3(normalized_distance), 1.0);
 }

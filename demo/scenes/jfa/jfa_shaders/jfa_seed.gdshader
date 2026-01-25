@@ -5,7 +5,7 @@ uniform sampler2D lookup_map : filter_nearest;
 uniform vec2 tex_size = vec2(5632.0, 2048.0);
 
 void fragment() {
-    vec2 pixel_size = 1.0 / tex_size;
+    vec2 pixel_size =SCREEN_PIXEL_SIZE;
     vec4 center_color = texture(lookup_map, UV);
     
     bool is_edge = false;
@@ -19,7 +19,7 @@ void fragment() {
     
     for(int i = 0; i < 4; i++) {
         vec4 neighbor_color = texture(lookup_map, UV + offsets[i] * pixel_size);
-        if (neighbor_color != center_color) {
+        if (distance(neighbor_color.rgb, center_color.rgb) > 0.001) {
             is_edge = true;
             break;
         }
@@ -28,10 +28,10 @@ void fragment() {
     if (is_edge) {
         // This pixel is a border. Store its own UV coordinate.
         // Red = UV.x, Green = UV.y
-        COLOR = vec4(UV.x, UV.y, 0.0, 1.0);
+        COLOR = vec4(SCREEN_UV.x, SCREEN_UV.y, 0.0, 1.0);
     } else {
         // Not a border. Store an "invalid" coordinate far outside 0.0-1.0.
         // We use 99.0 so that the JFA shader knows to ignore this pixel.
-        COLOR = vec4(99.0, 99.0, 0.0, 1.0);
+        COLOR = vec4(20.0, 20.0, 0.0, 0.0);
     }
 }
