@@ -1,12 +1,11 @@
 shader_type canvas_item;
 
-// This should be your Province Map texture
-uniform sampler2D lookup_map : filter_nearest;
+uniform sampler2D seed_map : filter_nearest;
 uniform vec2 tex_size = vec2(5632.0, 2048.0);
 
 void fragment() {
     vec2 pixel_size = 1.0 / tex_size;
-    vec4 center_color = texture(lookup_map, UV);
+    vec4 center_color = texture(seed_map, UV);
 
     bool is_edge = false;
 
@@ -18,7 +17,7 @@ void fragment() {
     );
 
     for(int i = 0; i < 4; i++) {
-        vec4 neighbor_color = texture(lookup_map, UV + offsets[i] * pixel_size);
+        vec4 neighbor_color = texture(seed_map, UV + offsets[i] * pixel_size);
         if (neighbor_color != center_color) {
             is_edge = true;
             break;

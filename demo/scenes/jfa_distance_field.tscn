@@ -1,0 +1,53 @@
+[gd_scene load_steps=9 format=3 uid="uid://sw045wwf0c2u"]
+
+[ext_resource type="Script" uid="uid://by4hxc1nq1yog" path="res://scripts/jfa_distance_field.gd" id="1_ms2t4"]
+[ext_resource type="Texture2D" uid="uid://bmk5fr67658ye" path="res://assets/mask_political_map.png" id="3_x1sp4"]
+[ext_resource type="Shader" uid="uid://pp81opuf2vwy" path="res://shaders/jfa/jfa_seed.gdshader" id="4_d8806"]
+[ext_resource type="Script" uid="uid://c3ocpooce5l16" path="res://scripts/jfa_step.gd" id="5_haf7e"]
+[ext_resource type="Shader" uid="uid://2wltv476w12s" path="res://shaders/jfa/jfa_pass.gdshader" id="6_fv8eu"]
+[ext_resource type="Shader" uid="uid://exaiv5mu0gkj" path="res://shaders/jfa/jfa_final.gdshader" id="7_haf7e"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_x1sp4"]
+shader = ExtResource("4_d8806")
+shader_parameter/seed_map = ExtResource("3_x1sp4")
+shader_parameter/tex_size = Vector2(5632, 2048)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_gxnqu"]
+shader = ExtResource("7_haf7e")
+shader_parameter/tex_size = Vector2(5632, 2048)
+shader_parameter/max_distance = 7.0
+
+[node name="CountryDistanceField" type="SubViewport"]
+disable_3d = true
+handle_input_locally = false
+canvas_item_default_texture_filter = 0
+size = Vector2i(5632, 2048)
+script = ExtResource("1_ms2t4")
+output_size = Vector2i(5632, 2048)
+
+[node name="Seed" type="ColorRect" parent="."]
+material = SubResource("ShaderMaterial_x1sp4")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="SeedCopy" type="BackBufferCopy" parent="."]
+texture_filter = 1
+copy_mode = 2
+
+[node name="JFAGenerator" type="Node2D" parent="."]
+script = ExtResource("5_haf7e")
+jfa_pass_shader = ExtResource("6_fv8eu")
+
+[node name="PassCopy" type="BackBufferCopy" parent="."]
+copy_mode = 2
+
+[node name="Output" type="ColorRect" parent="."]
+material = SubResource("ShaderMaterial_gxnqu")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2

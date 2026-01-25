@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=3 uid="uid://cgoxd520waiho"]
+[gd_scene load_steps=22 format=3 uid="uid://cgoxd520waiho"]
 
 [ext_resource type="Texture2D" uid="uid://c7x6n8v5pq0qm" path="res://assets/provinces.bmp" id="1_o5qli"]
 [ext_resource type="Shader" uid="uid://huxgtaoxjfut" path="res://shaders/final_output_political_map.gdshader" id="1_tipki"]
@@ -8,10 +8,10 @@
 [ext_resource type="Texture2D" uid="uid://ngjlbjkrfccl" path="res://assets/colormap_water.png" id="5_ya4ey"]
 [ext_resource type="Texture2D" uid="uid://b73404h0hkhdt" path="res://assets/color_lookup_map.png" id="6_85g3d"]
 [ext_resource type="Texture2D" uid="uid://bmk5fr67658ye" path="res://assets/mask_political_map.png" id="7_ya4ey"]
-[ext_resource type="Shader" uid="uid://blf5dq1vsy4ux" path="res://shaders/country_sdf.gdshader" id="8_ya4ey"]
 [ext_resource type="Shader" uid="uid://boobqvbyk5fn8" path="res://shaders/political_map.gdshader" id="10_ya4ey"]
 [ext_resource type="Script" uid="uid://h7noohpv4w5s" path="res://scripts/province_selector.gd" id="11_ya4ey"]
 [ext_resource type="Texture2D" uid="uid://jheu7a5ief82" path="res://assets/noise.tres" id="12_eb6dy"]
+[ext_resource type="PackedScene" uid="uid://sw045wwf0c2u" path="res://scenes/jfa_distance_field.tscn" id="12_trceg"]
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_eb6dy"]
 viewport_path = NodePath("Map/Subviewports/CountryDistanceField")
@@ -69,12 +69,6 @@ shader_parameter/gradient_strength = 0.26
 shader_parameter/edge_size = 0.106
 shader_parameter/province_size_size = 0.0341
 shader_parameter/province_border_color = Color(0, 0, 0, 0.0588235)
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_o6xl0"]
-shader = ExtResource("8_ya4ey")
-shader_parameter/lookup_map = ExtResource("6_85g3d")
-shader_parameter/color_map = ExtResource("5_tipki")
-shader_parameter/max_distance = 10.0
 
 [node name="Node" type="Node"]
 
@@ -20805,18 +20799,6 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="CountryDistanceField" type="SubViewport" parent="Map/Subviewports"]
-disable_3d = true
-handle_input_locally = false
-size = Vector2i(5632, 2048)
-render_target_update_mode = 1
-
-[node name="Output" type="ColorRect" parent="Map/Subviewports/CountryDistanceField"]
-material = SubResource("ShaderMaterial_o6xl0")
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+[node name="CountryDistanceField" parent="Map/Subviewports" instance=ExtResource("12_trceg")]
 
 [connection signal="map_change_triggered" from="Map/ProvinceSelector" to="Map" method="on_province_selector_map_change_triggered"]

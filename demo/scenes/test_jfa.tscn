@@ -1,0 +1,65 @@
+[gd_scene load_steps=7 format=3 uid="uid://blgj5xk6pnvtg"]
+
+[ext_resource type="PackedScene" uid="uid://sw045wwf0c2u" path="res://scenes/jfa_distance_field.tscn" id="1_1661a"]
+[ext_resource type="Script" uid="uid://5plh1k6vur5r" path="res://scripts/test_jfa.gd" id="1_hg5m8"]
+[ext_resource type="Shader" uid="uid://blf5dq1vsy4ux" path="res://shaders/country_sdf.gdshader" id="2_bjlip"]
+[ext_resource type="Texture2D" uid="uid://bro5urv8mkvw0" path="res://assets/color_map.png" id="3_hg5m8"]
+[ext_resource type="Texture2D" uid="uid://b73404h0hkhdt" path="res://assets/color_lookup_map.png" id="4_bjlip"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_16sqi"]
+shader = ExtResource("2_bjlip")
+shader_parameter/lookup_map = ExtResource("4_bjlip")
+shader_parameter/color_map = ExtResource("3_hg5m8")
+shader_parameter/max_distance = 10.0
+
+[node name="TestJfa" type="Node2D"]
+script = ExtResource("1_hg5m8")
+auto_start = true
+run_jfa = null
+reset_jfa = null
+step_jfa = null
+run_stepped_jfa = null
+current_step = null
+total_steps = null
+current_stride = null
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -2372.0
+offset_top = -4.0
+offset_right = 3260.0
+offset_bottom = 2044.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="CountryDistanceField" parent="SubViewportContainer" instance=ExtResource("1_1661a")]
+use_hdr_2d = true
+
+[node name="SubViewportContainer2" type="SubViewportContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -2066.0
+offset_top = 359.0
+offset_right = 3566.0
+offset_bottom = 2407.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="CountryDistanceField" type="SubViewport" parent="SubViewportContainer2"]
+disable_3d = true
+handle_input_locally = false
+use_hdr_2d = true
+canvas_item_default_texture_filter = 0
+size = Vector2i(5632, 2048)
+render_target_update_mode = 4
+
+[node name="Output" type="ColorRect" parent="SubViewportContainer2/CountryDistanceField"]
+material = SubResource("ShaderMaterial_16sqi")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2

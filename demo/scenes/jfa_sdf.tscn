@@ -1,0 +1,57 @@
+[gd_scene load_steps=6 format=3 uid="uid://5v2nmd4giet1"]
+
+[ext_resource type="Shader" uid="uid://pp81opuf2vwy" path="res://shaders/jfa/jfa_seed.gdshader" id="1_qnbd2"]
+[ext_resource type="Shader" uid="uid://exaiv5mu0gkj" path="res://shaders/jfa/jfa_final.gdshader" id="1_ux3es"]
+[ext_resource type="Texture2D" uid="uid://bmk5fr67658ye" path="res://assets/mask_political_map.png" id="3_pdri3"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_0ajay"]
+shader = ExtResource("1_ux3es")
+shader_parameter/tex_size = Vector2(5632, 2048)
+shader_parameter/max_distance = 7.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_2midx"]
+shader = ExtResource("1_qnbd2")
+shader_parameter/lookup_map = ExtResource("3_pdri3")
+shader_parameter/tex_size = Vector2(5632, 2048)
+
+[node name="JFA" type="Node2D"]
+
+[node name="SubViewport" type="SubViewport" parent="."]
+disable_3d = true
+handle_input_locally = false
+canvas_item_default_texture_filter = 0
+size = Vector2i(5632, 2048)
+render_target_update_mode = 1
+
+[node name="Output" type="ColorRect" parent="SubViewport"]
+texture_filter = 1
+material = SubResource("ShaderMaterial_0ajay")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Seed" type="ColorRect" parent="SubViewport"]
+material = SubResource("ShaderMaterial_2midx")
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="BuffA" type="ColorRect" parent="SubViewport"]
+material = SubResource("ShaderMaterial_2midx")
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="BuffB" type="ColorRect" parent="SubViewport"]
+material = SubResource("ShaderMaterial_2midx")
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Output" type="Sprite2D" parent="."]
+
+[node name="FinalViewport" type="SubViewport" parent="."]
+disable_3d = true
+handle_input_locally = false
+canvas_item_default_texture_filter = 0
+size = Vector2i(5632, 2048)
+render_target_update_mode = 1
