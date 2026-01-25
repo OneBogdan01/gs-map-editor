@@ -1,5 +1,4 @@
-@tool
-extends Node2D
+extends Node
 class_name JFAGenerator
 
 signal generation_complete

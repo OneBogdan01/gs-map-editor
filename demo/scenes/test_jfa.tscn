@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://blgj5xk6pnvtg"]
+[gd_scene load_steps=9 format=3 uid="uid://blgj5xk6pnvtg"]
 
 [ext_resource type="PackedScene" uid="uid://sw045wwf0c2u" path="res://scenes/jfa_distance_field.tscn" id="1_1661a"]
 [ext_resource type="Script" uid="uid://5plh1k6vur5r" path="res://scripts/test_jfa.gd" id="1_hg5m8"]
@@ -12,54 +12,37 @@ shader_parameter/lookup_map = ExtResource("4_bjlip")
 shader_parameter/color_map = ExtResource("3_hg5m8")
 shader_parameter/max_distance = 10.0
 
+[sub_resource type="ViewportTexture" id="ViewportTexture_hg5m8"]
+viewport_path = NodePath("CountryDistanceField")
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_16sqi"]
+viewport_path = NodePath("CountryDistanceField2")
+
 [node name="TestJfa" type="Node2D"]
 script = ExtResource("1_hg5m8")
-auto_start = true
-run_jfa = null
-reset_jfa = null
-step_jfa = null
-run_stepped_jfa = null
-current_step = null
-total_steps = null
-current_stride = null
+step_delay = 0.7
 
-[node name="SubViewportContainer" type="SubViewportContainer" parent="."]
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -2372.0
-offset_top = -4.0
-offset_right = 3260.0
-offset_bottom = 2044.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="CountryDistanceField" parent="SubViewportContainer" instance=ExtResource("1_1661a")]
-use_hdr_2d = true
-
-[node name="SubViewportContainer2" type="SubViewportContainer" parent="."]
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -2066.0
-offset_top = 359.0
-offset_right = 3566.0
-offset_bottom = 2407.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="CountryDistanceField" type="SubViewport" parent="SubViewportContainer2"]
+[node name="CountryDistanceField2" type="SubViewport" parent="."]
 disable_3d = true
 handle_input_locally = false
-use_hdr_2d = true
 canvas_item_default_texture_filter = 0
 size = Vector2i(5632, 2048)
-render_target_update_mode = 4
 
-[node name="Output" type="ColorRect" parent="SubViewportContainer2/CountryDistanceField"]
+[node name="Output" type="ColorRect" parent="CountryDistanceField2"]
 material = SubResource("ShaderMaterial_16sqi")
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(561, 1028)
+texture = SubResource("ViewportTexture_hg5m8")
+
+[node name="Sprite2D2" type="Sprite2D" parent="."]
+position = Vector2(543, 1341)
+texture = SubResource("ViewportTexture_16sqi")
+
+[node name="CountryDistanceField" parent="." instance=ExtResource("1_1661a")]
+use_hdr_2d = true

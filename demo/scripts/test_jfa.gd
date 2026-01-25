@@ -1,48 +1,24 @@
-@tool
 extends Node2D
 
 @export var auto_start: bool = false
 @export var step_delay: float = 0.1
 
-@export_group("Editor Controls")
-@export var run_jfa: bool = false:
-	set(v):
-		if v and Engine.is_editor_hint():
-			start()
-
-@export var reset_jfa: bool = false:
-	set(v):
-		if v and Engine.is_editor_hint():
-			reset()
-
-@export var step_jfa: bool = false:
-	set(v):
-		if v and Engine.is_editor_hint():
-			step()
-
-@export var run_stepped_jfa: bool = false:
-	set(v):
-		if v and Engine.is_editor_hint():
-			run_stepped()
-
-@export_group("Debug Info")
-@export var current_step: int = 0
-@export var total_steps: int = 0
-@export var current_stride: int = 0
-
 var country_distance_field: CountryDistanceField
 var is_running: bool = false
+var current_step: int = 0
+var total_steps: int = 0
+var current_stride: int = 0
 
 func _ready() -> void:
 	_update_reference()
 	
-	if not Engine.is_editor_hint() and auto_start:
+	if auto_start:
 		start()
 
 func _update_reference() -> void:
 	if not is_inside_tree():
 		return
-	var node := get_node_or_null("SubViewportContainer/CountryDistanceField")
+	var node := get_node_or_null("CountryDistanceField")
 	if node:
 		country_distance_field = node as CountryDistanceField
 
@@ -56,9 +32,6 @@ func _update_debug_info() -> void:
 		current_stride = jfa.current_stride
 
 func _unhandled_input(event: InputEvent) -> void:
-	if Engine.is_editor_hint():
-		return
-	
 	if event.is_action_pressed("ui_accept"):
 		start()
 	elif event.is_action_pressed("ui_cancel"):
@@ -93,13 +66,7 @@ func reset() -> void:
 	
 	print("[Controller] Resetting...")
 	is_running = false
-	
-	var jfa := country_distance_field.jfa_generator
-	await jfa.clear()
-	jfa.initialize(
-		country_distance_field.output_size,
-		country_distance_field.starting_stride
-	)
+	await country_distance_field.reset()
 	_update_debug_info()
 	print("[Controller] Reset complete")
 
@@ -108,14 +75,12 @@ func step() -> void:
 	if not country_distance_field or is_running:
 		return
 	
-	var jfa := country_distance_field.jfa_generator
-	
-	if jfa.current_step >= jfa.total_steps:
+	if country_distance_field.is_complete():
 		print("[Controller] All steps complete")
 		return
 	
 	is_running = true
-	await jfa.run_single_pass()
+	await country_distance_field.step()
 	is_running = false
 	_update_debug_info()
 
@@ -124,14 +89,12 @@ func add_iterations(count: int) -> void:
 	if not country_distance_field or is_running:
 		return
 	
-	var jfa := country_distance_field.jfa_generator
-	
 	is_running = true
 	for i in count:
-		if jfa.current_step >= jfa.total_steps:
+		if country_distance_field.is_complete():
 			print("[Controller] No more steps")
 			break
-		await jfa.run_single_pass()
+		await country_distance_field.step()
 		_update_debug_info()
 	is_running = false
 
@@ -140,11 +103,9 @@ func run_stepped() -> void:
 	if not country_distance_field or is_running:
 		return
 	
-	var jfa := country_distance_field.jfa_generator
-	
 	is_running = true
-	while jfa.current_step < jfa.total_steps:
-		await jfa.run_single_pass()
+	while not country_distance_field.is_complete():
+		await country_distance_field.step()
 		_update_debug_info()
 		await get_tree().create_timer(step_delay).timeout
 	is_running = false

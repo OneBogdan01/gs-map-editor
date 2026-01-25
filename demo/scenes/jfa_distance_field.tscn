@@ -15,7 +15,7 @@ shader_parameter/tex_size = Vector2(5632, 2048)
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_gxnqu"]
 shader = ExtResource("7_haf7e")
 shader_parameter/tex_size = Vector2(5632, 2048)
-shader_parameter/max_distance = 7.0
+shader_parameter/max_distance = 10.0
 
 [node name="CountryDistanceField" type="SubViewport"]
 disable_3d = true
@@ -34,10 +34,9 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="SeedCopy" type="BackBufferCopy" parent="."]
-texture_filter = 1
 copy_mode = 2
 
-[node name="JFAGenerator" type="Node2D" parent="."]
+[node name="JFAGenerator" type="Node" parent="."]
 script = ExtResource("5_haf7e")
 jfa_pass_shader = ExtResource("6_fv8eu")
 
