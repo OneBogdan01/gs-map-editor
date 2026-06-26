@@ -4,7 +4,7 @@ extends EditorPlugin
 var plugin: CountryInspector
 
 func _enter_tree():
-	plugin = preload("res://addons/map_editor/country_inspector.gd").new()
+	plugin = preload("country_inspector.gd").new()
 
 	add_inspector_plugin(plugin)
 
