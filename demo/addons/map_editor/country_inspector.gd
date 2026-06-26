@@ -1,5 +1,5 @@
 extends CountryInspector
-const INSPECTOR_THEME = preload("res://addons/map_editor/inspector_theme.tres")
+const INSPECTOR_THEME = preload("inspector_theme.tres")
 
 
 func _can_handle(object):
